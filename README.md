@@ -6,7 +6,7 @@ NOT READY FOR PRODUCTION YET
 
 ## Demo
 You can see a demo here: 
-https://innologica.github.io/vue-daterange-picker/
+https://innologica.github.io/vue2-daterange-picker/
 
 ## Build Setup
 
