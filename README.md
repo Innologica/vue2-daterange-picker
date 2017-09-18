@@ -1,6 +1,12 @@
 # vue-daterange-picker
 
-> A Vue.js project
+> Vue2 date range picker base on https://github.com/dangrossman/bootstrap-daterangepicker (no jQuery)
+
+NOT READY FOR PRODUCTION YET
+
+## Demo
+You can see a demo here: 
+https://innologica.github.io/vue-daterange-picker/
 
 ## Build Setup
 
