@@ -8,29 +8,42 @@ NOT READY FOR PRODUCTION YET
 You can see a demo here: 
 https://innologica.github.io/vue2-daterange-picker/
 
-## Build Setup
+## Installlation
 
 ``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
+# install via npm
+npm i vue2-daterange-picker --save
 ```
 
+## Usage
+
+```javascript
+import DateRangePicker from 'vue-daterange-picker/src/components/DateRangePicker'
+
+export default {
+    components: { DateRangePicker },
+    data() {
+        return {
+            startDate: '2017-09-05',
+            endDate: '2017-09-15'
+        }
+    }
+}
+```
+
+```html
+<template>
+    <date-range-picker :startDate="startDate" :endDate="endDate" @input="console.log(value)">
+</template>
+```
+
+##TODO
+- [ ] documentation
+- [ ] tests
+- [ ] disabled dates
+- [ ] make install function
+- [ ] export single components
+
+
+### Run local demo
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
