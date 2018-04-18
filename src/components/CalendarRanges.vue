@@ -6,7 +6,7 @@
         </div>
 
         <ul v-if="ranges">
-            <li v-for="(value, key) in ranges">{{key}}</li>
+            <li v-for="(value, key) in ranges" @click="$emit('clickRange', value)">{{key}}</li>
         </ul>
     </div>
 </template>

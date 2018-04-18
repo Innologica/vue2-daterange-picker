@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <calendar-ranges :canSelect="in_selection" @clickCancel="open=false"
+                <calendar-ranges :canSelect="in_selection" @clickCancel="open=false" @clickRange="clickRange"
                                  @clickApply="clickedApply" :ranges="ranges" class=" hidden-xs">
                 </calendar-ranges>
             </div>
@@ -82,12 +82,12 @@
         type: Object,
         default () {
           return {
-            'Today': new Date(),
-            'Yesterday': new Date(),
-            'This month': new Date(),
-            'This year': new Date(),
-            'Last week': new Date(),
-            'Last month': new Date(),
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'This month': [moment().startOf('month'), moment().endOf('month')],
+            'This year': [moment().startOf('year'), moment().endOf('year')],
+            'Last week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+            'Last month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
           }
         }
       },
@@ -170,6 +170,12 @@
         if (this.open) {
           this.open = false
         }
+      },
+      clickRange(value) {
+        this.start = new Date(value[0])
+        this.end = new Date(value[1])
+        this.monthDate = new Date(value[0])
+        this.clickedApply()
       }
     },
     computed: {
