@@ -33,7 +33,7 @@ export default {
 
 ```html
 <template>
-    <date-range-picker :startDate="startDate" :endDate="endDate" @input="console.log(value)"></date-range-picker>
+    <date-range-picker :startDate="startDate" :endDate="endDate" @update="console.log(value)"></date-range-picker>
 </template>
 ```
 
