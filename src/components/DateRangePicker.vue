@@ -140,6 +140,10 @@
         if (this.in_selection) {
           this.in_selection = false
           this.end = new Date(value)
+          if(this.end < this.start) {
+            this.in_selection = true
+            this.start = new Date(value)
+          }
         } else {
           this.in_selection = true
           this.start = new Date(value)
