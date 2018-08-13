@@ -18,7 +18,7 @@ npm i vue2-daterange-picker --save
 ## Usage
 
 ```javascript
-import DateRangePicker from 'vue-daterange-picker/src/components/DateRangePicker'
+import DateRangePicker from 'vue2-daterange-picker/src/components/DateRangePicker'
 
 export default {
     components: { DateRangePicker },
@@ -33,7 +33,7 @@ export default {
 
 ```html
 <template>
-    <date-range-picker :startDate="startDate" :endDate="endDate" @input="console.log(value)">
+    <date-range-picker :startDate="startDate" :endDate="endDate" @update="console.log(value)"></date-range-picker>
 </template>
 ```
 
