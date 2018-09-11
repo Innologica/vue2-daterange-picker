@@ -37,6 +37,25 @@ export default {
 </template>
 ```
 
+### Properties
+-------
+ You can define format and display options via the localeData prop:
+ 
+```
+      let default_locale = {
+        direction: 'ltr', //direction of text
+        format: moment.localeData().longDateFormat('L'), //fomart of the dates displayed
+        separator: ' - ', //separator between the two ranges
+        applyLabel: 'Apply',
+        cancelLabel: 'Cancel',
+        weekLabel: 'W',
+        customRangeLabel: 'Custom Range',
+        daysOfWeek: moment.weekdaysMin(), //array of days - see moment documenations for details
+        monthNames: moment.monthsShort(), //array of month names - see moment documenations for details
+        firstDay: moment.localeData().firstDayOfWeek() //ISO first day of week - see moment documenations for details
+      }
+```
+
 ## TODO
 
 - [ ] documentation
@@ -49,3 +68,10 @@ export default {
 ### Run local demo
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+### Publish
+Bump the version the publish the package
+```
+npm version patch/minor/major
+npm publish
+```

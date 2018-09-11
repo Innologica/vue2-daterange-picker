@@ -8,44 +8,60 @@
             </slot>
         </div>
         <transition name="slide-fade" mode="out-in">
-            <div class="daterangepicker dropdown-menu ltr" :class="pickerStyles()" v-if="open"
-                 v-on-clickaway="clickAway">
+            <div
+                    class="daterangepicker dropdown-menu ltr show-ranges"
+                    :class="pickerStyles()"
+                    v-if="open"
+                    v-on-clickaway="clickAway"
+            >
+                <div class="calendars">
+                    <calendar-ranges
+                            @clickRange="clickRange"
+                            :ranges="ranges"
+                    ></calendar-ranges>
 
-                <div class="calendar left">
-                    <div class="daterangepicker_input hidden-xs">
-                        <input class="input-mini form-control" type="text" name="daterangepicker_start"
-                               :value="startText"/>
-                        <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
+                    <div class="drp-calendar left">
+                        <div class="daterangepicker_input hidden-xs" v-if="false">
+                            <input class="input-mini form-control" type="text" name="daterangepicker_start"
+                                   :value="startText"/>
+                            <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
+                        </div>
+                        <div class="calendar-table">
+                            <calendar :monthDate="monthDate"
+                                      :locale="locale"
+                                      :start="start" :end="end"
+                                      @nextMonth="nextMonth" @prevMonth="prevMonth"
+                                      @dateClick="dateClick" @hoverDate="hoverDate"
+                            ></calendar>
+                        </div>
                     </div>
-                    <div class="calendar-table">
-                        <calendar :monthDate="monthDate"
-                                  :locale="locale"
-                                  :start="start" :end="end"
-                                  @nextMonth="nextMonth" @prevMonth="prevMonth"
-                                  @dateClick="dateClick" @hoverDate="hoverDate"
-                        ></calendar>
+
+                    <div class="drp-calendar right hidden-xs">
+                        <div class="daterangepicker_input" v-if="false">
+                            <input class="input-mini form-control" type="text" name="daterangepicker_end"
+                                   :value="endText"/>
+                            <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
+                        </div>
+                        <div class="calendar-table">
+                            <calendar :monthDate="nextMonthDate"
+                                      :locale="locale"
+                                      :start="start" :end="end"
+                                      @nextMonth="nextMonth" @prevMonth="prevMonth"
+                                      @dateClick="dateClick" @hoverDate="hoverDate"
+                            ></calendar>
+                        </div>
                     </div>
                 </div>
 
-                <div class="calendar right hidden-xs">
-                    <div class="daterangepicker_input">
-                        <input class="input-mini form-control" type="text" name="daterangepicker_end"
-                               :value="endText"/>
-                        <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
-                    </div>
-                    <div class="calendar-table">
-                        <calendar :monthDate="nextMonthDate"
-                                  :locale="locale"
-                                  :start="start" :end="end"
-                                  @nextMonth="nextMonth" @prevMonth="prevMonth"
-                                  @dateClick="dateClick" @hoverDate="hoverDate"
-                        ></calendar>
-                    </div>
+                <div class="drp-buttons">
+                    <button class="applyBtn btn btn-sm btn-success" :disabled="in_selection" type="button"
+                            @click="clickedApply">Apply
+                    </button>
+                    <button class="cancelBtn btn btn-sm btn-default" type="button" @click="open=false">
+                        Cancel
+                    </button>
                 </div>
 
-                <calendar-ranges :canSelect="in_selection" @clickCancel="open=false" @clickRange="clickRange"
-                                 @clickApply="clickedApply" :ranges="ranges" class=" hidden-xs">
-                </calendar-ranges>
             </div>
         </transition>
     </div>
@@ -55,8 +71,8 @@
   import moment from 'moment'
   import Calendar from './Calendar.vue'
   import CalendarRanges from './CalendarRanges'
-  import { nextMonth, prevMonth } from './util'
-  import { mixin as clickaway } from 'vue-clickaway'
+  import {nextMonth, prevMonth} from './util'
+  import {mixin as clickaway} from 'vue-clickaway'
 
   export default {
     components: {Calendar, CalendarRanges},
@@ -111,7 +127,7 @@
       }
 
       // let data = { locale: _locale }
-      let data = { locale: {...default_locale, ...this.localeData}}
+      let data = {locale: {...default_locale, ...this.localeData}}
 
       data.monthDate = new Date(this.startDate)
       data.start = new Date(this.startDate)
@@ -140,7 +156,7 @@
         if (this.in_selection) {
           this.in_selection = false
           this.end = new Date(value)
-          if(this.end < this.start) {
+          if (this.end < this.start) {
             this.in_selection = true
             this.start = new Date(value)
           }
@@ -175,7 +191,7 @@
           this.open = false
         }
       },
-      clickRange(value) {
+      clickRange (value) {
         this.start = new Date(value[0])
         this.end = new Date(value[1])
         this.monthDate = new Date(value[0])
@@ -206,10 +222,6 @@
 </script>
 
 <style>
-    .range_inputs {
-        margin-bottom: 10px;
-    }
-
     .reportrange-text {
         background: #fff;
         cursor: pointer;
@@ -218,21 +230,14 @@
         width: 100%;
     }
 
-    .daterangepicker.show-calendar {
-        display: inline-flex;
-    }
-
-    .daterangepicker .ranges {
-        width: 160px;
-    }
-
-    .ranges {
-        width: 130px;
-    }
-
-    .show-calendar {
-        display: block;
+    .daterangepicker{
+        flex-direction: column;
+        display: flex;
         width: auto;
+    }
+
+    .calendars {
+        display: flex;
     }
 
     div.daterangepicker.opensleft {
