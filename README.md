@@ -25,7 +25,19 @@ export default {
     data() {
         return {
             startDate: '2017-09-05',
-            endDate: '2017-09-15'
+            endDate: '2017-09-15',
+            locale: {
+                direction: 'ltr', //direction of text
+                format: 'DD-MM-YYYY', //fomart of the dates displayed
+                separator: ' - ', //separator between the two ranges
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                weekLabel: 'W',
+                customRangeLabel: 'Custom Range',
+                daysOfWeek: moment.weekdaysMin(), //array of days - see moment documenations for details
+                monthNames: moment.monthsShort(), //array of month names - see moment documenations for details
+                firstDay: 1 //ISO first day of week - see moment documenations for details
+            }
         }
     }
 }
@@ -33,13 +45,19 @@ export default {
 
 ```html
 <template>
-    <date-range-picker :startDate="startDate" :endDate="endDate" @update="console.log(value)"></date-range-picker>
+    <date-range-picker 
+        :startDate="startDate" 
+        :endDate="endDate" 
+        @update="console.log(value)"
+        :locale-data="locale"
+    ></date-range-picker>
 </template>
 ```
 
 ### Properties
 -------
- You can define format and display options via the localeData prop:
+ You can define format and display options via the localeData prop. This is the default locale
+ object :
  
 ```
       let default_locale = {
