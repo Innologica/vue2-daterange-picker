@@ -203,10 +203,12 @@
         return nextMonth(this.monthDate)
       },
       startText () {
-        return this.start.toLocaleDateString()
+        // return this.start.toLocaleDateString()
+        return moment(this.start).format(this.localeData.format)
       },
       endText () {
-        return new Date(this.end).toLocaleDateString()
+        return moment(new Date(this.end)).format(this.localeData.format)
+        // return new Date(this.end).toLocaleDateString()
       }
     },
     watch: {

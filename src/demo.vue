@@ -49,7 +49,7 @@
                     :startDate="startDate"
                     :endDate="endDate"
                     @update="updateValues"
-                    :locale-data="{ firstDay: 1 }"
+                    :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY' }"
             ></date-range-picker>
         </div>
     </div>
