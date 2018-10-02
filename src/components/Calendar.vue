@@ -9,11 +9,11 @@
         </thead>
         <tbody>
         <tr>
-            <th v-for="weekDay in locale.daysOfWeek">{{weekDay}}</th>
+            <th v-for="weekDay in locale.daysOfWeek" :key="weekDay">{{weekDay}}</th>
         </tr>
-        <tr v-for="dateRow in calendar">
+        <tr v-for="(dateRow, index) in calendar" :key="'date-row-' + index">
             <slot name="date-slot" v-for="date in dateRow">
-                <td :class="dayClass(date)" @click="$emit('dateClick', date)" @mouseover="$emit('hoverDate', date)">
+                <td :key="date" :class="dayClass(date)" @click="$emit('dateClick', date)" @mouseover="$emit('hoverDate', date)">
                     {{date | dateNum}}
                 </td>
             </slot>
