@@ -12,19 +12,37 @@
 
         <div class="well">
             <div class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-sm-2 control-label" for="startDate">StartDate</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="startDate" v-model="startDate">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="startDate">StartDate</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="startDate" v-model="startDate">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="endDate">EndDate</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="endDate" v-model="endDate">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="minDate">minDate</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="minDate" v-model="minDate">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="maxDate">maxDate</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="maxDate" v-model="maxDate">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label" for="endDate">EndDate</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="endDate" v-model="endDate">
-                    </div>
-                </div>
-
+                <hr>
                 <div class="form-group">
                     <label class="control-label">Opens: </label>
                     <div class="">
@@ -44,58 +62,55 @@
         </div>
 
         <div style="height: 400px;">
-            <date-range-picker
-                    :opens="opens"
-                    :startDate="startDate"
-                    :endDate="endDate"
-                    @update="updateValues"
-                    :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY' }"
-            ></date-range-picker>
+            <date-range-picker :opens="opens" :minDate="minDate" :maxDate="maxDate" :startDate="startDate" :endDate="endDate" @update="updateValues" :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY' }"></date-range-picker>
         </div>
     </div>
 </template>
 
 <script>
-  import DateRangePicker from './components/DateRangePicker'
+import DateRangePicker from "./components/DateRangePicker";
 
-  export default {
-    components: {DateRangePicker},
-    name: 'DateRangePickerDemo',
-    data () {
-      //                    :locale-data="{ daysOfWeek: [ 'Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб' ] }"
-      return {
-        opens: 'center',
-        startDate: '2017-09-19',
-        endDate: '2017-10-09'
-      }
-    },
-    methods: {
-      updateValues (values) {
-        console.log(values)
-        this.startDate = values.startDate.toISOString().slice(0, 10)
-        this.endDate = values.endDate.toISOString().slice(0, 10)
-      }
+export default {
+  components: { DateRangePicker },
+  name: "DateRangePickerDemo",
+  data() {
+    //                    :locale-data="{ daysOfWeek: [ 'Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб' ] }"
+    return {
+      opens: "center",
+      startDate: "2017-09-19",
+      endDate: "2017-10-09",
+      minDate: "2017-09-19",
+      maxDate: "2017-10-09"
+    };
+  },
+  methods: {
+    updateValues(values) {
+      console.log(values);
+      this.startDate = values.startDate.toISOString().slice(0, 10);
+      this.endDate = values.endDate.toISOString().slice(0, 10);
     }
   }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-    h1, h2 {
-        font-weight: normal;
-    }
+h1,
+h2 {
+  font-weight: normal;
+}
 
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
+ul {
+  list-style-type: none;
+  padding: 0;
+}
 
-    li {
-        display: inline-block;
-        margin: 0 10px;
-    }
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
 
-    a {
-        color: #42b983;
-    }
+a {
+  color: #42b983;
+}
 </style>
