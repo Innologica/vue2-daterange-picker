@@ -9,11 +9,11 @@
         </thead>
         <tbody>
         <tr>
-            <th v-for="weekDay in locale.daysOfWeek">{{weekDay}}</th>
+            <th v-for="weekDay in locale.daysOfWeek" :key="weekDay">{{weekDay}}</th>
         </tr>
-        <tr v-for="dateRow in calendar">
-            <slot name="date-slot" v-for="date in dateRow">
-                <td :class="dayClass(date)" @click="$emit('dateClick', date)" @mouseover="$emit('hoverDate', date)">
+        <tr v-for="(dateRow, index) in calendar" :key="'date-row-' + index">
+            <slot name="date-slot" v-for="(date, index) in dateRow">
+                <td :key="'date-' + index" :class="dayClass(date)" @click="$emit('dateClick', date)" @mouseover="$emit('hoverDate', date)">
                     {{date | dateNum}}
                 </td>
             </slot>
@@ -27,7 +27,7 @@
 
   export default {
     name: 'calendar',
-    props: ['monthDate', 'locale', 'start', 'end'],
+    props: ['monthDate', 'locale', 'start', 'end', 'minDate', 'maxDate'],
     methods: {
       dayClass (date) {
         let dt = new Date(date)
@@ -42,6 +42,15 @@
           weekend: date.isoWeekday() > 5,
           today: dt.setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0),
           active: dt.setHours(0, 0, 0, 0) == new Date(this.start).setHours(0, 0, 0, 0) || dt.setHours(0, 0, 0, 0) == new Date(this.end).setHours(0, 0, 0, 0),
+          disabled:
+                    (this.minDate &&
+                      moment(dt)
+                        .startOf('day')
+                        .isBefore(moment(this.minDate).startOf('day'))) ||
+                    (this.maxDate &&
+                      moment(dt)
+                        .startOf('day')
+                        .isAfter(moment(this.maxDate).startOf('day'))),
           'in-range': dt >= start && dt <= end,
           'start-date': dt.getTime() === start.getTime(),
           'end-date': dt.getTime() === end.getTime(),
@@ -111,7 +120,10 @@
 </script>
 
 <style>
-    td.today {
-        font-weight: bold;
-    }
+  td.disabled {
+    pointer-events: none;
+  }
+  td.today {
+    font-weight: bold;
+  }
 </style>

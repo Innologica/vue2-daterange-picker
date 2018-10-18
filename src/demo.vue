@@ -9,43 +9,72 @@
             The component is rewritten without jQuery dependancy. Requires only bootstrap and the original datepicker
             CSS (included).
         </p>
-
         <div class="well">
             <div class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-sm-2 control-label" for="startDate">StartDate</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="startDate" v-model="startDate">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="startDate">StartDate</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="startDate" v-model="startDate">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="endDate">EndDate</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="endDate" v-model="endDate">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="minDate">minDate</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="minDate" v-model="minDate">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="maxDate">maxDate</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="maxDate" v-model="maxDate">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label" for="endDate">EndDate</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="endDate" v-model="endDate">
-                    </div>
-                </div>
-
+                <hr>
                 <div class="form-group">
                     <label class="control-label">Opens: </label>
                     <div class="">
                         <label class="radio-inline">
                             <input type="radio" name="options" id="option1" value="left" v-model="opens">left
                         </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="options" id="option2" value="center" v-model="opens">center
+                                    <label class="radio-inline">
+                                        <input type="radio" name="options" id="option2" value="center" v-model="opens">center
                         </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="options" id="option3" value="right" v-model="opens">right
+                                        <label class="radio-inline">
+                                            <input type="radio" name="options" id="option3" value="right" v-model="opens">right
                         </label>
+                            </div>
+                            <span class="help-block">(string: 'left'/'right'/'center') Whether the picker appears aligned to the left, to the right, or centered under the HTML element it's attached to</span>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="checkbox-inline">
+                                <label for="showRangeLabel">
+                                    Show Range Label
+                                    <input type="checkbox" id="showRangeLabel" v-model="showRangeLabel"/>
+                       </label>
+                            </div>
+                        </div>
                     </div>
-                    <span class="help-block">(string: 'left'/'right'/'center') Whether the picker appears aligned to the left, to the right, or centered under the HTML element it's attached to</span>
                 </div>
-            </div>
-        </div>
 
         <div style="height: 400px;">
             <date-range-picker
                     :opens="opens"
+                    :showRangeLabel="showRangeLabel"
+                    :minDate="minDate"
+                    :maxDate="maxDate"
                     :startDate="startDate"
                     :endDate="endDate"
                     @update="updateValues"
@@ -56,22 +85,27 @@
 </template>
 
 <script>
-  import DateRangePicker from './components/DateRangePicker'
+import moment from 'moment'
+import DateRangePicker from './components/DateRangePicker'
+
+const START_DATE = moment().startOf('year').toISOString().slice(0, 10)
+const END_DATE = moment().endOf('year').toISOString().slice(0, 10)
 
   export default {
     components: {DateRangePicker},
     name: 'DateRangePickerDemo',
     data () {
-      //                    :locale-data="{ daysOfWeek: [ 'Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб' ] }"
       return {
         opens: 'center',
-        startDate: '2017-09-19',
-        endDate: '2017-10-09'
+        startDate: START_DATE,
+        endDate: END_DATE,
+        minDate: START_DATE,
+        maxDate: END_DATE,
+        showRangeLabel: false
       }
     },
     methods: {
       updateValues (values) {
-        console.log(values)
         this.startDate = values.startDate.toISOString().slice(0, 10)
         this.endDate = values.endDate.toISOString().slice(0, 10)
       }

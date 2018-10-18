@@ -3,7 +3,7 @@
         <div class="reportrange-text" @click="togglePicker">
             <slot name="input">
                 <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-                <span>{{startText}} - {{endText}}</span>
+                <span>{{label}}</span>
                 <b class="caret"></b>
             </slot>
         </div>
@@ -30,6 +30,7 @@
                             <calendar :monthDate="monthDate"
                                       :locale="locale"
                                       :start="start" :end="end"
+                                      :minDate="min" :maxDate="max"
                                       @nextMonth="nextMonth" @prevMonth="prevMonth"
                                       @dateClick="dateClick" @hoverDate="hoverDate"
                             ></calendar>
@@ -46,6 +47,7 @@
                             <calendar :monthDate="nextMonthDate"
                                       :locale="locale"
                                       :start="start" :end="end"
+                                      :minDate="min" :maxDate="max"
                                       @nextMonth="nextMonth" @prevMonth="prevMonth"
                                       @dateClick="dateClick" @hoverDate="hoverDate"
                             ></calendar>
@@ -54,11 +56,11 @@
                 </div>
 
                 <div class="drp-buttons">
-                    <button class="applyBtn btn btn-sm btn-success" :disabled="in_selection" type="button"
-                            @click="clickedApply">Apply
+                    <button class="applyBtn btn btn-sm btn-success" :disabled="inSelection" type="button"
+                            @click="clickedApply">{{locale.applyLabel}}
                     </button>
                     <button class="cancelBtn btn btn-sm btn-default" type="button" @click="open=false">
-                        Cancel
+                        {{locale.cancelLabel}}
                     </button>
                 </div>
 
@@ -73,6 +75,7 @@
   import CalendarRanges from './CalendarRanges'
   import {nextMonth, prevMonth} from './util'
   import {mixin as clickaway} from 'vue-clickaway'
+  import { findKey } from 'lodash';
 
   export default {
     components: {Calendar, CalendarRanges},
@@ -83,6 +86,12 @@
         default () {
           return {}
         },
+      },
+      minDate: {},
+      maxDate: {},
+      showRangeLabel: {
+        type: Boolean,
+        default: false
       },
       startDate: {
         default () {
@@ -113,37 +122,15 @@
       }
     },
     data () {
-      let default_locale = {
-        direction: 'ltr',
-        format: moment.localeData().longDateFormat('L'),
-        separator: ' - ',
-        applyLabel: 'Apply',
-        cancelLabel: 'Cancel',
-        weekLabel: 'W',
-        customRangeLabel: 'Custom Range',
-        daysOfWeek: moment.weekdaysMin(),
-        monthNames: moment.monthsShort(),
-        firstDay: moment.localeData().firstDayOfWeek()
+      return {
+        monthDate: new Date(this.startDate),
+        min: this.minDate ? new Date(this.minDate) : null,
+        max: this.maxDate ? new Date(this.maxDate) : null,
+        start: new Date(this.startDate),
+        end: new Date(this.endDate),
+        inSelection: false,
+        open: false
       }
-
-      // let data = { locale: _locale }
-      let data = {locale: {...default_locale, ...this.localeData}}
-
-      data.monthDate = new Date(this.startDate)
-      data.start = new Date(this.startDate)
-      data.end = new Date(this.endDate)
-      data.in_selection = false
-      data.open = false
-
-      // update day names order to firstDay
-      if (data.locale.firstDay !== 0) {
-        let iterator = data.locale.firstDay
-        while (iterator > 0) {
-          data.locale.daysOfWeek.push(data.locale.daysOfWeek.shift())
-          iterator--
-        }
-      }
-      return data
     },
     methods: {
       nextMonth () {
@@ -153,22 +140,22 @@
         this.monthDate = prevMonth(this.monthDate)
       },
       dateClick (value) {
-        if (this.in_selection) {
-          this.in_selection = false
+        if (this.inSelection) {
+          this.inSelection = false
           this.end = new Date(value)
           if (this.end < this.start) {
-            this.in_selection = true
+            this.inSelection = true
             this.start = new Date(value)
           }
         } else {
-          this.in_selection = true
+          this.inSelection = true
           this.start = new Date(value)
           this.end = new Date(value)
         }
       },
       hoverDate (value) {
         let dt = new Date(value)
-        if (this.in_selection && dt > this.start)
+        if (this.inSelection && dt > this.start)
           this.end = dt
       },
       togglePicker () {
@@ -199,19 +186,60 @@
       }
     },
     computed: {
+      locale() {
+        const DEFAULT_LOCALE_DATA = {
+          direction: "ltr",
+          format: moment.localeData().longDateFormat("L"),
+          separator: " - ",
+          applyLabel: "Apply",
+          cancelLabel: "Cancel",
+          weekLabel: "W",
+          customRangeLabel: "Custom Range",
+          daysOfWeek: moment.weekdaysMin(),
+          monthNames: moment.monthsShort(),
+          firstDay: moment.localeData().firstDayOfWeek()
+        };
+
+        // update day names order to firstDay
+        let locale = { ...DEFAULT_LOCALE_DATA, ...this.localeData }
+
+        if (locale.firstDay !== 0) {
+          let iterator = locale.firstDay
+          while (iterator > 0) {
+            locale.daysOfWeek.push(locale.daysOfWeek.shift())
+            iterator--
+          }
+        }
+        return locale
+      },
+      isRange() {
+        return findKey(this.ranges, range => {
+          return (
+            moment.utc(this.start).isSame(range[0], 'day') &&
+            moment.utc(this.end).isSame(range[1], 'day')
+          )
+        })
+      },
+      label() {
+        return this.showRangeLabel && this.isRange || this.startText + this.locale.separator + this.endText
+      },
       nextMonthDate () {
         return nextMonth(this.monthDate)
       },
       startText () {
-        // return this.start.toLocaleDateString()
         return moment(this.start).format(this.localeData.format)
       },
       endText () {
         return moment(new Date(this.end)).format(this.localeData.format)
-        // return new Date(this.end).toLocaleDateString()
       }
     },
     watch: {
+      minDate (value) {
+        this.min = new Date(value)
+      },
+      maxDate (value) {
+        this.max = new Date(value)
+      },
       startDate (value) {
         this.start = new Date(value)
       },
