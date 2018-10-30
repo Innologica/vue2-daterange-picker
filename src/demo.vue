@@ -50,7 +50,11 @@
                     :endDate="endDate"
                     @update="updateValues"
                     :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY' }"
-            ></date-range-picker>
+            >
+                <div slot="input" slot-scope="picker">
+                    {{ picker.startDate | date }} - {{ picker.endDate | date }}
+                </div>
+            </date-range-picker>
         </div>
     </div>
 </template>
@@ -61,6 +65,12 @@
   export default {
     components: {DateRangePicker},
     name: 'DateRangePickerDemo',
+    filters: {
+      date (value) {
+        let options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return Intl.DateTimeFormat('en-US', options).format(value)
+      }
+    },
     data () {
       //                    :locale-data="{ daysOfWeek: [ 'Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб' ] }"
       return {

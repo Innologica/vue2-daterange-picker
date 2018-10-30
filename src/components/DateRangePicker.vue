@@ -1,7 +1,12 @@
 <template>
     <div style="position: relative; display: inline-block;">
         <div class="reportrange-text" @click="togglePicker">
-            <slot name="input">
+            <slot
+                    name="input"
+                    :startDate="start"
+                    :endDate="end"
+                    :ranges="ranges"
+            >
                 <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
                 <span>{{startText}} - {{endText}}</span>
                 <b class="caret"></b>
@@ -54,12 +59,17 @@
                 </div>
 
                 <div class="drp-buttons">
-                    <button class="applyBtn btn btn-sm btn-success" :disabled="in_selection" type="button"
-                            @click="clickedApply">Apply
-                    </button>
-                    <button class="cancelBtn btn btn-sm btn-default" type="button" @click="open=false">
-                        Cancel
-                    </button>
+                    <button
+                            class="applyBtn btn btn-sm btn-success"
+                            :disabled="in_selection"
+                            type="button"
+                            @click="clickedApply"
+                    >{{locale.applyLabel}}</button>
+                    <button
+                            class="cancelBtn btn btn-sm btn-default"
+                            type="button"
+                            @click="open=false"
+                    >{{locale.cancelLabel}}</button>
                 </div>
 
             </div>

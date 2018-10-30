@@ -50,9 +50,22 @@ export default {
         :endDate="endDate" 
         @update="console.log(value)"
         :locale-data="locale"
-    ></date-range-picker>
+    >
+    <!--Optional scope for the input displaying the dates -->
+    <div slot="input" slot-scope="picker">...</div>
+</date-range-picker>
 </template>
 ```
+### Slots
+-------
+Slot "input" is used to display the currently selected date range. You can use it to format the date as you like. If you add clickable elements you need to stop the event from propagating to the parent if you dont want to open the picker e.g. with @click.stop.
+
+Props: 
+- startDate - the start date currently selected
+- endDate - the end date currently selected
+- ranges - the ranges object
+
+See the demo source or the code snippet above for example.
 
 ### Properties
 -------
