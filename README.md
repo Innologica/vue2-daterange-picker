@@ -63,6 +63,8 @@ Slot "input" is used to display the currently selected date range. You can use i
 Props: 
 - startDate - the start date currently selected
 - endDate - the end date currently selected
+- minDate - the minimum date that can be selected
+- maxDate - the maximum date that can be selected
 - ranges - the ranges object
 
 See the demo source or the code snippet above for example.
@@ -91,8 +93,7 @@ See the demo source or the code snippet above for example.
 
 - [ ] documentation
 - [ ] tests
-- [ ] disabled dates
-- [ ] make install function
+- [x] disabled dates
 - [ ] export single components
 
 

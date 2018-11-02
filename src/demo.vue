@@ -12,16 +12,34 @@
 
         <div class="well">
             <div class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-sm-2 control-label" for="startDate">StartDate</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="startDate" v-model="startDate">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="startDate">StartDate</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="startDate" v-model="startDate">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="endDate">EndDate</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="endDate" v-model="endDate">
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label" for="endDate">EndDate</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="endDate" v-model="endDate">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="minDate">minDate</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="minDate" v-model="minDate">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="maxDate">maxDate</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="maxDate" v-model="maxDate">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -50,6 +68,7 @@
                     :endDate="endDate"
                     @update="updateValues"
                     :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY' }"
+                    :minDate="minDate" :maxDate="maxDate"
             >
                 <div slot="input" slot-scope="picker">
                     {{ picker.startDate | date }} - {{ picker.endDate | date }}
@@ -67,7 +86,7 @@
     name: 'DateRangePickerDemo',
     filters: {
       date (value) {
-        let options = { year: 'numeric', month: 'long', day: 'numeric' };
+        let options = {year: 'numeric', month: 'long', day: 'numeric'};
         return Intl.DateTimeFormat('en-US', options).format(value)
       }
     },
@@ -76,7 +95,9 @@
       return {
         opens: 'center',
         startDate: '2017-09-19',
-        endDate: '2017-10-09'
+        endDate: '2017-10-09',
+        minDate: '2017-09-19',
+        maxDate: '2017-10-09',
       }
     },
     methods: {
@@ -90,7 +111,7 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang="scss" scoped>
     h1, h2 {
         font-weight: normal;
     }
@@ -102,7 +123,8 @@
 
     li {
         display: inline-block;
-        margin: 0 10px;
+        /*margin: 0 10px;*/
+        width: 100%;
     }
 
     a {

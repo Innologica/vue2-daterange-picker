@@ -35,6 +35,7 @@
                             <calendar :monthDate="monthDate"
                                       :locale="locale"
                                       :start="start" :end="end"
+                                      :minDate="min" :maxDate="max"
                                       @nextMonth="nextMonth" @prevMonth="prevMonth"
                                       @dateClick="dateClick" @hoverDate="hoverDate"
                             ></calendar>
@@ -51,6 +52,7 @@
                             <calendar :monthDate="nextMonthDate"
                                       :locale="locale"
                                       :start="start" :end="end"
+                                      :minDate="min" :maxDate="max"
                                       @nextMonth="nextMonth" @prevMonth="prevMonth"
                                       @dateClick="dateClick" @hoverDate="hoverDate"
                             ></calendar>
@@ -88,6 +90,8 @@
     components: {Calendar, CalendarRanges},
     mixins: [clickaway],
     props: {
+      minDate: [String, Object],
+      maxDate: [String, Object],
       localeData: {
         type: Object,
         default () {
@@ -219,6 +223,12 @@
       endText () {
         return moment(new Date(this.end)).format(this.localeData.format)
         // return new Date(this.end).toLocaleDateString()
+      },
+      min () {
+        return this.minDate ? new Date(this.minDate) : null
+      },
+      max () {
+        return this.maxDate ? new Date(this.maxDate) : null
       }
     },
     watch: {

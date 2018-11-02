@@ -15,12 +15,12 @@
                 v-for="(dateRow, index) in calendar"
                 :key="index"
         >
-            <slot name="date-slot" v-for="date in dateRow">
+            <slot name="date-slot" v-for="(date, idx) in dateRow">
                 <td
                         :class="dayClass(date)"
                         @click="$emit('dateClick', date)"
                         @mouseover="$emit('hoverDate', date)"
-                        :key="date"
+                        :key="idx"
                 >
                     {{date | dateNum}}
                 </td>
@@ -35,7 +35,7 @@
 
   export default {
     name: 'calendar',
-    props: ['monthDate', 'locale', 'start', 'end'],
+    props: ['monthDate', 'locale', 'start', 'end', 'minDate', 'maxDate'],
     methods: {
       dayClass (date) {
         let dt = new Date(date)
@@ -53,15 +53,17 @@
           'in-range': dt >= start && dt <= end,
           'start-date': dt.getTime() === start.getTime(),
           'end-date': dt.getTime() === end.getTime(),
+          disabled: (this.minDate && moment(dt).startOf("day").isBefore(moment(this.minDate).startOf("day")))
+            || (this.maxDate && moment(dt).startOf("day").isAfter(moment(this.maxDate).startOf("day"))),
         }
       }
     },
     computed: {
       arrowLeftClass () {
-        return 'fa fa-chevron-left glyphicon glyphicon-chevron-left'
+        return 'fa fa-chevron-left'
       },
       arrowRightClass () {
-        return 'fa fa-chevron-right glyphicon glyphicon-chevron-right'
+        return 'fa fa-chevron-right'
       },
       monthName () {
         return this.locale.monthNames[this.monthDate.getMonth()]
@@ -118,8 +120,56 @@
   }
 </script>
 
-<style>
+<style scoped lang="scss">
     td.today {
         font-weight: bold;
+    }
+
+    td.disabled {
+        pointer-events: none;
+        background-color: #eee;
+        border-radius: 0;
+        opacity: 0.6;
+    }
+
+    @function str-replace($string, $search, $replace: "") {
+        $index: str-index($string, $search);
+
+        @if $index {
+            @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+        }
+
+        @return $string;
+    }
+
+    $carousel-control-color:            #ccc !default;
+    $viewbox: '-2 -2 10 10';
+    $carousel-control-prev-icon-bg:     str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='#{$viewbox}'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E"), "#", "%23") !default;
+    $carousel-control-next-icon-bg:     str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='#{$viewbox}'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E"), "#", "%23") !default;
+
+    .fa {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        background: transparent no-repeat center center;
+        background-size: 100% 100%;
+        fill: $carousel-control-color;
+    }
+
+    .prev, .next {
+        &:hover {
+            background-color: transparent !important;
+        }
+
+        .fa:hover {
+            opacity: 0.6;
+        }
+    }
+
+    .fa-chevron-left {
+        background-image: $carousel-control-prev-icon-bg;
+    }
+    .fa-chevron-right {
+        background-image: $carousel-control-next-icon-bg;
     }
 </style>
