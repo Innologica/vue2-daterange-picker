@@ -60,10 +60,10 @@
     },
     computed: {
       arrowLeftClass () {
-        return 'fa fa-chevron-left'
+        return 'chevron-left'
       },
       arrowRightClass () {
-        return 'fa fa-chevron-right'
+        return 'chevron-right'
       },
       monthName () {
         return this.locale.monthNames[this.monthDate.getMonth()]
@@ -166,10 +166,10 @@
         }
     }
 
-    .fa-chevron-left {
+    .chevron-left {
         background-image: $carousel-control-prev-icon-bg;
     }
-    .fa-chevron-right {
+    .chevron-right {
         background-image: $carousel-control-next-icon-bg;
     }
 </style>

@@ -86,6 +86,8 @@
   import {nextMonth, prevMonth} from './util'
   import {mixin as clickaway} from 'vue-clickaway'
 
+  import '../assets/daterangepicker.css'
+
   export default {
     components: {Calendar, CalendarRanges},
     mixins: [clickaway],
@@ -218,11 +220,11 @@
       },
       startText () {
         // return this.start.toLocaleDateString()
-        return moment(this.start).format(this.localeData.format)
+        return moment(this.start).format(this.locale.format)
       },
       endText () {
-        return moment(new Date(this.end)).format(this.localeData.format)
         // return new Date(this.end).toLocaleDateString()
+        return moment(new Date(this.end)).format(this.locale.format)
       },
       min () {
         return this.minDate ? new Date(this.minDate) : null
@@ -243,7 +245,7 @@
 
 </script>
 
-<style>
+<style lang="scss" scoped>
     .reportrange-text {
         background: #fff;
         cursor: pointer;
@@ -256,6 +258,10 @@
         flex-direction: column;
         display: flex;
         width: auto;
+
+        &.show-calendar {
+            display: block;
+        }
     }
 
     .calendars {
