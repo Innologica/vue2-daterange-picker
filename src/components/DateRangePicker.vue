@@ -1,6 +1,6 @@
 <template>
     <div style="position: relative; display: inline-block;">
-        <div class="reportrange-text" @click="togglePicker">
+        <div class="form-control" @click="togglePicker">
             <slot
                     name="input"
                     :startDate="start"
@@ -85,8 +85,6 @@
   import CalendarRanges from './CalendarRanges'
   import {nextMonth, prevMonth} from './util'
   import {mixin as clickaway} from 'vue-clickaway'
-
-  import '../assets/daterangepicker.css'
 
   export default {
     components: {Calendar, CalendarRanges},
@@ -244,6 +242,10 @@
   }
 
 </script>
+
+<style lang="scss">
+    @import '../assets/daterangepicker.css';
+</style>
 
 <style lang="scss" scoped>
     .reportrange-text {
