@@ -40,6 +40,13 @@
                                       @dateClick="dateClick" @hoverDate="hoverDate"
                             ></calendar>
                         </div>
+                        <calendar-time v-if="timePicker"
+                          @update="onUpdateStartTime"
+                          :miniute-increment="timePickerIncrement"
+                          :hour24="timePicker24Hour"
+                          :second-picker="timePickerSeconds"
+                          :current-time="start"
+                        />
                     </div>
 
                     <div class="drp-calendar col right" v-if="!singleDatePicker">
@@ -57,6 +64,13 @@
                                       @dateClick="dateClick" @hoverDate="hoverDate"
                             ></calendar>
                         </div>
+                        <calendar-time v-if="timePicker"
+                          @update="onUpdateEndTime"
+                          :miniute-increment="timePickerIncrement"
+                          :hour24="timePicker24Hour"
+                          :second-picker="timePickerSeconds"
+                          :current-time="end"
+                        />
                     </div>
                 </div>
 
@@ -82,12 +96,13 @@
 <script>
   import moment from 'moment'
   import Calendar from './Calendar.vue'
+  import CalendarTime from './CalendarTime'
   import CalendarRanges from './CalendarRanges'
   import {nextMonth, prevMonth} from './util'
   import {mixin as clickaway} from 'vue-clickaway'
 
   export default {
-    components: {Calendar, CalendarRanges},
+    components: {Calendar, CalendarTime, CalendarRanges},
     mixins: [clickaway],
     props: {
       minDate: [String, Object],
@@ -97,6 +112,22 @@
         default: false,
       },
       showDropdowns: {
+        type: Boolean,
+        default: false,
+      },
+      timePicker: {
+        type: Boolean,
+        default: false,
+      },
+      timePickerIncrement: {
+        type: Number,
+        default: 5,
+      },
+      timePicker24Hour: {
+        type: Boolean,
+        default: true,
+      },
+      timePickerSeconds: {
         type: Boolean,
         default: false,
       },
@@ -231,7 +262,17 @@
         this.end = new Date(value[1])
         this.monthDate = new Date(value[0])
         this.clickedApply()
-      }
+      },
+      onUpdateStartTime (value) {
+        this.start.setHours(value.hours);
+        this.start.setMinutes(value.minutes);
+        this.start.setSeconds(value.seconds);
+      },
+      onUpdateEndTime (value) {
+        this.end.setHours(value.hours);
+        this.end.setMinutes(value.minutes);
+        this.end.setSeconds(value.seconds);
+      },
     },
     computed: {
       nextMonthDate () {
