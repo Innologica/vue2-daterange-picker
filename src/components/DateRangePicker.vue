@@ -81,6 +81,7 @@
                 </div>
 
                 <div class="drp-buttons" v-if="!autoApply">
+                    <span class="drp-selected">{{rangeText}}</span>
                     <button
                             class="cancelBtn btn btn-sm btn-default"
                             type="button"
@@ -251,20 +252,32 @@
         }
         this.changeMonth(value);
       },
+      normalizeDatetime (value, oldValue) {
+        let newDate = new Date(value);
+        if (this.timePicker) {
+          newDate.setHours(oldValue.getHours());
+          newDate.setMinutes(oldValue.getMinutes());
+          newDate.setSeconds(oldValue.getSeconds());
+          newDate.setMilliseconds(oldValue.getMilliseconds());
+        }
+
+        return newDate;
+      },
       dateClick (value) {
         if (this.in_selection) {
           this.in_selection = false
-          this.end = new Date(value)
+          this.end = this.normalizeDatetime(value, this.end);
+
           if (this.end < this.start) {
             this.in_selection = true
-            this.start = new Date(value)
+            this.start = this.normalizeDatetime(value, this.start);
           }
           if (!this.in_selection && this.autoApply) {
             this.clickedApply();
           }
         } else {
-          this.start = new Date(value)
-          this.end = new Date(value)
+          this.start = this.normalizeDatetime(value, this.start);
+          this.end = this.normalizeDatetime(value, this.end);
           if (!this.singleDatePicker) {
             this.in_selection = true
           } else if (this.autoApply){
@@ -273,7 +286,7 @@
         }
       },
       hoverDate (value) {
-        let dt = new Date(value)
+        let dt = this.normalizeDatetime(value, this.end);
         if (this.in_selection && dt > this.start)
           this.end = dt
       },
@@ -328,12 +341,19 @@
         // return new Date(this.end).toLocaleDateString()
         return moment(new Date(this.end)).format(this.locale.format)
       },
+      rangeText () {
+        let range = this.startText;
+        if (!this.singleDatePicker) {
+          range += ' - ' + this.endText;
+        }
+        return range;
+      },
       min () {
         return this.minDate ? new Date(this.minDate) : null
       },
       max () {
         return this.maxDate ? new Date(this.maxDate) : null
-      }
+      },
     },
     watch: {
       startDate (value) {
