@@ -2,9 +2,9 @@
     <table class="table-condensed">
         <thead>
         <tr>
-            <th class="prev available" @click="$emit('prevMonth')"><i :class="[arrowLeftClass]"></i></th>
+            <th class="prev available" @click="$emit('prevMonth')"><span /></th>
             <th colspan="5" class="month">{{monthName}} {{year}}</th>
-            <th class="next available" @click="$emit('nextMonth')"><i :class="[arrowRightClass]"></i></th>
+            <th class="next available" @click="$emit('nextMonth')"><span /></th>
         </tr>
         </thead>
         <tbody>
@@ -59,12 +59,6 @@
       }
     },
     computed: {
-      arrowLeftClass () {
-        return 'chevron-left'
-      },
-      arrowRightClass () {
-        return 'chevron-right'
-      },
       monthName () {
         return this.locale.monthNames[this.monthDate.getMonth()]
       },
@@ -130,46 +124,5 @@
         background-color: #eee;
         border-radius: 0;
         opacity: 0.6;
-    }
-
-    @function str-replace($string, $search, $replace: "") {
-        $index: str-index($string, $search);
-
-        @if $index {
-            @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
-        }
-
-        @return $string;
-    }
-
-    $carousel-control-color:            #ccc !default;
-    $viewbox: '-2 -2 10 10';
-    $carousel-control-prev-icon-bg:     str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='#{$viewbox}'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E"), "#", "%23") !default;
-    $carousel-control-next-icon-bg:     str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='#{$viewbox}'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E"), "#", "%23") !default;
-
-    .fa {
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-        background: transparent no-repeat center center;
-        background-size: 100% 100%;
-        fill: $carousel-control-color;
-    }
-
-    .prev, .next {
-        &:hover {
-            background-color: transparent !important;
-        }
-
-        .fa:hover {
-            opacity: 0.6;
-        }
-    }
-
-    .chevron-left {
-        background-image: $carousel-control-prev-icon-bg;
-    }
-    .chevron-right {
-        background-image: $carousel-control-next-icon-bg;
     }
 </style>
