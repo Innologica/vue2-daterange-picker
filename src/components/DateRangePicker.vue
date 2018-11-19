@@ -80,18 +80,18 @@
                     </div>
                 </div>
 
-                <div class="drp-buttons">
+                <div class="drp-buttons" v-if="!autoApply">
+                    <button
+                            class="cancelBtn btn btn-sm btn-default"
+                            type="button"
+                            @click="open=false"
+                    >{{locale.cancelLabel}}</button>
                     <button
                             class="applyBtn btn btn-sm btn-success"
                             :disabled="in_selection"
                             type="button"
                             @click="clickedApply"
                     >{{locale.applyLabel}}</button>
-                    <button
-                            class="cancelBtn btn btn-sm btn-default"
-                            type="button"
-                            @click="open=false"
-                    >{{locale.cancelLabel}}</button>
                 </div>
 
             </div>
@@ -134,6 +134,10 @@
         default: true,
       },
       timePickerSeconds: {
+        type: Boolean,
+        default: false,
+      },
+      autoApply: {
         type: Boolean,
         default: false,
       },
@@ -255,12 +259,17 @@
             this.in_selection = true
             this.start = new Date(value)
           }
-        } else {
-          if (!this.singleDatePicker) {
-            this.in_selection = true
+          if (!this.in_selection && this.autoApply) {
+            this.clickedApply();
           }
+        } else {
           this.start = new Date(value)
           this.end = new Date(value)
+          if (!this.singleDatePicker) {
+            this.in_selection = true
+          } else if (this.autoApply){
+            this.clickedApply();
+          }
         }
       },
       hoverDate (value) {

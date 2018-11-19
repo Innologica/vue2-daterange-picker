@@ -83,6 +83,7 @@
                                 :timePicker="true"
                                 :timePicker24Hour="true"
                                 :show-dropdowns="true"
+                                :autoApply="false"
                         >
                             <div slot="input" slot-scope="picker">
                                 {{ picker.startDate | date }} - {{ picker.endDate | date }}
