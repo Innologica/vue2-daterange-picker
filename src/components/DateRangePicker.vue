@@ -36,7 +36,10 @@
                                       :locale="locale"
                                       :start="start" :end="end"
                                       :minDate="min" :maxDate="max"
+                                      :show-dropdowns="showDropdowns"
+                                      :single-date-picker="singleDatePicker"
                                       @nextMonth="nextMonth" @prevMonth="prevMonth"
+                                      @change-month="changeLeftMonth"
                                       @dateClick="dateClick" @hoverDate="hoverDate"
                             ></calendar>
                         </div>
@@ -60,7 +63,10 @@
                                       :locale="locale"
                                       :start="start" :end="end"
                                       :minDate="min" :maxDate="max"
+                                      :show-dropdowns="showDropdowns"
+                                      :single-date-picker="singleDatePicker"
                                       @nextMonth="nextMonth" @prevMonth="prevMonth"
+                                      @change-month="changeRightMonth"
                                       @dateClick="dateClick" @hoverDate="hoverDate"
                             ></calendar>
                         </div>
@@ -208,11 +214,38 @@
       return data
     },
     methods: {
+      changeMonth (newDate) {
+        let max = this.max || new Date(8640000000000000);
+        let min = this.min || new Date(-8640000000000000);
+        // check min
+        if (moment(newDate).isBetween(min, max)) {
+          this.monthDate = newDate;
+        } else if (moment(newDate).isAfter(max)) {
+          this.monthDate = new Date(max);
+        } else {
+          this.monthDate = new Date(min);
+        }
+      },
       nextMonth () {
-        this.monthDate = nextMonth(this.monthDate)
+        this.changeMonth(nextMonth(new Date(this.monthDate.getFullYear(),
+          this.monthDate.getMonth(), 1)));
       },
       prevMonth () {
-        this.monthDate = prevMonth(this.monthDate)
+        this.changeMonth(prevMonth(new Date(this.monthDate.getFullYear(),
+          this.monthDate.getMonth(), 1)));
+      },
+      changeLeftMonth (value) {
+        let newDate = new Date(value.year, value.month, 1);
+        this.changeMonth(newDate);
+      },
+      changeRightMonth (value) {
+        if (value.month <= 0) {
+          value.month = 11;
+          value.year -= 1;
+        } else {
+          value.month -= 1;
+        }
+        this.changeMonth(value);
       },
       dateClick (value) {
         if (this.in_selection) {
@@ -299,6 +332,12 @@
       },
       endDate (value) {
         this.end = new Date(value)
+      },
+      minDate (value) {
+        this.changeMonth(this.monthDate);
+      },
+      maxDate (value) {
+        this.changeMonth(this.monthDate);
       }
     }
   }

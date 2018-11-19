@@ -3,7 +3,15 @@
         <thead>
         <tr>
             <th class="prev available" @click="$emit('prevMonth')"><span /></th>
-            <th colspan="5" class="month">{{monthName}} {{year}}</th>
+            <th v-if="showDropdowns" colspan="5" class="month">
+              <select :value="monthName" @change="onChangeMonth" class="monthselect">
+                <option v-for="m in months" :key="m" :value="m">{{m}}</option>
+              </select>
+              <select :value="year" @change="onChangeYear" class="yearselect">
+                <option v-for="y in years" :key="y" :value="y">{{y}}</option>
+              </select>
+            </th>
+            <th v-else colspan="5" class="month">{{monthName}} {{year}}</th>
             <th class="next available" @click="$emit('nextMonth')"><span /></th>
         </tr>
         </thead>
@@ -35,7 +43,22 @@
 
   export default {
     name: 'calendar',
-    props: ['monthDate', 'locale', 'start', 'end', 'minDate', 'maxDate'],
+    props: {
+      monthDate: Date,
+      locale: Object,
+      start: Date,
+      end: Date,
+      minDate: Date,
+      maxDate: Date,
+      showDropdowns: {
+        type: Boolean,
+        default: false,
+      },
+      singleDatePicker: {
+        type: Boolean,
+        default: false,
+      },
+    },
     methods: {
       dayClass (date) {
         let dt = new Date(date)
@@ -56,7 +79,20 @@
           disabled: (this.minDate && moment(dt).startOf("day").isBefore(moment(this.minDate).startOf("day")))
             || (this.maxDate && moment(dt).startOf("day").isAfter(moment(this.maxDate).startOf("day"))),
         }
-      }
+      },
+      onChangeMonth (e) {
+        let m = this.locale.monthNames.findIndex(v => v === e.target.value);
+        this.$emit('change-month', {
+          month: m,
+          year: this.year,
+        });
+      },
+      onChangeYear (e) {
+        this.$emit('change-month', {
+          month: this.month,
+          year: e.target.value,
+        });
+      },
     },
     computed: {
       monthName () {
@@ -104,6 +140,43 @@
         }
 
         return calendar
+      },
+      months() {
+        let y = this.maxDate.getFullYear() - this.minDate.getFullYear();
+        if (y < 2) {
+          // get months
+          let months = [];
+          if (y < 1 ) {
+            for (let i=this.minDate.getMonth(); i<=this.maxDate.getMonth(); i++) {
+              months.push(i);
+            }
+          } else {
+            for (let i=0; i<=this.maxDate.getMonth(); i++) {
+              months.push(i);
+            }
+            for (let i=this.minDate.getMonth(); i<12; i++) {
+              months.push(i);
+            }
+          }
+          if (!this.singleDatePicker) {
+            months.push((this.maxDate.getMonth()+1) % 12)
+          }
+
+          // do filter
+          if (months.length > 0) {
+            return this.locale.monthNames.filter((m, index) => {
+              return months.findIndex(i => i === index) > -1;
+            });
+          }
+        }
+        return this.locale.monthNames;
+      },
+      years() {
+        let values = [];
+        for (let i=this.minDate.getFullYear(); i <= this.maxDate.getFullYear(); i++) {
+          values.push(i);
+        }
+        return values;
       }
     },
     filters: {
