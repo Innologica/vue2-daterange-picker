@@ -78,6 +78,8 @@
                                 @update="updateValues"
                                 :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY' }"
                                 :minDate="minDate" :maxDate="maxDate"
+                                :showRanges="true"
+                                :singleDatePicker="false"
                         >
                             <div slot="input" slot-scope="picker">
                                 {{ picker.startDate | date }} - {{ picker.endDate | date }}

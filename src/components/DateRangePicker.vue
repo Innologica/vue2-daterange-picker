@@ -14,19 +14,19 @@
         </div>
         <transition name="slide-fade" mode="out-in">
             <div
-                    class="daterangepicker dropdown-menu ltr show-ranges"
+                    class="daterangepicker dropdown-menu ltr"
                     :class="pickerStyles()"
                     v-if="open"
                     v-on-clickaway="clickAway"
             >
-                <div class="calendars">
-                    <calendar-ranges
+                <div class="calendars row no-gutters">
+                    <calendar-ranges class="col-12 col-md-auto" v-if="showRanges"
                             @clickRange="clickRange"
                             :ranges="ranges"
                     ></calendar-ranges>
 
-                    <div class="drp-calendar left">
-                        <div class="daterangepicker_input hidden-xs" v-if="false">
+                    <div class="drp-calendar col left" :class="{single: singleDatePicker}">
+                        <div class="daterangepicker_input d-none d-sm-block" v-if="false">
                             <input class="input-mini form-control" type="text" name="daterangepicker_start"
                                    :value="startText"/>
                             <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
@@ -42,7 +42,7 @@
                         </div>
                     </div>
 
-                    <div class="drp-calendar right hidden-xs">
+                    <div class="drp-calendar col right" v-if="!singleDatePicker">
                         <div class="daterangepicker_input" v-if="false">
                             <input class="input-mini form-control" type="text" name="daterangepicker_end"
                                    :value="endText"/>
@@ -92,6 +92,14 @@
     props: {
       minDate: [String, Object],
       maxDate: [String, Object],
+      singleDatePicker: {
+        type: Boolean,
+        default: false,
+      },
+      showDropdowns: {
+        type: Boolean,
+        default: false,
+      },
       localeData: {
         type: Object,
         default () {
@@ -107,6 +115,10 @@
         default () {
           return new Date()
         }
+      },
+      showRanges: {
+        type: Boolean,
+        default: false,
       },
       ranges: {
         type: Object,
@@ -145,7 +157,12 @@
 
       data.monthDate = new Date(this.startDate)
       data.start = new Date(this.startDate)
-      data.end = new Date(this.endDate)
+      if (this.singleDatePicker) {
+        // ignore endDate for singleDatePicker
+        data.end = new Date(this.startDate)
+      } else {
+        data.end = new Date(this.endDate)
+      }
       data.in_selection = false
       data.open = false
 
@@ -175,7 +192,9 @@
             this.start = new Date(value)
           }
         } else {
-          this.in_selection = true
+          if (!this.singleDatePicker) {
+            this.in_selection = true
+          }
           this.start = new Date(value)
           this.end = new Date(value)
         }
@@ -191,6 +210,8 @@
       pickerStyles () {
         return {
           'show-calendar': this.open,
+          'show-ranges': this.showRanges,
+          single: this.singleDatePicker,
           opensright: this.opens === 'right',
           opensleft: this.opens === 'left',
           openscenter: this.opens === 'center'
@@ -261,13 +282,61 @@
         display: flex;
         width: auto;
 
+        @media screen and (max-width: 768px){
+          &.show-ranges {
+            .drp-calendar.left {
+              border-left: 0px;
+            }
+            .ranges {
+              border-bottom: 1px solid #ddd;
+              /deep/ ul {
+                display: flex;
+                flex-wrap: wrap;
+                width: auto;
+              }
+            }
+          }
+        }
+
+        @media screen and (min-width: 540px){
+          min-width: 486px;
+        }
+
+        @media screen and (min-width: 768px){
+          &.show-ranges {
+            min-width: 628px;
+          }
+        }
+
+        &.single {
+          @media screen and (max-width: 340px){
+            min-width: 250px;
+          }
+
+          @media screen and (min-width: 339px){
+            min-width: auto;
+            &.show-ranges {
+              min-width: 328px;
+              .drp-calendar.left {
+                border-left: 1px solid #ddd;
+              }
+              .ranges {
+                width: auto;
+                max-width: none;
+                flex-basis: auto;
+                border-bottom: 0;
+                /deep/ ul {
+                  display: block;
+                  width: 100%;
+                }
+              }
+            }
+          }
+        }
+
         &.show-calendar {
             display: block;
         }
-    }
-
-    .calendars {
-        display: flex;
     }
 
     div.daterangepicker.opensleft {
