@@ -84,6 +84,7 @@
                                 :timePicker24Hour="true"
                                 :show-dropdowns="true"
                                 :autoApply="false"
+                                v-model="dateRange"
                         >
                             <div slot="input" slot-scope="picker">
                                 {{ picker.startDate | date }} - {{ picker.endDate | date }}
@@ -116,11 +117,15 @@
         endDate: '2017-10-09',
         minDate: '2017-09-02',
         maxDate: '2017-10-02',
+        dateRange: {
+            startDate: '2017-09-1',
+            endDate: '2017-9-20',
+        }
       }
     },
     methods: {
       updateValues (values) {
-        console.log(values)
+        console.log(values, this.dateRange)
         this.startDate = values.startDate.toISOString().slice(0, 10)
         this.endDate = values.endDate.toISOString().slice(0, 10)
       }

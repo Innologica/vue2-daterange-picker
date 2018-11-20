@@ -8,7 +8,7 @@
                     :ranges="ranges"
             >
                 <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-                <span>{{startText}} - {{endText}}</span>
+                <span>{{rangeText}}</span>
                 <b class="caret"></b>
             </slot>
         </div>
@@ -111,6 +111,10 @@
   export default {
     components: {Calendar, CalendarTime, CalendarRanges},
     mixins: [clickaway],
+    model: {
+      prop: 'dateRange',
+      event: 'update',
+    },
     props: {
       minDate: [String, Object],
       maxDate: [String, Object],
@@ -147,6 +151,9 @@
         default () {
           return {}
         },
+      },
+      dateRange: { // for v-model
+        default: null,
       },
       startDate: {
         default () {
@@ -197,13 +204,20 @@
       // let data = { locale: _locale }
       let data = {locale: {...default_locale, ...this.localeData}}
 
-      data.monthDate = new Date(this.startDate)
-      data.start = new Date(this.startDate)
+      let startDate = this.startDate;
+      let endDate = this.endDate;
+      if (this.dateRange !== null) {
+        startDate = this.dateRange.startDate;
+        endDate = this.dateRange.endDate;
+      }
+
+      data.monthDate = new Date(startDate)
+      data.start = new Date(startDate)
       if (this.singleDatePicker) {
         // ignore endDate for singleDatePicker
-        data.end = new Date(this.startDate)
+        data.end = new Date(startDate)
       } else {
-        data.end = new Date(this.endDate)
+        data.end = new Date(endDate)
       }
       data.in_selection = false
       data.open = false
