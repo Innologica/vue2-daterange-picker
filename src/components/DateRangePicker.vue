@@ -85,7 +85,7 @@
                     <button
                             class="cancelBtn btn btn-sm btn-default"
                             type="button"
-                            @click="open=false"
+                            @click="clickAway"
                     >{{locale.cancelLabel}}</button>
                     <button
                             class="applyBtn btn btn-sm btn-success"
@@ -323,6 +323,15 @@
       },
       clickAway () {
         if (this.open) {
+          // reset start and end
+          let startDate = this.startDate;
+          let endDate = this.endDate;
+          if (this.dateRange !== null) {
+            startDate = this.dateRange.startDate;
+            endDate = this.dateRange.endDate;
+          }
+          this.start = new Date(startDate);
+          this.end = new Date(endDate);
           this.open = false
         }
       },
@@ -333,14 +342,20 @@
         this.clickedApply()
       },
       onUpdateStartTime (value) {
-        this.start.setHours(value.hours);
-        this.start.setMinutes(value.minutes);
-        this.start.setSeconds(value.seconds);
+        let start = new Date(this.start);
+        start.setHours(value.hours);
+        start.setMinutes(value.minutes);
+        start.setSeconds(value.seconds);
+
+        this.start = start;
       },
       onUpdateEndTime (value) {
-        this.end.setHours(value.hours);
-        this.end.setMinutes(value.minutes);
-        this.end.setSeconds(value.seconds);
+        let end = new Date(this.end);
+        end.setHours(value.hours);
+        end.setMinutes(value.minutes);
+        end.setSeconds(value.seconds);
+
+        this.end = end;
       },
     },
     computed: {

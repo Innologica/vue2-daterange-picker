@@ -76,7 +76,7 @@
                                 :startDate="startDate"
                                 :endDate="endDate"
                                 @update="updateValues"
-                                :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY' }"
+                                :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY HH:mm:ss' }"
                                 :minDate="minDate" :maxDate="maxDate"
                                 :showRanges="true"
                                 :singleDatePicker="false"
@@ -118,7 +118,7 @@
         minDate: '2017-09-02',
         maxDate: '2017-10-02',
         dateRange: {
-            startDate: '2017-09-1',
+            startDate: '2017-09-10',
             endDate: '2017-9-20',
         }
       }
