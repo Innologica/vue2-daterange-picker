@@ -396,6 +396,16 @@
       },
       maxDate (value) {
         this.changeMonth(this.monthDate);
+      },
+      dateRange (value) {
+        if (value) {
+          if (value.startDate) {
+            this.start = new Date(value.startDate);
+          }
+          if (value.endDate) {
+            this.end = new Date(value.endDate);
+          }
+        }
       }
     }
   }
