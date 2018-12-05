@@ -7,7 +7,7 @@
                     :endDate="end"
                     :ranges="ranges"
             >
-                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                <font-awesome-icon icon="calendar" />&nbsp;
                 <span>{{startText}} - {{endText}}</span>
                 <b class="caret"></b>
             </slot>
@@ -29,7 +29,7 @@
                         <div class="daterangepicker_input hidden-xs" v-if="false">
                             <input class="input-mini form-control" type="text" name="daterangepicker_start"
                                    :value="startText"/>
-                            <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
+                            <font-awesome-icon icon="calendar" /></i>
                         </div>
                         <div class="calendar-table">
                             <calendar :monthDate="monthDate"
@@ -46,7 +46,7 @@
                         <div class="daterangepicker_input" v-if="false">
                             <input class="input-mini form-control" type="text" name="daterangepicker_end"
                                    :value="endText"/>
-                            <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
+                            <font-awesome-icon icon="calendar" />
                         </div>
                         <div class="calendar-table">
                             <calendar :monthDate="nextMonthDate"
@@ -85,9 +85,13 @@
   import CalendarRanges from './CalendarRanges'
   import {nextMonth, prevMonth} from './util'
   import {mixin as clickaway} from 'vue-clickaway'
+  import { library } from '@fortawesome/fontawesome-svg-core'
+  import { faCalendar } from '@fortawesome/free-solid-svg-icons'
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+  library.add(faCalendar)
 
   export default {
-    components: {Calendar, CalendarRanges},
+    components: {FontAwesomeIcon, Calendar, CalendarRanges},
     mixins: [clickaway],
     props: {
       minDate: [String, Object],
