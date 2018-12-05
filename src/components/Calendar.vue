@@ -2,9 +2,9 @@
     <table class="table-condensed">
         <thead>
         <tr>
-            <th class="prev available" @click="$emit('prevMonth')"><i :class="[arrowLeftClass]"></i></th>
+            <th class="prev available" @click="$emit('prevMonth')"><font-awesome-icon icon="chevron-left" /></th>
             <th colspan="5" class="month">{{monthName}} {{year}}</th>
-            <th class="next available" @click="$emit('nextMonth')"><i :class="[arrowRightClass]"></i></th>
+            <th class="next available" @click="$emit('nextMonth')" <font-awesome-icon icon="chevron-right" /></i></th>
         </tr>
         </thead>
         <tbody>
@@ -32,8 +32,14 @@
 
 <script>
   import moment from 'moment'
+  import {library} from '@fortawesome/fontawesome-svg-core';
+  import {faChevronLeft, faChevronRight} from '@fortawesome/free-solid-svg-icons';
+  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+
+  library.add(faChevronLeft, faChevronRight);
 
   export default {
+    components: {FontAwesomeIcon},
     name: 'calendar',
     props: ['monthDate', 'locale', 'start', 'end', 'minDate', 'maxDate'],
     methods: {
@@ -59,12 +65,6 @@
       }
     },
     computed: {
-      arrowLeftClass () {
-        return 'chevron-left'
-      },
-      arrowRightClass () {
-        return 'chevron-right'
-      },
       monthName () {
         return this.locale.monthNames[this.monthDate.getMonth()]
       },
