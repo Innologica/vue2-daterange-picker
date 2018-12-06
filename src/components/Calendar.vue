@@ -4,7 +4,7 @@
         <tr>
             <th class="prev available" @click="$emit('prevMonth')"><font-awesome-icon icon="chevron-left" /></th>
             <th colspan="5" class="month">{{monthName}} {{year}}</th>
-            <th class="next available" @click="$emit('nextMonth')" <font-awesome-icon icon="chevron-right" /></i></th>
+            <th class="next available" @click="$emit('nextMonth')" <font-awesome-icon icon="chevron-right" /></th>
         </tr>
         </thead>
         <tbody>
