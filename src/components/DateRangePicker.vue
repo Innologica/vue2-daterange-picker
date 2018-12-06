@@ -29,7 +29,7 @@
                         <div class="daterangepicker_input hidden-xs" v-if="false">
                             <input class="input-mini form-control" type="text" name="daterangepicker_start"
                                    :value="startText"/>
-                            <font-awesome-icon icon="calendar" /></i>
+                            <font-awesome-icon icon="calendar" />
                         </div>
                         <div class="calendar-table">
                             <calendar :monthDate="monthDate"
