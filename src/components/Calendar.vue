@@ -167,9 +167,15 @@
     }
 
     .chevron-left {
+        width: 16px;
+        height: 16px;
+        display: block;
         background-image: $carousel-control-prev-icon-bg;
     }
     .chevron-right {
+        width: 16px;
+        height: 16px;
+        display: block;
         background-image: $carousel-control-next-icon-bg;
     }
 </style>
