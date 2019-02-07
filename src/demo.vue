@@ -67,11 +67,20 @@
                 </div>
                 <span class="form-text text-muted">(string: 'left'/'right'/'center') Whether the picker appears aligned to the left, to the right, or centered under the HTML element it's attached to</span>
 
+                <div class="form-group mt-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="showRanges" id="showRanges" :value="true"
+                               v-model="showRanges">
+                        <label class="col-form-label" for="showRanges"> Show Range</label>
+                    </div>
+                </div>
+
                 <div class="py-5">
                     <h1>Demo</h1>
                     <div class="form-group">
                         <label>Select range: </label>
                         <date-range-picker
+                                :ranges="ranges"
                                 :opens="opens"
                                 :startDate="startDate"
                                 :endDate="endDate"
@@ -110,6 +119,8 @@
         endDate: '2017-10-09',
         minDate: '2017-09-02',
         maxDate: '2017-10-02',
+        ranges: undefined, // setting to undefined to get the default ranges
+        showRanges: true,
       }
     },
     methods: {
@@ -117,6 +128,14 @@
         console.log(values)
         this.startDate = values.startDate.toISOString().slice(0, 10)
         this.endDate = values.endDate.toISOString().slice(0, 10)
+      }
+    },
+    watch: {
+      showRanges(newVal, oldVal){
+        if(newVal)
+          this.ranges = undefined
+        else if(!newVal)
+          this.ranges = false
       }
     }
   }

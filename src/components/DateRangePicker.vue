@@ -109,7 +109,7 @@
         }
       },
       ranges: {
-        type: Object,
+        type: [Object, Boolean],
         default () {
           return {
             'Today': [moment(), moment()],
