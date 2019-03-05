@@ -26,6 +26,7 @@ export default {
         return {
             startDate: '2017-09-05',
             endDate: '2017-09-15',
+            opens: "center",//which way the picker opens, default "center", can be "left"/"right"
             locale: {
                 direction: 'ltr', //direction of text
                 format: 'DD-MM-YYYY', //fomart of the dates displayed
@@ -50,6 +51,7 @@ export default {
         :endDate="endDate" 
         @update="console.log(value)"
         :locale-data="locale"
+        :opens="opens"       
     >
     <!--Optional scope for the input displaying the dates -->
     <div slot="input" slot-scope="picker">...</div>
