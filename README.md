@@ -37,6 +37,14 @@ export default {
                 daysOfWeek: moment.weekdaysMin(), //array of days - see moment documenations for details
                 monthNames: moment.monthsShort(), //array of month names - see moment documenations for details
                 firstDay: 1 //ISO first day of week - see moment documenations for details
+            },
+            ranges: { //default value for ranges object (if you set this to false ranges will no be rendered)
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'This month': [moment().startOf('month'), moment().endOf('month')],
+                'This year': [moment().startOf('year'), moment().endOf('year')],
+                'Last week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+                'Last month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
             }
         }
     }
@@ -65,9 +73,24 @@ Props:
 - endDate - the end date currently selected
 - minDate - the minimum date that can be selected
 - maxDate - the maximum date that can be selected
-- ranges - the ranges object
+- ranges - the ranges object (set to false if you want to hide the ranges),
+default ranges: 
+````
+{
+    'Today': [moment(), moment()],
+    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+    'This month': [moment().startOf('month'), moment().endOf('month')],
+    'This year': [moment().startOf('year'), moment().endOf('year')],
+    'Last week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+    'Last month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+}
+````
 
 See the demo source or the code snippet above for example.
+
+Slot "ranges" can be used to override the default ranges panel. If you utilize this slot it's your responsibility to set start and end date based on selection. 
+
+If not specified the default CalendarRanges component is used
 
 ### Properties
 -------

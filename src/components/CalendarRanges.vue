@@ -1,6 +1,6 @@
 <template>
     <div class="ranges">
-        <ul v-if="ranges" class="hidden-xs">
+        <ul v-if="ranges">
             <li
                     v-for="(value, key) in ranges"
                     @click="$emit('clickRange', value)"

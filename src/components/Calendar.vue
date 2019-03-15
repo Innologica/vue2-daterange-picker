@@ -2,9 +2,23 @@
     <table class="table-condensed">
         <thead>
         <tr>
-            <th class="prev available" @click="$emit('prevMonth')"><i :class="[arrowLeftClass]"></i></th>
-            <th colspan="5" class="month">{{monthName}} {{year}}</th>
-            <th class="next available" @click="$emit('nextMonth')"><i :class="[arrowRightClass]"></i></th>
+            <th class="prev available" @click="$emit('prevMonth')"><span/></th>
+            <th
+                    v-if="showDropdowns"
+                    colspan="5"
+                    class="month"
+            >
+                <div class="row mx-1">
+                    <select v-model="month" class="monthselect col">
+                        <option v-for="(m, idx) in months" :key="m" :value="idx">{{m}}</option>
+                    </select>
+                    <select v-model="year" class="yearselect col">
+                        <option v-for="y in years" :key="y" :value="y">{{y}}</option>
+                    </select>
+                </div>
+            </th>
+            <th v-else colspan="5" class="month">{{monthName}} {{year}}</th>
+            <th class="next available" @click="$emit('nextMonth')"><span/></th>
         </tr>
         </thead>
         <tbody>
@@ -35,7 +49,18 @@
 
   export default {
     name: 'calendar',
-    props: ['monthDate', 'locale', 'start', 'end', 'minDate', 'maxDate'],
+    props: {
+      monthDate: Date,
+      locale: Object,
+      start: Date,
+      end: Date,
+      minDate: Date,
+      maxDate: Date,
+      showDropdowns: {
+        type: Boolean,
+        default: false,
+      },
+    },
     methods: {
       dayClass (date) {
         let dt = new Date(date)
@@ -59,20 +84,30 @@
       }
     },
     computed: {
-      arrowLeftClass () {
-        return 'chevron-left'
-      },
-      arrowRightClass () {
-        return 'chevron-right'
-      },
       monthName () {
         return this.locale.monthNames[this.monthDate.getMonth()]
       },
-      year () {
-        return this.monthDate.getFullYear()
+      year: {
+        get () {
+          return this.monthDate.getFullYear()
+        },
+        set (value) {
+          this.$emit('change-month', {
+            month: this.month,
+            year: value,
+          });
+        }
       },
-      month () {
-        return this.monthDate.getMonth()
+      month: {
+        get () {
+          return this.monthDate.getMonth()
+        },
+        set (value) {
+          this.$emit('change-month', {
+            month: value,
+            year: this.year,
+          });
+        }
       },
       calendar () {
         let month = this.month
@@ -110,6 +145,43 @@
         }
 
         return calendar
+      },
+      months () {
+        let y = this.maxDate.getFullYear() - this.minDate.getFullYear();
+        if (y < 2) {
+          // get months
+          let months = [];
+          if (y < 1) {
+            for (let i = this.minDate.getMonth(); i <= this.maxDate.getMonth(); i++) {
+              months.push(i);
+            }
+          } else {
+            for (let i = 0; i <= this.maxDate.getMonth(); i++) {
+              months.push(i);
+            }
+            for (let i = this.minDate.getMonth(); i < 12; i++) {
+              months.push(i);
+            }
+          }
+
+          // do filter
+          if (months.length > 0) {
+            return this.locale.monthNames.filter((m, index) => {
+              return months.findIndex(i => i === index) > -1;
+            });
+          }
+        }
+        return this.locale.monthNames;
+      },
+      years () {
+        let values = []
+        let count = 0
+        // for (let i = this.minDate.getFullYear(); i <= this.maxDate.getFullYear() && count <= 20; i++) {
+        for (let i = this.start.getFullYear(); count <= 20; i++) {
+          count ++
+          values.push(i - 10)
+        }
+        return values;
       }
     },
     filters: {
@@ -121,6 +193,11 @@
 </script>
 
 <style scoped lang="scss">
+    th,td {
+        padding: 2px;
+        background-color: white;
+    }
+
     td.today {
         font-weight: bold;
     }
@@ -142,10 +219,10 @@
         @return $string;
     }
 
-    $carousel-control-color:            #ccc !default;
+    $carousel-control-color: #ccc !default;
     $viewbox: '-2 -2 10 10';
-    $carousel-control-prev-icon-bg:     str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='#{$viewbox}'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E"), "#", "%23") !default;
-    $carousel-control-next-icon-bg:     str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='#{$viewbox}'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E"), "#", "%23") !default;
+    $carousel-control-prev-icon-bg: str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='#{$viewbox}'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E"), "#", "%23") !default;
+    $carousel-control-next-icon-bg: str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='#{$viewbox}'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E"), "#", "%23") !default;
 
     .fa {
         display: inline-block;
@@ -172,6 +249,7 @@
         display: block;
         background-image: $carousel-control-prev-icon-bg;
     }
+
     .chevron-right {
         width: 16px;
         height: 16px;
