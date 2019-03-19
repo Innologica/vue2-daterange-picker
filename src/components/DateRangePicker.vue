@@ -448,7 +448,7 @@
                 .ranges {
                     border-bottom: 1px solid #ddd;
 
-                    /deep/ ul {
+                    ::v-deep ul {
                         display: flex;
                         flex-wrap: wrap;
                         width: auto;
@@ -487,7 +487,7 @@
                         flex-basis: auto;
                         border-bottom: 0;
 
-                        /deep/ ul {
+                        ::v-deep ul {
                             display: block;
                             width: 100%;
                         }
