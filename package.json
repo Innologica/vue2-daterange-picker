@@ -25,7 +25,6 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
-    "js-beautify": "^1.8.9",
     "moment": "^2.24.0",
     "vue": "^2.6.2",
     "vue-clickaway": "^2.2.2"
