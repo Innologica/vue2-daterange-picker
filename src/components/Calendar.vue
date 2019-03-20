@@ -5,7 +5,7 @@
             <th class="prev available" @click="$emit('prevMonth')"><span/></th>
             <th
                     v-if="showDropdowns"
-                    colspan="5"
+                    :colspan="showWeekNumbers ? 6 : 5"
                     class="month"
             >
                 <div class="row mx-1">
@@ -23,12 +23,16 @@
         </thead>
         <tbody>
         <tr>
+            <th v-if="showWeekNumbers" class="week">W</th>
             <th v-for="weekDay in locale.daysOfWeek" :key="weekDay">{{weekDay}}</th>
         </tr>
         <tr
                 v-for="(dateRow, index) in calendar"
                 :key="index"
         >
+            <td v-if="showWeekNumbers && (index%7 || index===0)" class="week">
+                {{dateRow[0] | weeknumber}}
+            </td>
             <slot name="date-slot" v-for="(date, idx) in dateRow">
                 <td
                         :class="dayClass(date)"
@@ -57,6 +61,10 @@
       minDate: Date,
       maxDate: Date,
       showDropdowns: {
+        type: Boolean,
+        default: false,
+      },
+      showWeekNumbers: {
         type: Boolean,
         default: false,
       },
@@ -187,6 +195,9 @@
     filters: {
       dateNum (value) {
         return value.date()
+      },
+      weeknumber (value) {
+        return value.week()
       }
     }
   }

@@ -42,6 +42,7 @@
                                       @nextMonth="nextMonth" @prevMonth="prevMonth"
                                       @change-month="changeLeftMonth"
                                       @dateClick="dateClick" @hoverDate="hoverDate"
+                                      :showWeekNumbers="showWeekNumbers"
                             ></calendar>
                         </div>
                         <calendar-time v-if="timePicker"
@@ -68,6 +69,7 @@
                                       @nextMonth="nextMonth" @prevMonth="prevMonth"
                                       @change-month="changeRightMonth"
                                       @dateClick="dateClick" @hoverDate="hoverDate"
+                                      :showWeekNumbers="showWeekNumbers"
                             ></calendar>
                         </div>
                         <calendar-time v-if="timePicker"
@@ -129,6 +131,10 @@
         default () {
           return new Date(8640000000000000)
         }
+      },
+      showWeekNumbers: {
+        type: Boolean,
+        default: false,
       },
       singleDatePicker: {
         type: Boolean,
@@ -386,6 +392,7 @@
         return {
           'show-calendar': this.open,
           'show-ranges': !!this.ranges,
+          'show-weeknumbers': this.showWeekNumbers,
           single: this.singleDatePicker,
           opensright: this.opens === 'right',
           opensleft: this.opens === 'left',
@@ -426,6 +433,8 @@
 </style>
 
 <style lang="scss" scoped>
+    $week-width: 682px - 628px;
+
     .reportrange-text {
         background: #fff;
         cursor: pointer;
@@ -459,23 +468,39 @@
 
         @media screen and (min-width: 540px) {
             min-width: 486px;
+            &.show-weeknumbers {
+                min-width: 490px + $week-width;
+            }
+
         }
 
         @media screen and (min-width: 768px) {
             &.show-ranges {
                 min-width: 628px;
+
+                &.show-weeknumbers {
+                    min-width: 628px + $week-width;
+                }
             }
         }
 
         &.single {
             @media screen and (max-width: 340px) {
                 min-width: 250px;
+
+                &.show-weeknumbers {
+                    min-width: 250px + $week-width;
+                }
             }
 
             @media screen and (min-width: 339px) {
                 min-width: auto;
                 &.show-ranges {
                     min-width: 328px;
+
+                    &.show-weeknumbers {
+                        min-width: 328px + $week-width;
+                    }
 
                     .drp-calendar.left {
                         border-left: 1px solid #ddd;

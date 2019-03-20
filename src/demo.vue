@@ -76,6 +76,12 @@
                         </label>
                     </div>
                     <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="showWeekNumbers" v-model="showWeekNumbers">
+                        <label class="form-check-label" for="showWeekNumbers">
+                            showWeekNumbers
+                        </label>
+                    </div>
+                    <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="timePicker" v-model="timePicker">
                         <label class="form-check-label" for="timePicker">
                             timePicker
@@ -99,6 +105,12 @@
                             autoApply
                         </label>
                     </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="show_ranges" v-model="show_ranges">
+                        <label class="form-check-label" for="show_ranges">
+                            show ranges
+                        </label>
+                    </div>
                 </div>
 
                 <div class="py-5">
@@ -115,9 +127,11 @@
                                 :singleDatePicker="singleDatePicker"
                                 :timePicker="timePicker"
                                 :timePicker24Hour="timePicker24Hour"
+                                :showWeekNumbers="showWeekNumbers"
                                 :showDropdowns="showDropdowns"
                                 :autoApply="autoApply"
                                 v-model="dateRange"
+                                :ranges="show_ranges ? undefined : false"
                         >
                             <div slot="input" slot-scope="picker" style="min-width: 350px;">
                                 {{ picker.startDate | date }} - {{ picker.endDate | date }}
@@ -160,6 +174,7 @@
         timePicker24Hour: true,
         showDropdowns: true,
         autoApply: false,
+        showWeekNumbers: true,
       }
     },
     methods: {

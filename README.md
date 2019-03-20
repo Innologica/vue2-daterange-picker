@@ -38,6 +38,7 @@ export default {
                 daysOfWeek: moment.weekdaysMin(), //array of days - see moment documenations for details
                 monthNames: moment.monthsShort(), //array of month names - see moment documenations for details
                 firstDay: 1 //ISO first day of week - see moment documenations for details
+                showWeekNumbers: true //show week numbers on each row of the calendar
             },
             ranges: { //default value for ranges object (if you set this to false ranges will no be rendered)
                 'Today': [moment(), moment()],
@@ -116,7 +117,7 @@ If not specified the default CalendarRanges component is used
 
 ## TODO
 
-- [ ] documentation
+- [x] documentation
 - [ ] tests
 - [x] disabled dates
 - [ ] export single components
