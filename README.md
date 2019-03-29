@@ -19,6 +19,8 @@ npm i vue2-daterange-picker --save
 
 ```javascript
 import DateRangePicker from 'vue2-daterange-picker'
+//you need to import the CSS manually (in case you want to override it)
+import 'vue2-daterange-picker/dist/lib/vue-daterange-picker.min.css'
 
 export default {
     components: { DateRangePicker },
