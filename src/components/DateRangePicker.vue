@@ -1,6 +1,6 @@
 <template>
-    <div style="position: relative; display: inline-block;">
-        <div class="form-control" @click="togglePicker">
+    <div class="vue-daterange-picker">
+        <div class="form-control reportrange-text" @click="togglePicker">
             <slot
                     name="input"
                     :startDate="start"
@@ -47,6 +47,7 @@
                         </div>
                         <calendar-time v-if="timePicker"
                                        @update="onUpdateStartTime"
+                                       @change-month="changeRightMonth"
                                        :miniute-increment="timePickerIncrement"
                                        :hour24="timePicker24Hour"
                                        :second-picker="timePickerSeconds"
@@ -278,7 +279,7 @@
         } else {
           value.month -= 1;
         }
-        this.changeMonth(value);
+        this.changeLeftMonth(value);
       },
       normalizeDatetime (value, oldValue) {
         let newDate = new Date(value);
@@ -378,7 +379,7 @@
       rangeText () {
         let range = this.startText;
         if (!this.singleDatePicker) {
-          range += ' ' + this.locale.separator + ' ' + this.endText;
+          range += this.locale.separator + this.endText;
         }
         return range;
       },
@@ -526,23 +527,25 @@
         }
     }
 
-    div.daterangepicker.opensleft {
-        top: 35px;
-        right: 10px;
-        left: auto;
-    }
+    .daterangepicker {
+        &.opensleft {
+            top: 35px;
+            right: 10px;
+            left: auto;
+        }
 
-    div.daterangepicker.openscenter {
-        top: 35px;
-        right: auto;
-        left: 50%;
-        transform: translate(-50%, 0);
-    }
+        &.openscenter {
+            top: 35px;
+            right: auto;
+            left: 50%;
+            transform: translate(-50%, 0);
+        }
 
-    div.daterangepicker.opensright {
-        top: 35px;
-        left: 10px;
-        right: auto;
+        &.opensright {
+            top: 35px;
+            left: 10px;
+            right: auto;
+        }
     }
 
     /* Enter and leave animations can use different */
@@ -560,6 +563,11 @@
     {
         transform: translateX(10px);
         opacity: 0;
+    }
+
+    .vue-daterange-picker {
+        position: relative;
+        display: inline-block;
     }
 
 </style>

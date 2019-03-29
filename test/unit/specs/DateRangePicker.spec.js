@@ -1,31 +1,34 @@
 import Vue from 'vue'
 import DateRangePicker from '@/components/DateRangePicker'
+import moment from 'moment'
 
 // helper function that mounts and returns the rendered text
 function getRenderedComponent (Component, propsData) {
   const Ctor = Vue.extend(Component)
-  const vm = new Ctor({ propsData: propsData }).$mount()
+  const vm = new Ctor({propsData: propsData}).$mount()
   return vm
 }
 
+const propsData = {
+  startDate: '2017-09-19',
+  endDate: '2017-10-09'
+}
+
 describe('DateRangePicker.vue', () => {
-  let vm = getRenderedComponent(DateRangePicker, {})
-  let dt = new Date()
+  let vm = getRenderedComponent(DateRangePicker, propsData)
+  let dt_start = new Date(propsData.startDate)
+  let dt_end = new Date(propsData.endDate)
+
+  let dt_start_text = moment(dt_start).format(vm.locale.format)
+  let dt_end_text = moment(dt_end).format(vm.locale.format)
 
   it('should render correct contents', () => {
     expect(vm.$el.querySelector('.reportrange-text span').textContent)
-      .to.equal(dt.toLocaleDateString() + ' - ' + dt.toLocaleDateString())
-  })
-
-  it('should have startDate and endDate props set to Date instances', () => {
-    expect(vm.startDate)
-      .to.be.a('Date')
-    expect(vm.endDate)
-      .to.be.a('Date')
+      .to.equal(dt_start_text + vm.locale.separator + dt_end_text)
   })
 
   it('should be hidden', () => {
-    expect(vm.$el.querySelector('div.daterangepicker'))
+    expect(vm.$el.querySelector('.daterangepicker'))
       .to.equal(null)
   })
 
@@ -34,27 +37,29 @@ describe('DateRangePicker.vue', () => {
 
     Vue.nextTick(() => {
       expect(vm.$el.querySelector('.daterangepicker'))
-        .to.not.be.empty()
+        .to.not.be.empty
       done()
     })
   })
 
-  it('should select the dates passed by props "2017-09-19" - "2017-10-09"', () => {
-    vm.startDate = '2017-09-19'
-    vm.endDate = '2017-10-09'
+  it('should select the dates passed by props "1981-11-24" - "2018-10-09"', (done) => {
+    vm.startDate = '1981-11-24'
+    vm.endDate = '2018-10-09'
 
     Vue.nextTick(() => {
-      expect(vm.$el.querySelectorAll('.in-range'))
-        .to.have.length(16)
 
-      expect(vm.start.toLocaleDateString())
-        .to.equal('19/9/2017')
-
-      expect(vm.end.toLocaleDateString())
-        .to.equal('9/10/2017')
+      expect(moment(vm.start).isSame('1981-11-24', 'date')).to.equal(true)
+      expect(moment(vm.end).isSame('2018-10-09', 'date')).to.equal(true)
 
       done()
     })
+  })
+
+  //bugs
+  it('getMonth is not a function #40 - select month before the start date', () => {
+    vm.startDate = propsData.startDate
+    vm.endDate = propsData.endDate
+    vm.changeRightMonth({month: 1, year: 2017})
   })
 
 })
