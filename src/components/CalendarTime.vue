@@ -53,7 +53,7 @@
     data() {
       let hours = this.currentTime.getHours();
       return {
-        hour: this.hour24 ? hours : hours % 12,
+        hour: this.hour24 ? hours : hours % 12 || 12,
         minute: this.currentTime.getMinutes() - (this.currentTime.getMinutes() % this.miniuteIncrement),
         second: this.currentTime.getSeconds(),
         ampm: hours < 12 ? 'AM' : 'PM',
