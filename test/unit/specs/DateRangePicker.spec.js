@@ -60,6 +60,11 @@ describe('DateRangePicker.vue', () => {
     vm.startDate = propsData.startDate
     vm.endDate = propsData.endDate
     vm.changeRightMonth({month: 1, year: 2017})
+    expect(moment(vm.nextMonthDate).month()).to.equal(1)
+    expect(moment(vm.nextMonthDate).year()).to.equal(2017)
   })
 
+  it('Cleared state / null value? #41 - should be able to set null value', (done) => {
+    done()
+  })
 })

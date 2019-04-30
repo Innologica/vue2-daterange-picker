@@ -26,8 +26,10 @@ export default {
     components: { DateRangePicker },
     data() {
         return {
-            startDate: '2017-09-05',
-            endDate: '2017-09-15',
+            dateRange: { // used for v-model prop
+                startDate: '2017-09-05',
+                endDate: '2017-09-15',
+            },
             opens: "center",//which way the picker opens, default "center", can be "left"/"right"
             locale: {
                 direction: 'ltr', //direction of text
@@ -39,7 +41,7 @@ export default {
                 customRangeLabel: 'Custom Range',
                 daysOfWeek: moment.weekdaysMin(), //array of days - see moment documenations for details
                 monthNames: moment.monthsShort(), //array of month names - see moment documenations for details
-                firstDay: 1 //ISO first day of week - see moment documenations for details
+                firstDay: 1, //ISO first day of week - see moment documenations for details
                 showWeekNumbers: true //show week numbers on each row of the calendar
             },
             ranges: { //default value for ranges object (if you set this to false ranges will no be rendered)
@@ -58,8 +60,7 @@ export default {
 ```html
 <template>
     <date-range-picker 
-        :startDate="startDate" 
-        :endDate="endDate" 
+        v-model="dateRange" 
         @update="console.log(value)"
         :locale-data="locale"
         :opens="opens"       
@@ -120,7 +121,7 @@ If not specified the default CalendarRanges component is used
 ## TODO
 
 - [x] documentation
-- [ ] tests
+- [x] tests
 - [x] disabled dates
 - [ ] export single components
 
