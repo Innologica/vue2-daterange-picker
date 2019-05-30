@@ -114,6 +114,7 @@
   import {mixin as clickaway} from 'vue-clickaway'
 
   export default {
+    inheritAttrs: false,
     components: {Calendar, CalendarTime, CalendarRanges},
     mixins: [clickaway],
     model: {
@@ -174,16 +175,6 @@
       dateRange: { // for v-model
         default: null,
       },
-      startDate: {
-        default () {
-          return new Date()
-        }
-      },
-      endDate: {
-        default () {
-          return new Date()
-        }
-      },
       ranges: {
         type: [Object, Boolean],
         default () {
@@ -219,20 +210,16 @@
       // let data = { locale: _locale }
       let data = {locale: {...default_locale, ...this.localeData}}
 
-      let startDate = this.startDate;
-      let endDate = this.endDate;
-      if (this.dateRange !== null) {
-        startDate = this.dateRange.startDate;
-        endDate = this.dateRange.endDate;
-      }
+      let startDate = this.dateRange.startDate || null;
+      let endDate = this.dateRange.endDate || null;
 
-      data.monthDate = new Date(startDate)
-      data.start = new Date(startDate)
+      data.monthDate = startDate ? new Date(startDate) : new Date()
+      data.start = startDate ? new Date(startDate) : null
       if (this.singleDatePicker) {
         // ignore endDate for singleDatePicker
-        data.end = new Date(startDate)
+        data.end = data.start
       } else {
-        data.end = new Date(endDate)
+        data.end = endDate ? new Date(endDate) : null
       }
       data.in_selection = false
       data.open = false
@@ -283,7 +270,7 @@
       },
       normalizeDatetime (value, oldValue) {
         let newDate = new Date(value);
-        if (this.timePicker) {
+        if (this.timePicker && oldValue) {
           newDate.setHours(oldValue.getHours());
           newDate.setMinutes(oldValue.getMinutes());
           newDate.setSeconds(oldValue.getSeconds());
@@ -329,14 +316,10 @@
       clickAway () {
         if (this.open) {
           // reset start and end
-          let startDate = this.startDate;
-          let endDate = this.endDate;
-          if (this.dateRange !== null) {
-            startDate = this.dateRange.startDate;
-            endDate = this.dateRange.endDate;
-          }
-          this.start = new Date(startDate);
-          this.end = new Date(endDate);
+          let startDate = this.dateRange.startDate
+          let endDate = this.dateRange.endDate
+          this.start = startDate ? new Date(startDate) : null
+          this.end = endDate ? new Date(endDate) : null
           this.open = false
         }
       },
@@ -344,8 +327,8 @@
         this.start = new Date(value[0])
         this.end = new Date(value[1])
         this.monthDate = new Date(value[0])
-        if(this.autoApply)
-            this.clickedApply()
+        if (this.autoApply)
+          this.clickedApply()
       },
       onUpdateStartTime (value) {
         let start = new Date(this.start);
@@ -369,10 +352,14 @@
         return nextMonth(this.monthDate)
       },
       startText () {
-        // return this.start.toLocaleDateString()
+        // return this.start.toLocaleDateString()+
+        if (this.start === null)
+          return ''
         return moment(this.start).format(this.locale.format)
       },
       endText () {
+        if (this.end === null)
+          return ''
         // return new Date(this.end).toLocaleDateString()
         return moment(new Date(this.end)).format(this.locale.format)
       },
@@ -400,28 +387,35 @@
           openscenter: this.opens === 'center'
         }
       },
+      isClear () {
+        return !this.dateRange.startDate || !this.dateRange.endDate
+      }
     },
     watch: {
-      startDate (value) {
-        this.start = new Date(value)
-      },
-      endDate (value) {
-        this.end = new Date(value)
-      },
       minDate (value) {
         this.changeMonth(this.monthDate);
       },
       maxDate (value) {
         this.changeMonth(this.monthDate);
       },
-      dateRange (value) {
-        if (value) {
-          if (value.startDate) {
-            this.start = new Date(value.startDate);
-          }
-          if (value.endDate) {
-            this.end = new Date(value.endDate);
-          }
+      'dateRange.startDate' (value) {
+        this.start = (!!value && !this.isClear) ? new Date(value) : null
+        if (this.isClear) {
+          this.start = null
+          this.end = null
+        } else {
+          this.start = new Date(this.dateRange.startDate)
+          this.end = new Date(this.dateRange.endDate)
+        }
+      },
+      'dateRange.endDate' (value) {
+        this.end = (!!value && !this.isClear) ? new Date(value) : null
+        if (this.isClear) {
+          this.start = null
+          this.end = null
+        } else {
+          this.start = new Date(this.dateRange.startDate)
+          this.end = new Date(this.dateRange.endDate)
         }
       }
     }

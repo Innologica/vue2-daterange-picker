@@ -10,14 +10,16 @@ function getRenderedComponent (Component, propsData) {
 }
 
 const propsData = {
-  startDate: '2017-09-19',
-  endDate: '2017-10-09'
+  dateRange: {
+    startDate: '2017-09-19',
+    endDate: '2017-10-09'
+  }
 }
 
 describe('DateRangePicker.vue', () => {
   let vm = getRenderedComponent(DateRangePicker, propsData)
-  let dt_start = new Date(propsData.startDate)
-  let dt_end = new Date(propsData.endDate)
+  let dt_start = new Date(propsData.dateRange.startDate)
+  let dt_end = new Date(propsData.dateRange.endDate)
 
   let dt_start_text = moment(dt_start).format(vm.locale.format)
   let dt_end_text = moment(dt_end).format(vm.locale.format)
@@ -35,7 +37,7 @@ describe('DateRangePicker.vue', () => {
   it('should open when clicked', (done) => {
     vm.open = true
 
-    Vue.nextTick(() => {
+    vm.$nextTick(() => {
       expect(vm.$el.querySelector('.daterangepicker'))
         .to.not.be.empty
       done()
@@ -43,10 +45,10 @@ describe('DateRangePicker.vue', () => {
   })
 
   it('should select the dates passed by props "1981-11-24" - "2018-10-09"', (done) => {
-    vm.startDate = '1981-11-24'
-    vm.endDate = '2018-10-09'
+    vm.dateRange.startDate = '1981-11-24'
+    vm.dateRange.endDate = '2018-10-09'
 
-    Vue.nextTick(() => {
+    vm.$nextTick(() => {
 
       expect(moment(vm.start).isSame('1981-11-24', 'date')).to.equal(true)
       expect(moment(vm.end).isSame('2018-10-09', 'date')).to.equal(true)
@@ -65,6 +67,15 @@ describe('DateRangePicker.vue', () => {
   })
 
   it('Cleared state / null value? #41 - should be able to set null value', (done) => {
-    done()
+    vm.dateRange.startDate = null
+    vm.$nextTick(() => {
+      expect(vm.start).to.equal(null)
+      expect(vm.end).to.equal(null)
+
+      expect(vm.startText).to.equal("")
+      expect(vm.endText).to.equal("")
+      expect(vm.rangeText).to.equal(vm.locale.separator)
+      done()
+    })
   })
 })

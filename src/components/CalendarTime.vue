@@ -51,11 +51,12 @@
       }
     },
     data() {
-      let hours = this.currentTime.getHours();
+      let current = this.currentTime ? this.currentTime : new Date()
+      let hours = current.getHours();
       return {
         hour: this.hour24 ? hours : hours % 12 || 12,
-        minute: this.currentTime.getMinutes() - (this.currentTime.getMinutes() % this.miniuteIncrement),
-        second: this.currentTime.getSeconds(),
+        minute: current.getMinutes() - (current.getMinutes() % this.miniuteIncrement),
+        second: current.getSeconds(),
         ampm: hours < 12 ? 'AM' : 'PM',
       };
     },

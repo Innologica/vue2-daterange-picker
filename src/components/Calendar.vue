@@ -185,7 +185,8 @@
         let values = []
         let count = 0
         // for (let i = this.minDate.getFullYear(); i <= this.maxDate.getFullYear() && count <= 20; i++) {
-        for (let i = this.start.getFullYear(); count <= 20; i++) {
+        let y = this.start ? this.start.getFullYear() : (new Date()).getFullYear()
+        for (let i = y; count <= 20; i++) {
           count ++
           values.push(i - 10)
         }

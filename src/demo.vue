@@ -21,13 +21,13 @@
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label" for="startDate">StartDate</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="startDate" v-model="startDate">
+                                <input type="text" class="form-control" id="startDate" v-model="dateRange.startDate">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label" for="endDate">EndDate</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="endDate" v-model="endDate">
+                                <input type="text" class="form-control" id="endDate" v-model="dateRange.endDate">
                             </div>
                         </div>
                     </div>
@@ -114,13 +114,11 @@
                 </div>
 
                 <div class="py-5">
-                    <h2>Demo <small class="text-muted">(overriden slot "input")</small></h2>
+                    <h2>Demo <small class="text-muted">(overridden slot "input")</small></h2>
                     <div class="form-group">
                         <label>Select range: </label>
                         <date-range-picker
                                 :opens="opens"
-                                :startDate="startDate"
-                                :endDate="endDate"
                                 @update="updateValues"
                                 :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY HH:mm:ss' }"
                                 :minDate="minDate" :maxDate="maxDate"
@@ -137,6 +135,8 @@
                                 {{ picker.startDate | date }} - {{ picker.endDate | date }}
                             </div>
                         </date-range-picker>
+
+                        <button class="btn btn-info" @click="dateRange.startDate = null, dateRange.endDate = null">Clear</button>
                     </div>
                 </div>
             </div>
@@ -152,6 +152,9 @@
     name: 'DateRangePickerDemo',
     filters: {
       date (value) {
+        if(!value)
+          return ''
+
         let options = {year: 'numeric', month: 'long', day: 'numeric'};
         return Intl.DateTimeFormat('en-US', options).format(value)
       }
@@ -160,8 +163,6 @@
       //                    :locale-data="{ daysOfWeek: [ 'Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб' ] }"
       return {
         opens: 'center',
-        startDate: '2017-09-19',
-        endDate: '2017-10-09',
         minDate: '2016-09-02',
         maxDate: '2019-10-02',
         dateRange: {
@@ -179,9 +180,8 @@
     },
     methods: {
       updateValues (values) {
-        console.log(values, this.dateRange)
-        this.startDate = values.startDate.toISOString().slice(0, 10)
-        this.endDate = values.endDate.toISOString().slice(0, 10)
+        this.dateRange.startDate = values.startDate.toISOString().slice(0, 10)
+        this.dateRange.endDate = values.endDate.toISOString().slice(0, 10)
       }
     }
   }
