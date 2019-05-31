@@ -64,11 +64,57 @@
                                v-model="opens">
                         <label class="form-check-label">right</label>
                     </div>
+                    <span class="form-text text-muted">(string: 'left'/'right'/'center') Whether the picker appears aligned to the left, to the right, or centered under the HTML element it's attached to</span>
                 </div>
-                <span class="form-text text-muted">(string: 'left'/'right'/'center') Whether the picker appears aligned to the left, to the right, or centered under the HTML element it's attached to</span>
+
+                <h4>Other options:</h4>
+                <div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="singleDatePicker" v-model="singleDatePicker">
+                        <label class="form-check-label" for="singleDatePicker">
+                            singleDatePicker
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="showWeekNumbers" v-model="showWeekNumbers">
+                        <label class="form-check-label" for="showWeekNumbers">
+                            showWeekNumbers
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="timePicker" v-model="timePicker">
+                        <label class="form-check-label" for="timePicker">
+                            timePicker
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="timePicker24Hour" v-model="timePicker24Hour">
+                        <label class="form-check-label" for="timePicker24Hour">
+                            timePicker24Hour
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="showDropdowns" v-model="showDropdowns">
+                        <label class="form-check-label" for="showDropdowns">
+                            showDropdowns
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="autoApply" v-model="autoApply">
+                        <label class="form-check-label" for="autoApply">
+                            autoApply
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="show_ranges" v-model="show_ranges">
+                        <label class="form-check-label" for="show_ranges">
+                            show ranges
+                        </label>
+                    </div>
+                </div>
 
                 <div class="py-5">
-                    <h1>Demo</h1>
+                    <h2>Demo <small class="text-muted">(overriden slot "input")</small></h2>
                     <div class="form-group">
                         <label>Select range: </label>
                         <date-range-picker
@@ -76,10 +122,18 @@
                                 :startDate="startDate"
                                 :endDate="endDate"
                                 @update="updateValues"
-                                :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY' }"
+                                :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY HH:mm:ss' }"
                                 :minDate="minDate" :maxDate="maxDate"
+                                :singleDatePicker="singleDatePicker"
+                                :timePicker="timePicker"
+                                :timePicker24Hour="timePicker24Hour"
+                                :showWeekNumbers="showWeekNumbers"
+                                :showDropdowns="showDropdowns"
+                                :autoApply="autoApply"
+                                v-model="dateRange"
+                                :ranges="show_ranges ? undefined : false"
                         >
-                            <div slot="input" slot-scope="picker">
+                            <div slot="input" slot-scope="picker" style="min-width: 350px;">
                                 {{ picker.startDate | date }} - {{ picker.endDate | date }}
                             </div>
                         </date-range-picker>
@@ -108,13 +162,24 @@
         opens: 'center',
         startDate: '2017-09-19',
         endDate: '2017-10-09',
-        minDate: '2017-09-02',
-        maxDate: '2017-10-02',
+        minDate: '2016-09-02',
+        maxDate: '2019-10-02',
+        dateRange: {
+          startDate: '2017-09-10',
+          endDate: '2017-9-20',
+        },
+        show_ranges: true,
+        singleDatePicker: false,
+        timePicker: true,
+        timePicker24Hour: true,
+        showDropdowns: true,
+        autoApply: false,
+        showWeekNumbers: true,
       }
     },
     methods: {
       updateValues (values) {
-        console.log(values)
+        console.log(values, this.dateRange)
         this.startDate = values.startDate.toISOString().slice(0, 10)
         this.endDate = values.endDate.toISOString().slice(0, 10)
       }

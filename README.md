@@ -19,13 +19,18 @@ npm i vue2-daterange-picker --save
 
 ```javascript
 import DateRangePicker from 'vue2-daterange-picker'
+//you need to import the CSS manually (in case you want to override it)
+import 'vue2-daterange-picker/dist/lib/vue-daterange-picker.min.css'
 
 export default {
     components: { DateRangePicker },
     data() {
         return {
-            startDate: '2017-09-05',
-            endDate: '2017-09-15',
+            dateRange: { // used for v-model prop
+                startDate: '2017-09-05',
+                endDate: '2017-09-15',
+            },
+            opens: "center",//which way the picker opens, default "center", can be "left"/"right"
             locale: {
                 direction: 'ltr', //direction of text
                 format: 'DD-MM-YYYY', //fomart of the dates displayed
@@ -36,7 +41,16 @@ export default {
                 customRangeLabel: 'Custom Range',
                 daysOfWeek: moment.weekdaysMin(), //array of days - see moment documenations for details
                 monthNames: moment.monthsShort(), //array of month names - see moment documenations for details
-                firstDay: 1 //ISO first day of week - see moment documenations for details
+                firstDay: 1, //ISO first day of week - see moment documenations for details
+                showWeekNumbers: true //show week numbers on each row of the calendar
+            },
+            ranges: { //default value for ranges object (if you set this to false ranges will no be rendered)
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'This month': [moment().startOf('month'), moment().endOf('month')],
+                'This year': [moment().startOf('year'), moment().endOf('year')],
+                'Last week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+                'Last month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
             }
         }
     }
@@ -46,10 +60,10 @@ export default {
 ```html
 <template>
     <date-range-picker 
-        :startDate="startDate" 
-        :endDate="endDate" 
+        v-model="dateRange" 
         @update="console.log(value)"
         :locale-data="locale"
+        :opens="opens"       
     >
     <!--Optional scope for the input displaying the dates -->
     <div slot="input" slot-scope="picker">...</div>
@@ -65,9 +79,24 @@ Props:
 - endDate - the end date currently selected
 - minDate - the minimum date that can be selected
 - maxDate - the maximum date that can be selected
-- ranges - the ranges object
+- ranges - the ranges object (set to false if you want to hide the ranges),
+default ranges: 
+````
+{
+    'Today': [moment(), moment()],
+    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+    'This month': [moment().startOf('month'), moment().endOf('month')],
+    'This year': [moment().startOf('year'), moment().endOf('year')],
+    'Last week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+    'Last month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+}
+````
 
 See the demo source or the code snippet above for example.
+
+Slot "ranges" can be used to override the default ranges panel. If you utilize this slot it's your responsibility to set start and end date based on selection. 
+
+If not specified the default CalendarRanges component is used
 
 ### Properties
 -------
@@ -91,8 +120,8 @@ See the demo source or the code snippet above for example.
 
 ## TODO
 
-- [ ] documentation
-- [ ] tests
+- [x] documentation
+- [x] tests
 - [x] disabled dates
 - [ ] export single components
 
