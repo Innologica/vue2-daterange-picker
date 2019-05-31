@@ -163,8 +163,10 @@
       //                    :locale-data="{ daysOfWeek: [ 'Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб' ] }"
       return {
         opens: 'center',
-        minDate: '2016-09-02',
-        maxDate: '2019-10-02',
+        // minDate: '2016-09-02',
+        // maxDate: '2019-10-02',
+        minDate: '',
+        maxDate: '',
         dateRange: {
           startDate: '2017-09-10',
           endDate: '2017-9-20',

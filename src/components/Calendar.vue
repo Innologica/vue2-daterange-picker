@@ -155,28 +155,29 @@
         return calendar
       },
       months () {
-        let y = this.maxDate.getFullYear() - this.minDate.getFullYear();
-        if (y < 2) {
-          // get months
-          let months = [];
-          if (y < 1) {
-            for (let i = this.minDate.getMonth(); i <= this.maxDate.getMonth(); i++) {
-              months.push(i);
+        if (this.maxDate && this.minDate) {
+          let y = this.maxDate.getFullYear() - this.minDate.getFullYear();
+          if (y < 2) {
+            // get months
+            let months = [];
+            if (y < 1) {
+              for (let i = this.minDate.getMonth(); i <= this.maxDate.getMonth(); i++) {
+                months.push(i);
+              }
+            } else {
+              for (let i = 0; i <= this.maxDate.getMonth(); i++) {
+                months.push(i);
+              }
+              for (let i = this.minDate.getMonth(); i < 12; i++) {
+                months.push(i);
+              }
             }
-          } else {
-            for (let i = 0; i <= this.maxDate.getMonth(); i++) {
-              months.push(i);
+            // do filter
+            if (months.length > 0) {
+              return this.locale.monthNames.filter((m, index) => {
+                return months.findIndex(i => i === index) > -1;
+              });
             }
-            for (let i = this.minDate.getMonth(); i < 12; i++) {
-              months.push(i);
-            }
-          }
-
-          // do filter
-          if (months.length > 0) {
-            return this.locale.monthNames.filter((m, index) => {
-              return months.findIndex(i => i === index) > -1;
-            });
           }
         }
         return this.locale.monthNames;
@@ -187,7 +188,7 @@
         // for (let i = this.minDate.getFullYear(); i <= this.maxDate.getFullYear() && count <= 20; i++) {
         let y = this.start ? this.start.getFullYear() : (new Date()).getFullYear()
         for (let i = y; count <= 20; i++) {
-          count ++
+          count++
           values.push(i - 10)
         }
         return values;
@@ -205,7 +206,7 @@
 </script>
 
 <style scoped lang="scss">
-    th,td {
+    th, td {
         padding: 2px;
         background-color: white;
     }
