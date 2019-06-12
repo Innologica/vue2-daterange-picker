@@ -118,8 +118,8 @@
                     <div class="form-group">
                         <label>Select range: </label>
                         <date-range-picker
+                                ref="picker"
                                 :opens="opens"
-                                @update="updateValues"
                                 :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY HH:mm:ss' }"
                                 :minDate="minDate" :maxDate="maxDate"
                                 :singleDatePicker="singleDatePicker"
@@ -130,6 +130,8 @@
                                 :autoApply="autoApply"
                                 v-model="dateRange"
                                 :ranges="show_ranges ? undefined : false"
+                                @update="updateValues"
+                                @toggle="checkOpen"
                         >
                             <div slot="input" slot-scope="picker" style="min-width: 350px;">
                                 {{ picker.startDate | date }} - {{ picker.endDate | date }}
@@ -180,10 +182,16 @@
         showWeekNumbers: true,
       }
     },
+    mounted () {
+      this.$refs.picker.open = true
+    },
     methods: {
       updateValues (values) {
         this.dateRange.startDate = values.startDate.toISOString().slice(0, 10)
         this.dateRange.endDate = values.endDate.toISOString().slice(0, 10)
+      },
+      checkOpen (open) {
+        console.log('event: open', open)
       }
     }
   }

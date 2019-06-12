@@ -12,9 +12,7 @@
                     <select v-model="month" class="monthselect col">
                         <option v-for="(m, idx) in months" :key="m" :value="idx">{{m}}</option>
                     </select>
-                    <select v-model="year" class="yearselect col">
-                        <option v-for="y in years" :key="y" :value="y">{{y}}</option>
-                    </select>
+                    <input type="number" v-model="year" class="yearselect col" />
                 </div>
             </th>
             <th v-else colspan="5" class="month">{{monthName}} {{year}}</th>
@@ -182,17 +180,6 @@
         }
         return this.locale.monthNames;
       },
-      years () {
-        let values = []
-        let count = 0
-        // for (let i = this.minDate.getFullYear(); i <= this.maxDate.getFullYear() && count <= 20; i++) {
-        let y = this.start ? this.start.getFullYear() : (new Date()).getFullYear()
-        for (let i = y; count <= 20; i++) {
-          count++
-          values.push(i - 10)
-        }
-        return values;
-      }
     },
     filters: {
       dateNum (value) {
@@ -268,5 +255,15 @@
         height: 16px;
         display: block;
         background-image: $carousel-control-next-icon-bg;
+    }
+
+    .yearselect {
+        padding-right: 1px;
+        border: none;
+        appearance: menulist;
+    }
+
+    .monthselect {
+        border: none;
     }
 </style>

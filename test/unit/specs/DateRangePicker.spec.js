@@ -1,23 +1,26 @@
 import Vue from 'vue'
 import DateRangePicker from '@/components/DateRangePicker'
 import moment from 'moment'
+import { shallowMount, mount } from '@vue/test-utils'
 
 // helper function that mounts and returns the rendered text
 function getRenderedComponent (Component, propsData) {
-  const Ctor = Vue.extend(Component)
-  const vm = new Ctor({propsData: propsData}).$mount()
-  return vm
+  // const Ctor = Vue.extend(Component)
+  // return new Ctor({propsData: propsData}).$mount()
+  return shallowMount(Component, { propsData })
 }
 
 const propsData = {
   dateRange: {
     startDate: '2017-09-19',
     endDate: '2017-10-09'
-  }
+  },
+  showWeekNumbers: true,
 }
 
 describe('DateRangePicker.vue', () => {
-  let vm = getRenderedComponent(DateRangePicker, propsData)
+  let wrapper = getRenderedComponent(DateRangePicker, propsData)
+  const vm = wrapper.vm
   let dt_start = new Date(propsData.dateRange.startDate)
   let dt_end = new Date(propsData.dateRange.endDate)
 
@@ -45,11 +48,15 @@ describe('DateRangePicker.vue', () => {
   })
 
   it('should select the dates passed by props "1981-11-24" - "2018-10-09"', (done) => {
-    vm.dateRange.startDate = '1981-11-24'
-    vm.dateRange.endDate = '2018-10-09'
+    wrapper.setProps({
+      dateRange: {
+        startDate: '1981-11-24',
+        endDate: '2018-10-09'
+      }
+    })
 
     vm.$nextTick(() => {
-
+      // console.error(vm.start, vm.dateRange)
       expect(moment(vm.start).isSame('1981-11-24', 'date')).to.equal(true)
       expect(moment(vm.end).isSame('2018-10-09', 'date')).to.equal(true)
 
@@ -67,7 +74,7 @@ describe('DateRangePicker.vue', () => {
   })
 
   it('Cleared state / null value? #41 - should be able to set null value', (done) => {
-    vm.dateRange.startDate = null
+    wrapper.setProps({ dateRange: { startDate: null, endDate: null } })
     vm.$nextTick(() => {
       expect(vm.start).to.equal(null)
       expect(vm.end).to.equal(null)
@@ -76,6 +83,45 @@ describe('DateRangePicker.vue', () => {
       expect(vm.endText).to.equal("")
       expect(vm.rangeText).to.equal(vm.locale.separator)
       done()
+    })
+  })
+})
+
+describe('DateRangePicker.vue MIN/MAX', () => {
+  const wrapper = mount(DateRangePicker, { propsData: {
+      dateRange: {
+        startDate: '2017-09-19',
+        endDate: '2017-10-09'
+      },
+      minDate: '2016-09-02',
+      maxDate: '2019-10-02',
+      showDropdowns: true,
+    }
+  })
+  const vm = wrapper.vm
+
+  it('should not be able to navigate outside of min/max values', (done) => {
+    //the input is missing when not open
+    expect(vm.$el.querySelector('.yearselect')).to.equal(null)
+    expect(vm.monthDate.getFullYear()).to.equal(2017)
+
+    wrapper.setData({open: true})
+
+    vm.$nextTick(() => {
+      const input = wrapper.find('.yearselect')
+      input.setValue(2016)
+
+      vm.$nextTick(() => {
+        expect(vm.monthDate.getFullYear()).to.equal(2016)
+        done()
+      })
+
+      input.setValue(2015)
+
+      vm.$nextTick(() => {
+        expect(vm.monthDate.getFullYear()).to.equal(2016)
+        done()
+      })
     })
   })
 })

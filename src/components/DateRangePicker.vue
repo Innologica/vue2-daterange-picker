@@ -1,6 +1,6 @@
 <template>
     <div class="vue-daterange-picker">
-        <div class="form-control reportrange-text" @click="togglePicker">
+        <div class="form-control reportrange-text" @click="togglePicker(null, true)">
             <slot
                     name="input"
                     :startDate="start"
@@ -238,14 +238,18 @@
       changeMonth (newDate) {
         let max = new Date(this.max);
         let min = new Date(this.min);
-        // check min
-        if (moment(newDate).isBetween(min, max)) {
-          this.monthDate = newDate;
-        } else if (moment(newDate).isAfter(max)) {
-          this.monthDate = new Date(max);
-        } else {
-          this.monthDate = new Date(min);
+
+        if(this.max && moment(newDate).isAfter(max)) {
+          this.monthDate = max;
+          return
         }
+
+        if(this.min && moment(newDate).isBefore(min)) {
+          this.monthDate = min;
+          return
+        }
+
+        this.monthDate = newDate;
       },
       nextMonth () {
         this.changeMonth(nextMonth(new Date(this.monthDate.getFullYear(),
@@ -306,11 +310,20 @@
         if (this.in_selection && dt > this.start)
           this.end = dt
       },
-      togglePicker () {
-        this.open = !this.open
+      togglePicker (value, event) {
+        if(typeof value === 'boolean') {
+          this.open = value
+        } else {
+          this.open = !this.open
+        }
+
+        if(event === true)
+          this.$emit('toggle', this.open, this.togglePicker )
+
       },
       clickedApply () {
-        this.open = false
+        // this.open = false
+        this.togglePicker(false, true)
         this.$emit('update', {startDate: this.start, endDate: this.end})
       },
       clickAway () {
@@ -320,7 +333,8 @@
           let endDate = this.dateRange.endDate
           this.start = startDate ? new Date(startDate) : null
           this.end = endDate ? new Date(endDate) : null
-          this.open = false
+          // this.open = false
+          this.togglePicker(false, true)
         }
       },
       clickRange (value) {
@@ -392,12 +406,6 @@
       }
     },
     watch: {
-      minDate (value) {
-        this.changeMonth(this.monthDate);
-      },
-      maxDate (value) {
-        this.changeMonth(this.monthDate);
-      },
       'dateRange.startDate' (value) {
         this.start = (!!value && !this.isClear) ? new Date(value) : null
         if (this.isClear) {
