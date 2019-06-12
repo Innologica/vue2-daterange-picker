@@ -16,6 +16,10 @@ baseWebpackConfig.entry = {
 }
 
 var webpackConfig = merge(baseWebpackConfig, {
+  externals: {
+    vue: 'Vue',
+    moment: 'moment'
+  },
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.lib.productionSourceMap,

@@ -183,12 +183,14 @@
       }
     },
     mounted () {
-      this.$refs.picker.open = true
+      // this.$refs.picker.open = true
     },
     methods: {
       updateValues (values) {
         this.dateRange.startDate = values.startDate.toISOString().slice(0, 10)
         this.dateRange.endDate = values.endDate.toISOString().slice(0, 10)
+
+        console.log('event: update', values)
       },
       checkOpen (open) {
         console.log('event: open', open)
