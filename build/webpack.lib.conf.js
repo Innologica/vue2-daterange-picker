@@ -17,7 +17,7 @@ baseWebpackConfig.entry = {
 
 var webpackConfig = merge(baseWebpackConfig, {
   externals: {
-    vue: 'Vue',
+    vue: 'vue',
     moment: 'moment'
   },
   module: {
