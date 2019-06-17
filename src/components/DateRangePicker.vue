@@ -24,6 +24,7 @@
                         <calendar-ranges class="col-12 col-md-auto"
                                          @clickRange="clickRange"
                                          :ranges="ranges"
+                                         :selected="{ startDate: start, endDate: end }"
                         ></calendar-ranges>
                     </slot>
 

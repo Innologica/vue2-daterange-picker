@@ -148,6 +148,7 @@
 
 <script>
   import DateRangePicker from './components/DateRangePicker'
+  import moment from 'moment'
 
   export default {
     components: {DateRangePicker},
@@ -187,8 +188,8 @@
     },
     methods: {
       updateValues (values) {
-        this.dateRange.startDate = values.startDate.toISOString().slice(0, 10)
-        this.dateRange.endDate = values.endDate.toISOString().slice(0, 10)
+        this.dateRange.startDate = moment(values.startDate).format('YYYY-MM-DD');
+        this.dateRange.endDate =  moment(values.endDate).format('YYYY-MM-DD');
 
         console.log('event: update', values)
       },
