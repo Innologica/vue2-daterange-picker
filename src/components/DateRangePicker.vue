@@ -308,7 +308,7 @@
       },
       hoverDate (value) {
         let dt = this.normalizeDatetime(value, this.end);
-        if (this.in_selection && dt > this.start)
+        if (this.in_selection && dt >= this.start)
           this.end = dt
       },
       togglePicker (value, event) {
