@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import DateRangePicker from '@/components/DateRangePicker'
 import moment from 'moment'
 import { shallowMount, mount } from '@vue/test-utils'

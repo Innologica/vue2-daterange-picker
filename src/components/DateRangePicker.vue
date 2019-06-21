@@ -36,19 +36,19 @@
                         </div>
                         <div class="calendar-table">
                             <calendar :monthDate="monthDate"
-                                      :locale="locale"
+                                      :locale-data="locale"
                                       :start="start" :end="end"
                                       :minDate="min" :maxDate="max"
                                       :show-dropdowns="showDropdowns"
-                                      @nextMonth="nextMonth" @prevMonth="prevMonth"
+
                                       @change-month="changeLeftMonth"
+
                                       @dateClick="dateClick" @hoverDate="hoverDate"
                                       :showWeekNumbers="showWeekNumbers"
                             ></calendar>
                         </div>
                         <calendar-time v-if="timePicker"
                                        @update="onUpdateStartTime"
-                                       @change-month="changeRightMonth"
                                        :miniute-increment="timePickerIncrement"
                                        :hour24="timePicker24Hour"
                                        :second-picker="timePickerSeconds"
@@ -64,12 +64,13 @@
                         </div>
                         <div class="calendar-table">
                             <calendar :monthDate="nextMonthDate"
-                                      :locale="locale"
+                                      :locale-data="locale"
                                       :start="start" :end="end"
                                       :minDate="min" :maxDate="max"
                                       :show-dropdowns="showDropdowns"
-                                      @nextMonth="nextMonth" @prevMonth="prevMonth"
+
                                       @change-month="changeRightMonth"
+
                                       @dateClick="dateClick" @hoverDate="hoverDate"
                                       :showWeekNumbers="showWeekNumbers"
                             ></calendar>
@@ -111,7 +112,7 @@
   import Calendar from './Calendar.vue'
   import CalendarTime from './CalendarTime'
   import CalendarRanges from './CalendarRanges'
-  import {nextMonth, prevMonth} from './util'
+  import {localeData, nextMonth, prevMonth, validateDateRange, yearMonth} from './util'
   import {mixin as clickaway} from 'vue-clickaway'
 
   export default {
@@ -126,18 +127,22 @@
       minDate: {
         type: [String, Date],
         default () {
-          return new Date(0)
+          return null
         }
       },
       maxDate: {
         type: [String, Date],
         default () {
-          return new Date(8640000000000000)
+          return null
         }
       },
       showWeekNumbers: {
         type: Boolean,
         default: false,
+      },
+      linkedCalendars: {
+        type: Boolean,
+        default: true,
       },
       singleDatePicker: {
         type: Boolean,
@@ -195,26 +200,13 @@
       }
     },
     data () {
-      let default_locale = {
-        direction: 'ltr',
-        format: moment.localeData().longDateFormat('L'),
-        separator: ' - ',
-        applyLabel: 'Apply',
-        cancelLabel: 'Cancel',
-        weekLabel: 'W',
-        customRangeLabel: 'Custom Range',
-        daysOfWeek: moment.weekdaysMin(),
-        monthNames: moment.monthsShort(),
-        firstDay: moment.localeData().firstDayOfWeek()
-      }
-
-      // let data = { locale: _locale }
-      let data = {locale: {...default_locale, ...this.localeData}}
+      let data = {locale: localeData(this.localeData)}
 
       let startDate = this.dateRange.startDate || null;
       let endDate = this.dateRange.endDate || null;
 
       data.monthDate = startDate ? new Date(startDate) : new Date()
+      data.nextMonthDate = nextMonth(data.monthDate)
       data.start = startDate ? new Date(startDate) : null
       if (this.singleDatePicker) {
         // ignore endDate for singleDatePicker
@@ -236,42 +228,25 @@
       return data
     },
     methods: {
-      changeMonth (newDate) {
-        let max = new Date(this.max);
-        let min = new Date(this.min);
-
-        if(this.max && moment(newDate).isAfter(max)) {
-          this.monthDate = max;
-          return
-        }
-
-        if(this.min && moment(newDate).isBefore(min)) {
-          this.monthDate = min;
-          return
-        }
-
-        this.monthDate = newDate;
-      },
-      nextMonth () {
-        this.changeMonth(nextMonth(new Date(this.monthDate.getFullYear(),
-          this.monthDate.getMonth(), 1)));
-      },
-      prevMonth () {
-        this.changeMonth(prevMonth(new Date(this.monthDate.getFullYear(),
-          this.monthDate.getMonth(), 1)));
-      },
       changeLeftMonth (value) {
         let newDate = new Date(value.year, value.month, 1);
-        this.changeMonth(newDate);
+        this.monthDate = newDate
+        if(this.linkedCalendars || (yearMonth(this.monthDate) >= yearMonth(this.nextMonthDate))) {
+          this.nextMonthDate = validateDateRange(nextMonth(newDate), this.minDate, this.maxDate);
+          if(yearMonth(this.monthDate) === yearMonth(this.nextMonthDate)) {
+            this.monthDate = validateDateRange(prevMonth(this.monthDate), this.minDate, this.maxDate)
+          }
+        }
       },
       changeRightMonth (value) {
-        if (value.month <= 0) {
-          value.month = 11;
-          value.year -= 1;
-        } else {
-          value.month -= 1;
+        let newDate = new Date(value.year, value.month, 1);
+        this.nextMonthDate = newDate
+        if(this.linkedCalendars || (yearMonth(this.nextMonthDate) <= yearMonth(this.monthDate))) {
+          this.monthDate = validateDateRange(prevMonth(newDate), this.minDate, this.maxDate);
+          if(yearMonth(this.monthDate) === yearMonth(this.nextMonthDate)) {
+            this.nextMonthDate = validateDateRange(nextMonth(this.nextMonthDate), this.minDate, this.maxDate)
+          }
         }
-        this.changeLeftMonth(value);
       },
       normalizeDatetime (value, oldValue) {
         let newDate = new Date(value);
@@ -312,14 +287,14 @@
           this.end = dt
       },
       togglePicker (value, event) {
-        if(typeof value === 'boolean') {
+        if (typeof value === 'boolean') {
           this.open = value
         } else {
           this.open = !this.open
         }
 
-        if(event === true)
-          this.$emit('toggle', this.open, this.togglePicker )
+        if (event === true)
+          this.$emit('toggle', this.open, this.togglePicker)
 
       },
       clickedApply () {
@@ -363,9 +338,6 @@
       },
     },
     computed: {
-      nextMonthDate () {
-        return nextMonth(this.monthDate)
-      },
       startText () {
         // return this.start.toLocaleDateString()+
         if (this.start === null)
@@ -399,7 +371,8 @@
           single: this.singleDatePicker,
           opensright: this.opens === 'right',
           opensleft: this.opens === 'left',
-          openscenter: this.opens === 'center'
+          openscenter: this.opens === 'center',
+          linked: this.linkedCalendars
         }
       },
       isClear () {
@@ -407,6 +380,14 @@
       }
     },
     watch: {
+      minDate () {
+        let dt = validateDateRange(this.monthDate, this.minDate || new Date(), this.maxDate)
+        this.changeLeftMonth({ year: dt.getFullYear(), month: dt.getMonth() })
+      },
+      maxDate () {
+        let dt = validateDateRange(this.nextMonthDate, this.minDate, this.maxDate || new Date())
+        this.changeRightMonth({ year: dt.getFullYear(), month: dt.getMonth() })
+      },
       'dateRange.startDate' (value) {
         this.start = (!!value && !this.isClear) ? new Date(value) : null
         if (this.isClear) {

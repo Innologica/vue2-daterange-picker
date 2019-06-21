@@ -80,36 +80,63 @@
                         <label class="form-check-label" for="showWeekNumbers">
                             showWeekNumbers
                         </label>
+                        <small class="form-text text-muted">
+                            Show the ISO weeknumbers on the side of the calendar
+                        </small>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="timePicker" v-model="timePicker">
                         <label class="form-check-label" for="timePicker">
                             timePicker
                         </label>
+                        <small class="form-text text-muted">
+                            Allow the user to select time.
+                        </small>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="timePicker24Hour" v-model="timePicker24Hour">
                         <label class="form-check-label" for="timePicker24Hour">
                             timePicker24Hour
                         </label>
+                        <small class="form-text text-muted">
+                            The time selection uses the 24 hour format
+                        </small>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="showDropdowns" v-model="showDropdowns">
                         <label class="form-check-label" for="showDropdowns">
                             showDropdowns
                         </label>
+                        <small class="form-text text-muted">
+                            Show dropdown/input for faster selection of year and month.
+                        </small>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="autoApply" v-model="autoApply">
                         <label class="form-check-label" for="autoApply">
                             autoApply
                         </label>
+                        <small class="form-text text-muted">
+                            Automatically select the range once the second date is selected ( otherwise you need to click the apply button)
+                        </small>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="show_ranges" v-model="show_ranges">
                         <label class="form-check-label" for="show_ranges">
                             show ranges
                         </label>
+                        <small class="form-text text-muted">
+                            You can set this to false in order to hide the ranges selection. Otherwise it is an object with key/value.
+                        </small>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="linkedCalendars" v-model="linkedCalendars">
+                        <label class="form-check-label" for="linkedCalendars">
+                            linkedCalendars
+                        </label>
+                        <small class="form-text text-muted">
+                            Each calendar has separate navigation
+                        </small>
                     </div>
                 </div>
 
@@ -132,6 +159,7 @@
                                 :ranges="show_ranges ? undefined : false"
                                 @update="updateValues"
                                 @toggle="checkOpen"
+                                :linkedCalendars="linkedCalendars"
                         >
                             <div slot="input" slot-scope="picker" style="min-width: 350px;">
                                 {{ picker.startDate | date }} - {{ picker.endDate | date }}
@@ -166,10 +194,10 @@
       //                    :locale-data="{ daysOfWeek: [ 'Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб' ] }"
       return {
         opens: 'center',
-        // minDate: '2016-09-02',
-        // maxDate: '2019-10-02',
-        minDate: '',
-        maxDate: '',
+        minDate: '2017-08-02',
+        maxDate: '2017-11-02',
+        // minDate: '',
+        // maxDate: '',
         dateRange: {
           startDate: '2017-09-10',
           endDate: '2017-9-20',
@@ -181,6 +209,7 @@
         showDropdowns: true,
         autoApply: false,
         showWeekNumbers: true,
+        linkedCalendars: true,
       }
     },
     mounted () {
@@ -219,5 +248,17 @@
 
     a {
         color: #42b983;
+    }
+
+    label {
+        width: 200px;
+    }
+
+    small.form-text {
+        display: initial;
+
+        &::before {
+            content: ' - ';
+        }
     }
 </style>

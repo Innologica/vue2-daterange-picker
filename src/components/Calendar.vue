@@ -2,7 +2,7 @@
     <table class="table-condensed">
         <thead>
         <tr>
-            <th class="prev available" @click="$emit('prevMonth')"><span/></th>
+            <th class="prev available" @click="prevMonth"><span/></th>
             <th
                     v-if="showDropdowns"
                     :colspan="showWeekNumbers ? 6 : 5"
@@ -10,13 +10,13 @@
             >
                 <div class="row mx-1">
                     <select v-model="month" class="monthselect col">
-                        <option v-for="(m, idx) in months" :key="m" :value="idx">{{m}}</option>
+                        <option v-for="(m) in months" :key="m.value" :value="m.value">{{m.label}}</option>
                     </select>
                     <input type="number" v-model="year" class="yearselect col" />
                 </div>
             </th>
             <th v-else colspan="5" class="month">{{monthName}} {{year}}</th>
-            <th class="next available" @click="$emit('nextMonth')"><span/></th>
+            <th class="next available" @click="nextMonth"><span/></th>
         </tr>
         </thead>
         <tbody>
@@ -48,12 +48,13 @@
 
 <script>
   import moment from 'moment'
+  import {localeData, nextMonth, prevMonth, validateDateRange, yearMonth} from "./util";
 
   export default {
     name: 'calendar',
     props: {
       monthDate: Date,
-      locale: Object,
+      localeData: Object,
       start: Date,
       end: Date,
       minDate: Date,
@@ -67,7 +68,28 @@
         default: false,
       },
     },
+    data () {
+      return {
+        currentMonthDate: this.monthDate || this.start || new Date(),
+      }
+    },
     methods: {
+      prevMonth() {
+        this.changeMonthDate(prevMonth(this.currentMonthDate))
+      },
+      nextMonth() {
+        this.changeMonthDate(nextMonth(this.currentMonthDate))
+      },
+      changeMonthDate (date, emit = true) {
+        let year_month = yearMonth(this.currentMonthDate)
+        this.currentMonthDate = validateDateRange(date, this.minDate, this.maxDate)
+        if(emit && year_month !== yearMonth(this.currentMonthDate)) {
+          this.$emit('change-month', {
+            month: this.currentMonthDate.getMonth(),
+            year: this.currentMonthDate.getFullYear(),
+          })
+        }
+      },
       dayClass (date) {
         let dt = new Date(date)
         dt.setHours(0, 0, 0, 0)
@@ -91,33 +113,37 @@
     },
     computed: {
       monthName () {
-        return this.locale.monthNames[this.monthDate.getMonth()]
+        return this.locale.monthNames[this.currentMonthDate.getMonth()]
       },
       year: {
         get () {
-          return this.monthDate.getFullYear()
+          return this.currentMonthDate.getFullYear()
         },
         set (value) {
+          let newDate = validateDateRange(new Date(value, this.month, 1), this.minDate, this.maxDate)
+
           this.$emit('change-month', {
-            month: this.month,
-            year: value,
+            month: newDate.getMonth(),
+            year: newDate.getFullYear(),
           });
         }
       },
       month: {
         get () {
-          return this.monthDate.getMonth()
+          return this.currentMonthDate.getMonth()
         },
         set (value) {
+          let newDate = validateDateRange(new Date(this.year, value, 1), this.minDate, this.maxDate)
+
           this.$emit('change-month', {
-            month: value,
-            year: this.year,
+            month: newDate.getMonth(),
+            year: newDate.getFullYear(),
           });
         }
       },
       calendar () {
         let month = this.month
-        let year = this.monthDate.getFullYear()
+        let year = this.currentMonthDate.getFullYear()
         let daysInMonth = new Date(year, month, 0).getDate()
         let firstDay = new Date(year, month, 1)
         let lastDay = new Date(year, month, daysInMonth)
@@ -153,6 +179,8 @@
         return calendar
       },
       months () {
+        let monthsData = this.locale.monthNames.map((m, idx) => ({ label: m, value: idx }))
+
         if (this.maxDate && this.minDate) {
           let y = this.maxDate.getFullYear() - this.minDate.getFullYear();
           if (y < 2) {
@@ -172,14 +200,20 @@
             }
             // do filter
             if (months.length > 0) {
-              return this.locale.monthNames.filter((m, index) => {
-                return months.findIndex(i => i === index) > -1;
+              return monthsData.filter((m) => {
+                return months.find(i => m.value === i) > -1;
               });
             }
           }
         }
-        return this.locale.monthNames;
+        return monthsData;
       },
+      locale () { return localeData(this.localeData) }
+    },
+    watch: {
+      monthDate (value) {
+        this.changeMonthDate(value, false)
+      }
     },
     filters: {
       dateNum (value) {
