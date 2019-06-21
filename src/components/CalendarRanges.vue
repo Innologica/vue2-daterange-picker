@@ -6,13 +6,25 @@
                     @click="$emit('clickRange', value)"
                     :data-range-key="key"
                     :key="key"
-            >{{key}}</li>
+                    :class="range_class(value)"
+            >{{key}}
+            </li>
         </ul>
     </div>
 </template>
 
 <script>
-    export default {
-        props: ['ranges']
-    }
+  import moment from 'moment'
+
+  export default {
+    props: {
+      ranges: Object,
+      selected: Object
+    },
+    methods: {
+      range_class (range) {
+        return { active: moment(this.selected.startDate).isSame(range[0], 'date') && moment(this.selected.endDate).isSame(range[1], 'date') };
+      }
+    },
+  }
 </script>
