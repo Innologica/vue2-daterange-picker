@@ -67,6 +67,10 @@
         type: Boolean,
         default: false,
       },
+      dateFormat: {
+        type: Function,
+        default: null
+      }
     },
     data () {
       return {
@@ -98,17 +102,19 @@
         let end = new Date(this.end)
         end.setHours(0, 0, 0, 0)
 
-        return {
+        let classes = {
           off: date.month() !== this.month,
           weekend: date.isoWeekday() > 5,
           today: dt.setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0),
           active: dt.setHours(0, 0, 0, 0) == new Date(this.start).setHours(0, 0, 0, 0) || dt.setHours(0, 0, 0, 0) == new Date(this.end).setHours(0, 0, 0, 0),
-          'in-range': dt >= start && dt <= end,
+          // 'in-range': dt >= start && dt <= end,
           'start-date': dt.getTime() === start.getTime(),
           'end-date': dt.getTime() === end.getTime(),
           disabled: (this.minDate && moment(dt).startOf("day").isBefore(moment(this.minDate).startOf("day")))
             || (this.maxDate && moment(dt).startOf("day").isAfter(moment(this.maxDate).startOf("day"))),
         }
+        return this.dateFormat ? this.dateFormat(classes, date) : classes
+
       }
     },
     computed: {
