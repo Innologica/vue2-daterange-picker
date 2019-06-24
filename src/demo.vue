@@ -1,17 +1,21 @@
 <template>
     <div class="demo container">
-        <div class="text-center">
-            <img src="./assets/logo.png">
+        <div class="d-flex align-items-center">
+            <div class="pr-5">
+                <img src="./assets/logo.png">
 
-            <h1>Vue Date Range Picker</h1>
-            <p>
-                Based on <a href="http://www.daterangepicker.com" target="_blank">http://www.daterangepicker.com</a>
-            </p>
+            </div>
+            <div>
+                <h1>Vue Date Range Picker</h1>
+                <p>
+                    Based on <a href="http://www.daterangepicker.com" target="_blank">http://www.daterangepicker.com</a>
+                </p>
 
-            <p>
-                The component is rewritten without jQuery dependancy. Requires only bootstrap and the original
-                datepicker CSS (included).
-            </p>
+                <p>
+                    The component is rewritten without jQuery dependancy. Requires only bootstrap and the original
+                    datepicker CSS (included).
+                </p>
+            </div>
         </div>
 
         <div class="card bg-light" style="margin-bottom: 300px;">
@@ -70,7 +74,8 @@
                 <h4>Other options:</h4>
                 <div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="singleDatePicker" v-model="singleDatePicker">
+                        <input class="form-check-input" type="checkbox" id="singleDatePicker"
+                               v-model="singleDatePicker">
                         <label class="form-check-label" for="singleDatePicker">
                             singleDatePicker
                         </label>
@@ -94,7 +99,8 @@
                         </small>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="timePicker24Hour" v-model="timePicker24Hour">
+                        <input class="form-check-input" type="checkbox" id="timePicker24Hour"
+                               v-model="timePicker24Hour">
                         <label class="form-check-label" for="timePicker24Hour">
                             timePicker24Hour
                         </label>
@@ -117,7 +123,8 @@
                             autoApply
                         </label>
                         <small class="form-text text-muted">
-                            Automatically select the range once the second date is selected ( otherwise you need to click the apply button)
+                            Automatically select the range once the second date is selected ( otherwise you need to
+                            click the apply button)
                         </small>
                     </div>
                     <div class="form-check">
@@ -126,7 +133,8 @@
                             show ranges
                         </label>
                         <small class="form-text text-muted">
-                            You can set this to false in order to hide the ranges selection. Otherwise it is an object with key/value.
+                            You can set this to false in order to hide the ranges selection. Otherwise it is an object
+                            with key/value.
                         </small>
                     </div>
                     <div class="form-check">
@@ -140,8 +148,23 @@
                     </div>
                 </div>
 
+                <div class="pt-5">
+                    <h5>Override date formatting :</h5>
+                    <dt>dateFormat: function(classes, date) - <small>special prop type function which accepts 2 params:</small></dt>
+                    <ul>
+                        <li>"classes" - the classes that the component's logic has defined,</li>
+                        <li>"date" - tha date currently processed.</li>
+                    </ul>
+
+                    <p><b>@return:</b> you should return Vue class object which should be applied to the date rendered.</p>
+                    <p>in the demo this function is used to disable "yesterday" date</p>
+
+                </div>
+
                 <div class="py-5">
-                    <h2>Demo <small class="text-muted">(overridden slot "input")</small></h2>
+                    <h2>Demo
+                        <small class="text-muted">(overridden slot "input")</small>
+                    </h2>
                     <div class="form-group">
                         <label>Select range: </label>
                         <date-range-picker
@@ -160,13 +183,16 @@
                                 @update="updateValues"
                                 @toggle="checkOpen"
                                 :linkedCalendars="linkedCalendars"
+                                :dateFormat="dateFormat"
                         >
                             <div slot="input" slot-scope="picker" style="min-width: 350px;">
                                 {{ picker.startDate | date }} - {{ picker.endDate | date }}
                             </div>
                         </date-range-picker>
 
-                        <button class="btn btn-info" @click="dateRange.startDate = null, dateRange.endDate = null">Clear</button>
+                        <button class="btn btn-info" @click="dateRange.startDate = null, dateRange.endDate = null">
+                            Clear
+                        </button>
                     </div>
                 </div>
             </div>
@@ -183,7 +209,7 @@
     name: 'DateRangePickerDemo',
     filters: {
       date (value) {
-        if(!value)
+        if (!value)
           return ''
 
         let options = {year: 'numeric', month: 'long', day: 'numeric'};
@@ -218,12 +244,19 @@
     methods: {
       updateValues (values) {
         this.dateRange.startDate = moment(values.startDate).format('YYYY-MM-DD');
-        this.dateRange.endDate =  moment(values.endDate).format('YYYY-MM-DD');
+        this.dateRange.endDate = moment(values.endDate).format('YYYY-MM-DD');
 
         console.log('event: update', values)
       },
       checkOpen (open) {
         console.log('event: open', open)
+      },
+      dateFormat (classes, date) {
+        let yesterday = moment().subtract(1, 'day');
+        if (!classes.disabled) {
+          classes.disabled = date.isSame(yesterday, 'day')
+        }
+        return classes
       }
     }
   }
@@ -233,17 +266,6 @@
 <style lang="scss" scoped>
     h1, h2 {
         font-weight: normal;
-    }
-
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    li {
-        display: inline-block;
-        /*margin: 0 10px;*/
-        width: 100%;
     }
 
     a {

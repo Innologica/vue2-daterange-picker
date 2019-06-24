@@ -42,7 +42,7 @@
                                       :show-dropdowns="showDropdowns"
 
                                       @change-month="changeLeftMonth"
-                                      :date-format="dateFormat"
+                                      :date-format="dateFormatFn"
 
                                       @dateClick="dateClick" @hoverDate="hoverDate"
                                       :showWeekNumbers="showWeekNumbers"
@@ -71,7 +71,7 @@
                                       :show-dropdowns="showDropdowns"
 
                                       @change-month="changeRightMonth"
-                                      :date-format="dateFormat"
+                                      :date-format="dateFormatFn"
 
                                       @dateClick="dateClick" @hoverDate="hoverDate"
                                       :showWeekNumbers="showWeekNumbers"
@@ -199,6 +199,11 @@
       opens: {
         type: String,
         default: 'center'
+      },
+      dateFormat: Function,
+      alwaysShowCalendars: {
+        type: Boolean,
+        default: true
       }
     },
     data () {
@@ -230,7 +235,7 @@
       return data
     },
     methods: {
-      dateFormat(classes, date) {
+      dateFormatFn(classes, date) {
         let dt = new Date(date)
         dt.setHours(0, 0, 0, 0)
         let start = new Date(this.start)
@@ -239,15 +244,8 @@
         end.setHours(0, 0, 0, 0)
 
         classes['in-range'] = dt >= start && dt <= end
-        // classes['in-range'] = true
-          // active: dt.setHours(0, 0, 0, 0) == new Date(this.start).setHours(0, 0, 0, 0) || dt.setHours(0, 0, 0, 0) == new Date(this.end).setHours(0, 0, 0, 0),
-          //
-          // 'start-date': dt.getTime() === start.getTime(),
-          // 'end-date': dt.getTime() === end.getTime(),
-          // disabled: (this.minDate && moment(dt).startOf("day").isBefore(moment(this.minDate).startOf("day")))
-          //   || (this.maxDate && moment(dt).startOf("day").isAfter(moment(this.maxDate).startOf("day"))),
 
-        return classes
+        return this.dateFormat ? this.dateFormat(classes, date) : classes
       },
       changeLeftMonth (value) {
         let newDate = new Date(value.year, value.month, 1);
