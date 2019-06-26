@@ -1,6 +1,13 @@
 <template>
     <div class="vue-daterange-picker">
         <div class="form-control reportrange-text" @click="togglePicker(null, true)">
+            <!--
+              Allows you to change the input which is visible before the picker opens
+
+              @param {Date} startDate - current startDate
+              @param {Date} endDate - current endDate
+              @param {object} ranges - object with ranges
+            -->
             <slot
                     name="input"
                     :startDate="start"
@@ -20,7 +27,20 @@
                     v-on-clickaway="clickAway"
             >
                 <div class="calendars row no-gutters">
-                    <slot name="ranges" v-if="ranges !== false">
+            <!--
+              Allows you to change the range
+
+              @param {Date} startDate - current startDate
+              @param {Date} endDate - current endDate
+              @param {object} ranges - object with ranges
+            -->
+                    <slot
+                            name="ranges"
+                            :startDate="start"
+                            :endDate="end"
+                            :ranges="ranges"
+                            v-if="ranges !== false"
+                    >
                         <calendar-ranges class="col-12 col-md-auto"
                                          @clickRange="clickRange"
                                          :ranges="ranges"
@@ -126,63 +146,111 @@
       event: 'update',
     },
     props: {
+      /**
+       * minimum date allowed to be selected
+       * @default null
+       */
       minDate: {
         type: [String, Date],
         default () {
           return null
         }
       },
+      /**
+       * maximum date allowed to be selected
+       * @default null
+       */
       maxDate: {
         type: [String, Date],
         default () {
           return null
         }
       },
+      /**
+       * Show the week numbers on the left side of the calendar
+       */
       showWeekNumbers: {
         type: Boolean,
         default: false,
       },
+      /**
+       * Each calendar has separate navigation when this is false
+       */
       linkedCalendars: {
         type: Boolean,
         default: true,
       },
+      /**
+       * Allows you to select only one date (instead of range). This will hide the ranges with different start/end
+       */
       singleDatePicker: {
         type: Boolean,
         default: false,
       },
+      /**
+       * Show the dropdowns for month and year selection above the calendars
+       */
       showDropdowns: {
         type: Boolean,
         default: false,
       },
+      /**
+       * Show the dropdowns for time (hour/minute) selection below the calendars
+       */
       timePicker: {
         type: Boolean,
         default: false,
       },
+      /**
+       * Determines the increment of minutes in the minute dropdown
+       */
       timePickerIncrement: {
         type: Number,
         default: 5,
       },
+      /**
+       * Use 24h format for the time
+       */
       timePicker24Hour: {
         type: Boolean,
         default: true,
       },
+      /**
+       * Allows you to select seconds except hour/minute
+       */
       timePickerSeconds: {
         type: Boolean,
         default: false,
       },
+      /**
+       * Auto apply selected range. If false you need to click an apply button
+       */
       autoApply: {
         type: Boolean,
         default: false,
       },
+      /**
+       * Object containing locale data used by the picker. See example below the table
+       *
+       * @default *see below
+       */
       localeData: {
         type: Object,
         default () {
           return {}
         },
       },
+      /**
+       * This is the v-model prop which the component uses.
+       */
       dateRange: { // for v-model
         default: null,
+        required: true
       },
+      /**
+       * You can set this to false in order to hide the ranges selection. Otherwise it is an object with key/value. See below
+       * @default *see below
+       */
       ranges: {
         type: [Object, Boolean],
         default () {
@@ -196,11 +264,23 @@
           }
         }
       },
+      /**
+       * which way the picker opens - "center", "left" or "right"
+       */
       opens: {
         type: String,
         default: 'center'
       },
+      /**
+       function(classes, date) - special prop type function which accepts 2 params:
+        "classes" - the classes that the component's logic has defined,
+        "date" - tha date currently processed.
+         You should return Vue class object which should be applied to the date rendered.
+       */
       dateFormat: Function,
+      /**
+       * *WIP*
+       */
       alwaysShowCalendars: {
         type: Boolean,
         default: true
@@ -235,7 +315,7 @@
       return data
     },
     methods: {
-      dateFormatFn(classes, date) {
+      dateFormatFn (classes, date) {
         let dt = new Date(date)
         dt.setHours(0, 0, 0, 0)
         let start = new Date(this.start)
@@ -250,9 +330,9 @@
       changeLeftMonth (value) {
         let newDate = new Date(value.year, value.month, 1);
         this.monthDate = newDate
-        if(this.linkedCalendars || (yearMonth(this.monthDate) >= yearMonth(this.nextMonthDate))) {
+        if (this.linkedCalendars || (yearMonth(this.monthDate) >= yearMonth(this.nextMonthDate))) {
           this.nextMonthDate = validateDateRange(nextMonth(newDate), this.minDate, this.maxDate);
-          if(yearMonth(this.monthDate) === yearMonth(this.nextMonthDate)) {
+          if (yearMonth(this.monthDate) === yearMonth(this.nextMonthDate)) {
             this.monthDate = validateDateRange(prevMonth(this.monthDate), this.minDate, this.maxDate)
           }
         }
@@ -260,9 +340,9 @@
       changeRightMonth (value) {
         let newDate = new Date(value.year, value.month, 1);
         this.nextMonthDate = newDate
-        if(this.linkedCalendars || (yearMonth(this.nextMonthDate) <= yearMonth(this.monthDate))) {
+        if (this.linkedCalendars || (yearMonth(this.nextMonthDate) <= yearMonth(this.monthDate))) {
           this.monthDate = validateDateRange(prevMonth(newDate), this.minDate, this.maxDate);
-          if(yearMonth(this.monthDate) === yearMonth(this.nextMonthDate)) {
+          if (yearMonth(this.monthDate) === yearMonth(this.nextMonthDate)) {
             this.nextMonthDate = validateDateRange(nextMonth(this.nextMonthDate), this.minDate, this.maxDate)
           }
         }
@@ -313,12 +393,21 @@
         }
 
         if (event === true)
+          /**
+           * Emits whenever the picker opens/closes
+           * @param {boolean} open - the current state of the picker
+           * @param {Function} togglePicker - function (show, event) which can be used to control the picker. where "show" is the new state and "event" is boolean indicating whether a new event should be raised
+           */
           this.$emit('toggle', this.open, this.togglePicker)
 
       },
       clickedApply () {
         // this.open = false
         this.togglePicker(false, true)
+        /**
+         * Emits when the user selects a range from the picker and clicks "apply" (if autoApply is true).
+         * @param {json} value - json object containing the dates: {startDate, endDate}
+         */
         this.$emit('update', {startDate: this.start, endDate: this.end})
       },
       clickAway () {
@@ -401,11 +490,11 @@
     watch: {
       minDate () {
         let dt = validateDateRange(this.monthDate, this.minDate || new Date(), this.maxDate)
-        this.changeLeftMonth({ year: dt.getFullYear(), month: dt.getMonth() })
+        this.changeLeftMonth({year: dt.getFullYear(), month: dt.getMonth()})
       },
       maxDate () {
         let dt = validateDateRange(this.nextMonthDate, this.minDate, this.maxDate || new Date())
-        this.changeRightMonth({ year: dt.getFullYear(), month: dt.getMonth() })
+        this.changeRightMonth({year: dt.getFullYear(), month: dt.getMonth()})
       },
       'dateRange.startDate' (value) {
         this.start = (!!value && !this.isClear) ? new Date(value) : null

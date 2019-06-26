@@ -1,0 +1,7 @@
+{
+  "components": {
+    "DateRangePicker": {
+      "path": "../../src/components/"
+    }
+  }
+}
