@@ -526,6 +526,9 @@
           this.end = new Date(this.dateRange.endDate)
         }
       }
+    },
+    mounted(){
+      console.log("JB mounted")
     }
   }
 
