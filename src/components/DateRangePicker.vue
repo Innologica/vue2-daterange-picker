@@ -27,13 +27,13 @@
                     v-on-clickaway="clickAway"
             >
                 <div class="calendars row no-gutters">
-            <!--
-              Allows you to change the range
+                  <!--
+                    Allows you to change the range
 
-              @param {Date} startDate - current startDate
-              @param {Date} endDate - current endDate
-              @param {object} ranges - object with ranges
-            -->
+                    @param {Date} startDate - current startDate
+                    @param {Date} endDate - current endDate
+                    @param {object} ranges - object with ranges
+                  -->
                     <slot
                             name="ranges"
                             :startDate="start"
@@ -52,7 +52,9 @@
                         <div class="daterangepicker_input d-none d-sm-block" v-if="false">
                             <input class="input-mini form-control" type="text" name="daterangepicker_start"
                                    :value="startText"/>
+                            
                             <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
+                            
                         </div>
                         <div class="calendar-table">
                             <calendar :monthDate="monthDate"
