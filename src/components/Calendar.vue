@@ -125,6 +125,9 @@
 
       }
     },
+    mounted(){
+      console.log("mount test")
+    },
     computed: {
       monthName () {
         return this.locale.monthNames[this.currentMonthDate.getMonth()]
