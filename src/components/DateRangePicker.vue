@@ -8,6 +8,8 @@
               @param {Date} endDate - current endDate
               @param {object} ranges - object with ranges
             -->
+            <slot name="icon">
+            </slot>
             <slot
                     name="input"
                     :startDate="start"
@@ -526,9 +528,6 @@
           this.end = new Date(this.dateRange.endDate)
         }
       }
-    },
-    mounted(){
-      console.log("JB mounted")
     }
   }
 
