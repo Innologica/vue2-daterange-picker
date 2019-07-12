@@ -1,6 +1,6 @@
 <template>
     <div class="vue-daterange-picker">
-        <div class="form-control reportrange-text" @click="togglePicker(null, true)">
+        <div :class="wrapperClass" @click="togglePicker(null, true)">
             <!--
               Allows you to change the input which is visible before the picker opens
 
@@ -167,6 +167,15 @@
         }
       },
       /**
+       * Set classes on text wrapper
+       */
+      wrapperClass:{
+        type:[String],
+        default(){
+          return 'form-control reportrange-text'
+        }
+      },
+      /**
        * Show the week numbers on the left side of the calendar
        */
       showWeekNumbers: {
@@ -287,6 +296,7 @@
       }
     },
     data () {
+    
       let data = {locale: localeData(this.localeData)}
 
       let startDate = this.dateRange.startDate || null;
