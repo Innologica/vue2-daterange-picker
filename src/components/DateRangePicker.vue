@@ -1,6 +1,6 @@
 <template>
     <div class="vue-daterange-picker">
-        <div :class="wrapperClass" @click="togglePicker(null, true)">
+        <div :class="classes.wrapper" @click="togglePicker(null, true)">
             <!--
               Allows you to change the input which is visible before the picker opens
 
