@@ -13,10 +13,10 @@
                     class="month"
             >
                 <div class="row mx-1">
-                    <select v-model="month" class="monthselect col">
+                    <select v-model="month" class="monthselect">
                         <option v-for="(m) in months" :key="m.value" :value="m.value">{{m.label}}</option>
                     </select>
-                    <input type="number" v-model="year" class="yearselect col" />
+                    <input type="number" v-model="year" class="yearselect" />
                 </div>
             </th>
             <th v-else colspan="5" class="month">{{monthName}} {{year}}</th>
