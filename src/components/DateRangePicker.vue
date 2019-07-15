@@ -109,16 +109,14 @@
                     </div>
                 </div>
 
-                <div class="drp-buttons" v-if="!autoApply">
-                    <span class="drp-selected">{{rangeText}}</span>
+                <div :class="classes.applyBtnWrapper" v-if="!autoApply">
+                  
+                    <span v-if="showRangeText" :class="classes.rangeText">{{rangeText}}</span>
+                    
+                    <span :class="classes.cancel" @click="clickAway">{{locale.cancelLabel}}</span>
+
                     <button
-                            class="cancelBtn btn btn-sm btn-default"
-                            type="button"
-                            @click="clickAway"
-                    >{{locale.cancelLabel}}
-                    </button>
-                    <button
-                            class="applyBtn btn btn-sm btn-success"
+                            :class="classes.apply"
                             :disabled="in_selection"
                             type="button"
                             @click="clickedApply"
@@ -169,12 +167,25 @@
         }
       },
       /**
+       * Show rangeText or not
+       */
+      showRangeText:{
+        type:Boolean,
+        default:true
+      },
+      /**
        * Set classes on text wrapper
        */
-      wrapperClass:{
+      classes:{
         type:[String],
         default(){
-          return 'form-control reportrange-text'
+          return {
+            wrapper: 'form-control reportrange-text',
+            applyBtnWrapper: 'drp-buttons', 
+            rangeText:'drp-selected',
+            cancel: 'link link--cancel',
+            apply:'applyBtn btn btn-sm btn-success'
+          }
         }
       },
       /**
