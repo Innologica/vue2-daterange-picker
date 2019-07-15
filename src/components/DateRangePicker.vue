@@ -70,6 +70,7 @@
                                       :showWeekNumbers="showWeekNumbers"
                             ></calendar>
                         </div>
+                        <slot name="prepend-from" />
                         <calendar-time v-if="timePicker"
                                        @update="onUpdateStartTime"
                                        :miniute-increment="timePickerIncrement"
@@ -99,6 +100,7 @@
                                       :showWeekNumbers="showWeekNumbers"
                             ></calendar>
                         </div>
+                        <slot name="prepend-to" />
                         <calendar-time v-if="timePicker"
                                        @update="onUpdateEndTime"
                                        :miniute-increment="timePickerIncrement"
