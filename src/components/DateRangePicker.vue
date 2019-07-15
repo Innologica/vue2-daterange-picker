@@ -70,14 +70,18 @@
                                       :showWeekNumbers="showWeekNumbers"
                             ></calendar>
                         </div>
-                        <slot name="prepend-from" />
-                        <calendar-time v-if="timePicker"
-                                       @update="onUpdateStartTime"
-                                       :miniute-increment="timePickerIncrement"
-                                       :hour24="timePicker24Hour"
-                                       :second-picker="timePickerSeconds"
-                                       :current-time="start"
-                        />
+
+                        <div :class="classes.wrapperTimePicker">
+                          <slot name="prepend-from" />
+                          <calendar-time v-if="timePicker"
+                                        @update="onUpdateStartTime"
+                                        :miniute-increment="timePickerIncrement"
+                                        :hour24="timePicker24Hour"
+                                        :second-picker="timePickerSeconds"
+                                        :current-time="start"
+                          />
+                        </div>
+
                     </div>
 
                     <div class="drp-calendar col right" v-if="!singleDatePicker">
@@ -100,14 +104,18 @@
                                       :showWeekNumbers="showWeekNumbers"
                             ></calendar>
                         </div>
-                        <slot name="prepend-to" />
-                        <calendar-time v-if="timePicker"
+
+                        <div :class="classes.wrapperTimePicker">
+                          <slot name="prepend-to">
+                          
+                          </slot>
+                          <calendar-time v-if="timePicker"
                                        @update="onUpdateEndTime"
                                        :miniute-increment="timePickerIncrement"
                                        :hour24="timePicker24Hour"
                                        :second-picker="timePickerSeconds"
-                                       :current-time="end"
-                        />
+                                       :current-time="end" />
+                        </div>
                     </div>
                 </div>
 
@@ -183,6 +191,7 @@
         default(){
           return {
             wrapper: 'form-control reportrange-text',
+            wrapperTimePicker: '',
             applyBtnWrapper: 'drp-buttons', 
             rangeText:'drp-selected',
             cancel: 'link link--cancel',

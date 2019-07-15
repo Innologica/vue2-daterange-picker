@@ -126,7 +126,7 @@
       }
     },
     mounted(){
-      console.log("mount test")
+      
     },
     computed: {
       monthName () {
