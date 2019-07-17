@@ -187,7 +187,7 @@
        * Set classes on text wrapper
        */
       classes:{
-        type:[String],
+        type:[Object],
         default(){
           return {
             wrapper: 'form-control reportrange-text',
