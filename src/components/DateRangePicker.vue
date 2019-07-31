@@ -132,8 +132,8 @@
 <script>
   import moment from 'moment'
   import Calendar from './Calendar.vue'
-  import CalendarTime from './CalendarTime'
-  import CalendarRanges from './CalendarRanges'
+  import CalendarTime from './CalendarTime.vue'
+  import CalendarRanges from './CalendarRanges.vue'
   import {localeData, nextMonth, prevMonth, validateDateRange, yearMonth} from './util'
   import {mixin as clickaway} from 'vue-clickaway'
 
