@@ -113,14 +113,14 @@
                             class="cancelBtn btn btn-sm btn-default"
                             type="button"
                             @click="clickAway"
-                    >{{locale.cancelLabel}}
+                    >{{localeData.cancelLabel}}
                     </button>
                     <button
                             class="applyBtn btn btn-sm btn-success"
                             :disabled="in_selection"
                             type="button"
                             @click="clickedApply"
-                    >{{locale.applyLabel}}
+                    >{{localeData.applyLabel}}
                     </button>
                 </div>
 
