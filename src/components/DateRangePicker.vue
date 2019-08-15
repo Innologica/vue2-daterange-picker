@@ -56,42 +56,78 @@
             ></calendar-ranges>
           </slot>
 
-          <div
-            class="drp-calendar col left"
-            :class="{single: singleDatePicker}"
-          >
+          <div class="calendar-time-area">
             <div
-              class="daterangepicker_input d-none d-sm-block"
-              v-if="false"
+              class="drp-calendar left"
+              :class="{single: singleDatePicker}"
             >
-              <input
-                class="input-mini form-control"
-                type="text"
-                name="daterangepicker_start"
-                :value="startText"
-              />
+              <div
+                class="daterangepicker_input d-none d-sm-block"
+                v-if="false"
+              >
+                <input
+                  class="input-mini form-control"
+                  type="text"
+                  name="daterangepicker_start"
+                  :value="startText"
+                />
 
-              <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
+                <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
 
+              </div>
+              <div class="calendar-table">
+                <calendar
+                  :monthDate="monthDate"
+                  :locale-data="locale"
+                  :start="start"
+                  :end="end"
+                  :minDate="min"
+                  :maxDate="max"
+                  :show-dropdowns="showDropdowns"
+                  @change-month="changeLeftMonth"
+                  :date-format="dateFormatFn"
+                  @dateClick="dateClick"
+                  @hoverDate="hoverDate"
+                  :showWeekNumbers="showWeekNumbers"
+                ></calendar>
+              </div>
             </div>
-            <div class="calendar-table">
-              <calendar
-                :monthDate="monthDate"
-                :locale-data="locale"
-                :start="start"
-                :end="end"
-                :minDate="min"
-                :maxDate="max"
-                :show-dropdowns="showDropdowns"
-                @change-month="changeLeftMonth"
-                :date-format="dateFormatFn"
-                @dateClick="dateClick"
-                @hoverDate="hoverDate"
-                :showWeekNumbers="showWeekNumbers"
-              ></calendar>
+
+            <div
+              class="drp-calendar right"
+              v-if="!singleDatePicker"
+            >
+              <div
+                class="daterangepicker_input"
+                v-if="false"
+              >
+                <input
+                  class="input-mini form-control"
+                  type="text"
+                  name="daterangepicker_end"
+                  :value="endText"
+                />
+                <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
+              </div>
+              <div class="calendar-table">
+                <calendar
+                  :monthDate="nextMonthDate"
+                  :locale-data="locale"
+                  :start="start"
+                  :end="end"
+                  :minDate="min"
+                  :maxDate="max"
+                  :show-dropdowns="showDropdowns"
+                  @change-month="changeRightMonth"
+                  :date-format="dateFormatFn"
+                  @dateClick="dateClick"
+                  @hoverDate="hoverDate"
+                  :showWeekNumbers="showWeekNumbers"
+                ></calendar>
+              </div>
             </div>
 
-            <div :class="classes.wrapperTimePicker">
+            <div class="time-area" :class="classes.wrapperTimePicker">
               <slot name="prepend-from" />
               <calendar-time
                 v-if="timePicker"
@@ -101,47 +137,8 @@
                 :second-picker="timePickerSeconds"
                 :current-time="start"
               />
-            </div>
 
-          </div>
-
-          <div
-            class="drp-calendar col right"
-            v-if="!singleDatePicker"
-          >
-            <div
-              class="daterangepicker_input"
-              v-if="false"
-            >
-              <input
-                class="input-mini form-control"
-                type="text"
-                name="daterangepicker_end"
-                :value="endText"
-              />
-              <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
-            </div>
-            <div class="calendar-table">
-              <calendar
-                :monthDate="nextMonthDate"
-                :locale-data="locale"
-                :start="start"
-                :end="end"
-                :minDate="min"
-                :maxDate="max"
-                :show-dropdowns="showDropdowns"
-                @change-month="changeRightMonth"
-                :date-format="dateFormatFn"
-                @dateClick="dateClick"
-                @hoverDate="hoverDate"
-                :showWeekNumbers="showWeekNumbers"
-              ></calendar>
-            </div>
-
-            <div :class="classes.wrapperTimePicker">
-              <slot name="prepend-to">
-
-              </slot>
+              <slot name="prepend-to" />
               <calendar-time
                 v-if="timePicker"
                 @update="onUpdateEndTime"
@@ -152,6 +149,7 @@
               />
             </div>
           </div>
+
         </div>
 
         <div

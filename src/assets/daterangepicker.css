@@ -107,17 +107,24 @@
   display: none;
 }
 
+.daterangepicker .calendar-time-area {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.daterangepicker .calendars {
+  flex-wrap: nowrap;
+}
+
+.daterangepicker .time-area {
+  display: flex;
+  flex: 0 0 100%;
+}
+
 .daterangepicker .drp-calendar {
   display: none;
   max-width: 270px;
-}
-
-.daterangepicker .drp-calendar.left {
-  padding: 8px 0 8px 8px;
-}
-
-.daterangepicker .drp-calendar.right {
-  padding: 8px;
+  flex: 0 0 50%;
 }
 
 .daterangepicker .drp-calendar.single .calendar-table {
@@ -332,10 +339,6 @@
       width: 100%; }
     .daterangepicker.single .drp-calendar.left {
       clear: none; }
-    .daterangepicker.single.ltr .ranges, .daterangepicker.single.ltr .drp-calendar {
-      float: left; }
-    .daterangepicker.single.rtl .ranges, .daterangepicker.single.rtl .drp-calendar {
-      float: right; }
     .daterangepicker.ltr {
       direction: ltr;
       text-align: left; }
@@ -352,10 +355,6 @@
           border-left: none;
           border-top-left-radius: 0;
           border-bottom-left-radius: 0; }
-      .daterangepicker.ltr .drp-calendar.left .calendar-table {
-        padding-right: 8px; }
-      .daterangepicker.ltr .ranges, .daterangepicker.ltr .drp-calendar {
-        float: left; }
     .daterangepicker.rtl {
       direction: rtl;
       text-align: right; }
@@ -375,14 +374,8 @@
       .daterangepicker.rtl .drp-calendar.left .calendar-table {
         padding-left: 12px; }
       .daterangepicker.rtl .ranges, .daterangepicker.rtl .drp-calendar {
-        text-align: right;
-        float: right; } }
+        text-align: right; } }
 @media (min-width: 730px) {
   .daterangepicker .ranges {
     width: auto; }
-  .daterangepicker.ltr .ranges {
-    float: left; }
-  .daterangepicker.rtl .ranges {
-    float: right; }
-  .daterangepicker .drp-calendar.left {
-    clear: none !important; } }
+  }
