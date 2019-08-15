@@ -118,6 +118,7 @@
 
 .daterangepicker .time-area {
   display: flex;
+  justify-content: center;
   flex: 0 0 100%;
 }
 
@@ -293,14 +294,11 @@
   padding: 4px 8px;
 }
 
-.daterangepicker.show-ranges .drp-calendar.left {
-  border-left: 1px solid #ddd;
-}
-
 .daterangepicker .ranges {
   float: none;
   text-align: left;
   margin: 0;
+  border-right: 1px solid #ddd;
 }
 
 .daterangepicker.show-calendar .ranges {
@@ -330,9 +328,12 @@
 }
 
 /*  Larger Screen Styling */
-@media (min-width: 564px) {
+@media (min-width: 768px) {
   .daterangepicker {
     width: auto; }
+    .daterangepicker .ranges {
+      width: auto;
+    }
     .daterangepicker .ranges ul {
       width: 140px; }
     .daterangepicker.single .ranges ul {
@@ -374,8 +375,5 @@
       .daterangepicker.rtl .drp-calendar.left .calendar-table {
         padding-left: 12px; }
       .daterangepicker.rtl .ranges, .daterangepicker.rtl .drp-calendar {
-        text-align: right; } }
-@media (min-width: 730px) {
-  .daterangepicker .ranges {
-    width: auto; }
-  }
+        text-align: right; } 
+}

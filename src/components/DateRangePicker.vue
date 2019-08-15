@@ -35,12 +35,12 @@
         <slot name="header" />
         <div class="calendars row no-gutters">
           <!--
-                    Allows you to change the range
+            Allows you to change the range
 
-                    @param {Date} startDate - current startDate
-                    @param {Date} endDate - current endDate
-                    @param {object} ranges - object with ranges
-                  -->
+            @param {Date} startDate - current startDate
+            @param {Date} endDate - current endDate
+            @param {object} ranges - object with ranges
+          -->
           <slot
             name="ranges"
             :startDate="start"
@@ -128,25 +128,28 @@
             </div>
 
             <div class="time-area" :class="classes.wrapperTimePicker">
-              <slot name="prepend-from" />
-              <calendar-time
-                v-if="timePicker"
-                @update="onUpdateStartTime"
-                :miniute-increment="timePickerIncrement"
-                :hour24="timePicker24Hour"
-                :second-picker="timePickerSeconds"
-                :current-time="start"
-              />
-
-              <slot name="prepend-to" />
-              <calendar-time
-                v-if="timePicker"
-                @update="onUpdateEndTime"
-                :miniute-increment="timePickerIncrement"
-                :hour24="timePicker24Hour"
-                :second-picker="timePickerSeconds"
-                :current-time="end"
-              />
+              <div class="time-from">
+                <slot name="prepend-from" />
+                <calendar-time
+                  v-if="timePicker"
+                  @update="onUpdateStartTime"
+                  :miniute-increment="timePickerIncrement"
+                  :hour24="timePicker24Hour"
+                  :second-picker="timePickerSeconds"
+                  :current-time="start"
+                />
+              </div>
+              <div class="time-to">
+                <slot name="prepend-to" />
+                <calendar-time
+                  v-if="timePicker"
+                  @update="onUpdateEndTime"
+                  :miniute-increment="timePickerIncrement"
+                  :hour24="timePicker24Hour"
+                  :second-picker="timePickerSeconds"
+                  :current-time="end"
+                />
+              </div>
             </div>
           </div>
 
@@ -602,8 +605,6 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-$week-width: 682px - 628px;
-
 .reportrange-text {
   background: #fff;
   cursor: pointer;
@@ -617,80 +618,8 @@ $week-width: 682px - 628px;
   display: flex;
   width: auto;
 
-  @media screen and (max-width: 768px) {
-    &.show-ranges {
-      .drp-calendar.left {
-        border-left: 0px;
-      }
-
-      .ranges {
-        border-bottom: 1px solid #ddd;
-
-        ::v-deep ul {
-          display: flex;
-          flex-wrap: wrap;
-          width: auto;
-        }
-      }
-    }
-  }
-
-  @media screen and (min-width: 540px) {
-    min-width: 486px;
-    &.show-weeknumbers {
-      min-width: 490px + $week-width;
-    }
-  }
-
   @media screen and (min-width: 768px) {
-    &.show-ranges {
-      min-width: 628px;
-
-      &.show-weeknumbers {
-        min-width: 628px + $week-width;
-      }
-    }
-  }
-
-  &.single {
-    @media screen and (max-width: 340px) {
-      min-width: 250px;
-
-      &.show-weeknumbers {
-        min-width: 250px + $week-width;
-      }
-    }
-
-    @media screen and (min-width: 339px) {
-      min-width: auto;
-      &.show-ranges {
-        min-width: 328px;
-
-        &.show-weeknumbers {
-          min-width: 328px + $week-width;
-        }
-
-        .drp-calendar.left {
-          border-left: 1px solid #ddd;
-        }
-
-        .ranges {
-          width: auto;
-          max-width: none;
-          flex-basis: auto;
-          border-bottom: 0;
-
-          ::v-deep ul {
-            display: block;
-            width: 100%;
-          }
-        }
-      }
-    }
-  }
-
-  &.show-calendar {
-    display: block;
+    width: 682px; 
   }
 }
 
