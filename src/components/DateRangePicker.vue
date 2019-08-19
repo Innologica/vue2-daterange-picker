@@ -165,6 +165,8 @@
             :class="classes.rangeText"
           >{{rangeText}}</span>
 
+          <slot name="clear-date-period" />
+
           <span
             :class="classes.cancel"
             @click="clickAway"
