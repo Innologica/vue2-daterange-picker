@@ -165,7 +165,7 @@
             :class="classes.rangeText"
           >{{rangeText}}</span>
 
-          <slot name="clear-date-period" />
+          <slot name="clear-date-period" v-bind="{ clearInput: clickClear }" />
 
           <span
             :class="classes.cancel"
@@ -508,6 +508,12 @@ export default {
       this.monthDate = new Date(value[0])
       if (this.autoApply)
         this.clickedApply()
+    },
+    clickClear () {     
+      this.start = null
+      this.end = null
+      
+      this.$emit('clearInput')
     },
     onUpdateStartTime (value) {
       let start = new Date(this.start);

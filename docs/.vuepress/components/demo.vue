@@ -19,11 +19,15 @@
                         :ranges="show_ranges ? undefined : false"
                         @update="updateValues"
                         @toggle="checkOpen"
+                        @clearInput="onClearInputClick"
                         :linkedCalendars="linkedCalendars"
                         :dateFormat="dateFormat"
                 >
                     <div slot="input" slot-scope="picker" style="min-width: 350px;">
                         {{ picker.startDate | date }} - {{ picker.endDate | date }}
+                    </div>
+                    <div slot="clear-date-period" slot-scope="{ clearInput }" @click="clearInput" class="btn c-btn btn-link btn-link--danger c-date-picker__clear-date-period">
+                       Clear input
                     </div>
                 </date-range-picker>
 
@@ -235,6 +239,9 @@
           classes.disabled = date.isSame(yesterday, 'day')
         }
         return classes
+      },
+      onClearInputClick () {          
+        this.dateObject = { startDate: null, endDate: null }
       }
     }
   }
