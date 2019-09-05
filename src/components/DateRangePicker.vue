@@ -32,7 +32,10 @@
         v-if="open"
         v-on-clickaway="clickAway"
       >
-        <slot name="header" />
+        <div class="daterangepicker-header">
+          <slot name="header-title" :startDate="start" :endDate="end"/>
+          <button type="button" aria-label="Close" class="close" @click="togglePicker(null, true)">&times;</button>
+        </div>
         <div class="calendars row no-gutters">
           <!--
             Allows you to change the range
