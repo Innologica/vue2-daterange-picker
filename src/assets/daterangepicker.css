@@ -107,9 +107,9 @@
   display: none;
 }
 
-/* .daterangepicker-header {
+.daterangepicker-header {
   display: none;
-} */
+}
 
 .daterangepicker .calendar-time-area {
   display: flex;
