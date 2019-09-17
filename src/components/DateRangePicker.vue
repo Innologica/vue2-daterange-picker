@@ -472,8 +472,10 @@ export default {
     togglePicker (value, event) {
       if (typeof value === 'boolean') {
         this.open = value
+        this.toggleBodyClass('removeClass', 'daterangepicker-open')
       } else {
         this.open = !this.open
+        this.toggleBodyClass('addClass', 'daterangepicker-open')
       }
 
       if (event === true)
@@ -534,6 +536,15 @@ export default {
 
       this.end = end;
     },
+    toggleBodyClass (addRemoveClass, className) {
+      const el = document.body
+
+      if (addRemoveClass === 'addClass') {
+        el.classList.add(className)
+      } else {
+        el.classList.remove(className)
+      }
+    }
   },
   computed: {
     startText () {
