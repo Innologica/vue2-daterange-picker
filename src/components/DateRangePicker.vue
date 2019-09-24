@@ -108,6 +108,13 @@
                 </div>
 
                 <div class="drp-buttons" v-if="!autoApply">
+                  <slot name="buttons"
+                        :rangeText="rangeText"
+                        :locale="locale"
+                        :clickAway="clickAway"
+                        :clickApply="clickedApply"
+                        :in_selection="in_selection">
+
                     <span class="drp-selected">{{rangeText}}</span>
                     <button
                             class="cancelBtn btn btn-sm btn-default"
@@ -122,6 +129,7 @@
                             @click="clickedApply"
                     >{{locale.applyLabel}}
                     </button>
+                  </slot>
                 </div>
 
             </div>
