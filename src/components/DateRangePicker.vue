@@ -112,7 +112,7 @@
                         :rangeText="rangeText"
                         :locale="locale"
                         :clickAway="clickAway"
-                        :clickApply="clickedApply"
+                        :clickedApply="clickedApply"
                         :in_selection="in_selection">
 
                     <span class="drp-selected">{{rangeText}}</span>
