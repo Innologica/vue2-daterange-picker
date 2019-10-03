@@ -56,7 +56,7 @@ export default {
     >
         <template v-slot:input="picker" style="min-width: 350px;">
             {{ picker.startDate | date }} - {{ picker.endDate | date }}
-        </div>
+        </template>
     </date-range-picker>
 ```
 
