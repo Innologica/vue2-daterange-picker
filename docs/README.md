@@ -54,9 +54,9 @@ export default {
             :linkedCalendars="linkedCalendars"
             :dateFormat="dateFormat"
     >
-        <div slot="input" slot-scope="picker" style="min-width: 350px;">
+        <template v-slot:input="picker" style="min-width: 350px;">
             {{ picker.startDate | date }} - {{ picker.endDate | date }}
-        </div>
+        </template>
     </date-range-picker>
 ```
 
