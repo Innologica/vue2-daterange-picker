@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import moment from 'moment'
+  import dayjs from 'dayjs'
 
   export default {
     props: {
@@ -23,7 +23,7 @@
     },
     methods: {
       range_class (range) {
-        return { active: moment(this.selected.startDate).isSame(range[0], 'date') && moment(this.selected.endDate).isSame(range[1], 'date') };
+        return { active: dayjs(this.selected.startDate).isSame(range[0], 'date') && dayjs(this.selected.endDate).isSame(range[1], 'date') };
       }
     },
   }

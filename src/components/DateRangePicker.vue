@@ -130,7 +130,7 @@
 </template>
 
 <script>
-  import moment from 'moment'
+  import dayjs from 'dayjs'
   import Calendar from './Calendar.vue'
   import CalendarTime from './CalendarTime'
   import CalendarRanges from './CalendarRanges'
@@ -255,12 +255,12 @@
         type: [Object, Boolean],
         default () {
           return {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'This month': [moment().startOf('month'), moment().endOf('month')],
-            'This year': [moment().startOf('year'), moment().endOf('year')],
-            'Last week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
-            'Last month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            'Today': [dayjs(), dayjs()],
+            'Yesterday': [dayjs().subtract(1, 'days'), dayjs().subtract(1, 'days')],
+            'This month': [dayjs().startOf('month'), dayjs().endOf('month')],
+            'This year': [dayjs().startOf('year'), dayjs().endOf('year')],
+            'Last week': [dayjs().subtract(1, 'week').startOf('week'), dayjs().subtract(1, 'week').endOf('week')],
+            'Last month': [dayjs().subtract(1, 'month').startOf('month'), dayjs().subtract(1, 'month').endOf('month')],
           }
         }
       },
@@ -450,13 +450,13 @@
         // return this.start.toLocaleDateString()+
         if (this.start === null)
           return ''
-        return moment(this.start).format(this.locale.format)
+        return dayjs(this.start).format(this.locale.format)
       },
       endText () {
         if (this.end === null)
           return ''
         // return new Date(this.end).toLocaleDateString()
-        return moment(new Date(this.end)).format(this.locale.format)
+        return dayjs(new Date(this.end)).format(this.locale.format)
       },
       rangeText () {
         let range = this.startText;

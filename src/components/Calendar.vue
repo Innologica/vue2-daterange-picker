@@ -47,7 +47,7 @@
 </template>
 
 <script>
-  import moment from 'moment'
+  import dayjs from 'dayjs'
   import {localeData, nextMonth, prevMonth, validateDateRange, yearMonth} from "./util";
 
   export default {
@@ -104,14 +104,14 @@
 
         let classes = {
           off: date.month() !== this.month,
-          weekend: date.isoWeekday() > 5,
+          weekend: date.weekday() > 5,
           today: dt.setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0),
           active: dt.setHours(0, 0, 0, 0) == new Date(this.start).setHours(0, 0, 0, 0) || dt.setHours(0, 0, 0, 0) == new Date(this.end).setHours(0, 0, 0, 0),
           // 'in-range': dt >= start && dt <= end,
           'start-date': dt.getTime() === start.getTime(),
           'end-date': dt.getTime() === end.getTime(),
-          disabled: (this.minDate && moment(dt).startOf("day").isBefore(moment(this.minDate).startOf("day")))
-            || (this.maxDate && moment(dt).startOf("day").isAfter(moment(this.maxDate).startOf("day"))),
+          disabled: (this.minDate && dayjs(dt).startOf("day").isBefore(dayjs(this.minDate).startOf("day")))
+            || (this.maxDate && dayjs(dt).startOf("day").isAfter(dayjs(this.maxDate).startOf("day"))),
         }
         return this.dateFormat ? this.dateFormat(classes, date) : classes
 
@@ -150,12 +150,12 @@
       calendar () {
         let month = this.month
         let year = this.currentMonthDate.getFullYear()
-        let daysInMonth = new Date(year, month, 0).getDate()
+        // let daysInMonth = new Date(year, month, 0).getDate()
         let firstDay = new Date(year, month, 1)
-        let lastDay = new Date(year, month, daysInMonth)
-        let lastMonth = moment(firstDay).subtract(1, 'month').month()
-        let lastYear = moment(firstDay).subtract(1, 'month').year()
-        let daysInLastMonth = moment([lastYear, lastMonth]).daysInMonth()
+        // let lastDay = new Date(year, month, daysInMonth)
+        let lastMonth = dayjs(firstDay).subtract(1, 'month').month()
+        let lastYear = dayjs(firstDay).subtract(1, 'month').year()
+        let daysInLastMonth = dayjs(new Date(lastYear, lastMonth)).daysInMonth()
 
         let dayOfWeek = firstDay.getDay()
 
@@ -172,8 +172,8 @@
         if (dayOfWeek === this.locale.firstDay)
           startDay = daysInLastMonth - 6;
 
-        let curDate = moment([lastYear, lastMonth, startDay, 12, 0, 0]);
-        for (let i = 0, col = 0, row = 0; i < 6 * 7; i++, col++, curDate = moment(curDate).add(1, 'day')) {
+        let curDate = dayjs(new Date(lastYear, lastMonth, startDay, 12, 0, 0));
+        for (let i = 0, col = 0, row = 0; i < 6 * 7; i++, col++, curDate = dayjs(curDate).add(1, 'day')) {
           if (i > 0 && col % 7 === 0) {
             col = 0;
             row++;
