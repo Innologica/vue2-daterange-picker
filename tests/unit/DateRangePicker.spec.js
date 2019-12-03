@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import DateRangePicker from '@/components/DateRangePicker'
-import moment from 'moment'
+import { format, isSameDay } from 'date-fns'
 import { shallowMount, mount } from '@vue/test-utils'
 
 // helper function that mounts and returns the rendered text
@@ -24,8 +24,8 @@ describe('DateRangePicker.vue', () => {
   let dt_start = new Date(propsData.dateRange.startDate)
   let dt_end = new Date(propsData.dateRange.endDate)
 
-  let dt_start_text = moment(dt_start).format(vm.locale.format)
-  let dt_end_text = moment(dt_end).format(vm.locale.format)
+  let dt_start_text = format(dt_start, vm.locale.format)
+  let dt_end_text = format(dt_end, vm.locale.format)
 
   it('should render correct contents', () => {
     expect(vm.$el.querySelector('.reportrange-text span').textContent)
@@ -57,8 +57,8 @@ describe('DateRangePicker.vue', () => {
 
     vm.$nextTick(() => {
       // console.error(vm.start, vm.dateRange)
-      expect(moment(vm.start).isSame('1981-11-24', 'date')).to.equal(true)
-      expect(moment(vm.end).isSame('2018-10-09', 'date')).to.equal(true)
+      expect(isSameDay(vm.start, Date.parse('1981-11-24'))).to.equal(true)
+      expect(isSameDay(vm.end, Date.parse('2018-10-09'))).to.equal(true)
 
       done()
     })
@@ -69,8 +69,8 @@ describe('DateRangePicker.vue', () => {
     vm.startDate = propsData.startDate
     vm.endDate = propsData.endDate
     vm.changeRightMonth({month: 1, year: 2017})
-    expect(moment(vm.nextMonthDate).month()).to.equal(1)
-    expect(moment(vm.nextMonthDate).year()).to.equal(2017)
+    expect(vm.nextMonthDate.getMonth()).to.equal(1)
+    expect(vm.nextMonthDate.getFullYear()).to.equal(2017)
   })
 
   it('Cleared state / null value? #41 - should be able to set null value', (done) => {

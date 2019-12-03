@@ -47,7 +47,7 @@
 </template>
 
 <script>
-  import moment from 'moment'
+  import { addDays, getISODay, isBefore, startOfDay, isAfter, subMonths, getDaysInMonth, setHours, getWeek } from 'date-fns'
   import {localeData, nextMonth, prevMonth, validateDateRange, yearMonth} from "./util";
 
   export default {
@@ -103,15 +103,15 @@
         end.setHours(0, 0, 0, 0)
 
         let classes = {
-          off: date.month() !== this.month,
-          weekend: date.isoWeekday() > 5,
+          off: date.getMonth() !== this.month,
+          weekend: getISODay(date) > 5,
           today: dt.setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0),
           active: dt.setHours(0, 0, 0, 0) == new Date(this.start).setHours(0, 0, 0, 0) || dt.setHours(0, 0, 0, 0) == new Date(this.end).setHours(0, 0, 0, 0),
           // 'in-range': dt >= start && dt <= end,
           'start-date': dt.getTime() === start.getTime(),
           'end-date': dt.getTime() === end.getTime(),
-          disabled: (this.minDate && moment(dt).startOf("day").isBefore(moment(this.minDate).startOf("day")))
-            || (this.maxDate && moment(dt).startOf("day").isAfter(moment(this.maxDate).startOf("day"))),
+          disabled: (this.minDate && isBefore(startOfDay(dt), startOfDay(this.minDate)))
+            || (this.maxDate && isAfter(startOfDay(dt), startOfDay(this.maxDate))),
         }
         return this.dateFormat ? this.dateFormat(classes, date) : classes
 
@@ -119,7 +119,7 @@
     },
     computed: {
       monthName () {
-        return this.locale.monthNames[this.currentMonthDate.getMonth()]
+        return this.locale.getMonthName(this.currentMonthDate)
       },
       year: {
         get () {
@@ -150,12 +150,10 @@
       calendar () {
         let month = this.month
         let year = this.currentMonthDate.getFullYear()
-        let daysInMonth = new Date(year, month, 0).getDate()
         let firstDay = new Date(year, month, 1)
-        let lastDay = new Date(year, month, daysInMonth)
-        let lastMonth = moment(firstDay).subtract(1, 'month').month()
-        let lastYear = moment(firstDay).subtract(1, 'month').year()
-        let daysInLastMonth = moment([lastYear, lastMonth]).daysInMonth()
+        let lastMonth = subMonths(firstDay, 1).getMonth()
+        let lastYear = subMonths(firstDay, 1).getFullYear()
+        let daysInLastMonth = getDaysInMonth(new Date(lastYear, lastMonth))
 
         let dayOfWeek = firstDay.getDay()
 
@@ -172,21 +170,20 @@
         if (dayOfWeek === this.locale.firstDay)
           startDay = daysInLastMonth - 6;
 
-        let curDate = moment([lastYear, lastMonth, startDay, 12, 0, 0]);
-        for (let i = 0, col = 0, row = 0; i < 6 * 7; i++, col++, curDate = moment(curDate).add(1, 'day')) {
+        let curDate = new Date(lastYear, lastMonth, startDay, 12, 0, 0);
+        for (let i = 0, col = 0, row = 0; i < 6 * 7; i++, col++, curDate = addDays(curDate, 1)) {
           if (i > 0 && col % 7 === 0) {
             col = 0;
             row++;
           }
-          calendar[row][col] = curDate.clone()
-          curDate.hour(12);
+          calendar[row][col] = new Date(curDate.getTime())
+          setHours(curDate, 12);
         }
 
         return calendar
       },
       months () {
-        let monthsData = this.locale.monthNames.map((m, idx) => ({ label: m, value: idx }))
-
+        let monthsData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => ({ label: this.locale.getMonthName(new Date(2000, i)), value: i }))
         if (this.maxDate && this.minDate) {
           let y = this.maxDate.getFullYear() - this.minDate.getFullYear();
           if (y < 2) {
@@ -223,10 +220,10 @@
     },
     filters: {
       dateNum (value) {
-        return value.date()
+        return value.getDate()
       },
       weeknumber (value) {
-        return value.week()
+        return getWeek(value)
       }
     }
   }

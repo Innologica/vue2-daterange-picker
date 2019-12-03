@@ -7,7 +7,7 @@
                 <date-range-picker
                         ref="picker"
                         :opens="opens"
-                        :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY HH:mm:ss' }"
+                        :locale-data="{ firstDay: 1, format: 'dd-MM-yyyy HH:mm:ss', locale: locale }"
                         :minDate="minDate" :maxDate="maxDate"
                         :singleDatePicker="singleDatePicker"
                         :timePicker="timePicker"
@@ -23,7 +23,7 @@
                         :dateFormat="dateFormat"
                 >
                     <div slot="input" slot-scope="picker" style="min-width: 350px;">
-                        {{ picker.startDate | date }} - {{ picker.endDate | date }}
+                        {{ picker.startDate | date(locale.code) }} - {{ picker.endDate | date(locale.code) }}
                     </div>
                 </date-range-picker>
 
@@ -180,31 +180,33 @@
 
 <script>
   import DateRangePicker from '../../../src/components/DateRangePicker'
-  import moment from 'moment'
+  import { format, addDays, isSameDay } from 'date-fns'
+  import { enUS, fr } from 'date-fns/locale'
 
   export default {
     components: {DateRangePicker},
     name: 'DateRangePickerDemo',
     filters: {
-      date (value) {
+      date (value, locale = 'en-US') {
         if (!value)
           return ''
 
         let options = {year: 'numeric', month: 'long', day: 'numeric'};
-        return Intl.DateTimeFormat('en-US', options).format(value)
+        return Intl.DateTimeFormat(locale, options).format(value)
       }
     },
     data () {
-      //                    :locale-data="{ daysOfWeek: [ 'Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб' ] }"
+      // :locale-data="{ daysOfWeek: [ 'Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб' ] }"
       return {
+        locale: enUS,
         opens: 'center',
-        minDate: '2017-08-02',
-        maxDate: '2017-11-02',
+        minDate: null,
+        maxDate: format(addDays(new Date(), 2), 'yyyy-MM-dd'),
         // minDate: '',
         // maxDate: '',
         dateRange: {
           startDate: '2017-09-10',
-          endDate: '2017-9-20',
+          endDate: '2017-09-20',
         },
         show_ranges: true,
         singleDatePicker: false,
@@ -221,8 +223,8 @@
     },
     methods: {
       updateValues (values) {
-        this.dateRange.startDate = moment(values.startDate).format('YYYY-MM-DD');
-        this.dateRange.endDate = moment(values.endDate).format('YYYY-MM-DD');
+        this.dateRange.startDate = format(values.startDate, 'yyyy-MM-dd');
+        this.dateRange.endDate = format(values.endDate, 'yyyy-MM-dd');
 
         console.log('event: update', values)
       },
@@ -230,9 +232,9 @@
         console.log('event: open', open)
       },
       dateFormat (classes, date) {
-        let yesterday = moment().subtract(1, 'day');
+        let yesterday = addDays(new Date(), -1)
         if (!classes.disabled) {
-          classes.disabled = date.isSame(yesterday, 'day')
+          classes.disabled = isSameDay(date, yesterday)
         }
         return classes
       }

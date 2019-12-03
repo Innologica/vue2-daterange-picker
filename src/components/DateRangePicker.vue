@@ -130,7 +130,7 @@
 </template>
 
 <script>
-  import moment from 'moment'
+  import { addDays, startOfMonth, endOfMonth, startOfYear, endOfYear, startOfWeek, addWeeks, endOfWeek, addMonths } from 'date-fns'
   import Calendar from './Calendar.vue'
   import CalendarTime from './CalendarTime'
   import CalendarRanges from './CalendarRanges'
@@ -255,12 +255,12 @@
         type: [Object, Boolean],
         default () {
           return {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'This month': [moment().startOf('month'), moment().endOf('month')],
-            'This year': [moment().startOf('year'), moment().endOf('year')],
-            'Last week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
-            'Last month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            'Today': [new Date(), new Date()],
+            'Yesterday': [addDays(new Date(), -1), addDays(new Date(), -1)],
+            'This month': [startOfMonth(new Date()), endOfMonth(new Date())],
+            'This year': [startOfYear(new Date()), endOfYear(new Date())],
+            'Last week': [startOfWeek(addWeeks(new Date(), -1)), endOfWeek(addWeeks(new Date(), -1))],
+            'Last month': [startOfMonth(addMonths(new Date(), -1)), endOfMonth(addMonths(new Date(), -1))]
           }
         }
       },
@@ -450,13 +450,13 @@
         // return this.start.toLocaleDateString()+
         if (this.start === null)
           return ''
-        return moment(this.start).format(this.locale.format)
+        return this.locale.formatDate(this.start)
       },
       endText () {
         if (this.end === null)
           return ''
         // return new Date(this.end).toLocaleDateString()
-        return moment(new Date(this.end)).format(this.locale.format)
+        return this.locale.formatDate(new Date(this.end))
       },
       rangeText () {
         let range = this.startText;

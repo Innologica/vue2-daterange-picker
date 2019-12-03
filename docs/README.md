@@ -2,7 +2,7 @@
 
 > Vue2 date range picker based on https://github.com/dangrossman/bootstrap-daterangepicker (no jQuery)
 
-Date range picker component for vue made without jQuery dependency. Heavily inspired by bootstrap-daterangepicker. 
+Date range picker component for vue made without jQuery dependency. Heavily inspired by bootstrap-daterangepicker.
 
 
 ## Installation
@@ -11,7 +11,7 @@ Date range picker component for vue made without jQuery dependency. Heavily insp
 npm i vue2-daterange-picker --save
 ```
 
-or 
+or
 
 ```sh
 yarn add vue2-daterange-picker
@@ -40,7 +40,7 @@ export default {
     <date-range-picker
             ref="picker"
             :opens="opens"
-            :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY HH:mm:ss' }"
+            :locale-data="{ firstDay: 1, format: 'dd-MM-yyyy HH:mm:ss' }"
             :minDate="minDate" :maxDate="maxDate"
             :singleDatePicker="singleDatePicker"
             :timePicker="timePicker"
@@ -68,30 +68,36 @@ export default {
 
 <component-props component="DateRangePicker"/>
 
-* sample locale data
+* sample locale data (all values are optional)
 ```JS
+import { eo } from 'date-fns/locale' // import your locale
+
 {
+    locale: eo, // setting the locale is recommended
     direction: 'ltr',
-    format: moment.localeData().longDateFormat('L'),
+    format: 'P', // P is default long format for locales
     separator: ' - ',
     applyLabel: 'Apply',
     cancelLabel: 'Cancel',
     weekLabel: 'W',
     customRangeLabel: 'Custom Range',
-    daysOfWeek: moment.weekdaysMin(),
-    monthNames: moment.monthsShort(),
-    firstDay: moment.localeData().firstDayOfWeek()
+    daysOfWeek: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"], // will be obtained from locale if ommitted
+    monthNames: [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ], // will be obtained from locale if ommitted
+    firstDay: 1 // will be obtained from locale if ommitted
 }
 ```
 * default ranges object (set to false to hide ranges)
 ```JS
 {
-    'Today': [moment(), moment()],
-    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-    'This month': [moment().startOf('month'), moment().endOf('month')],
-    'This year': [moment().startOf('year'), moment().endOf('year')],
-    'Last week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
-    'Last month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+    'Today': [new Date(), new Date()],
+    'Yesterday': [addDays(new Date(), -1), addDays(new Date(), -1)],
+    'This month': [startOfMonth(new Date()), endOfMonth(new Date())],
+    'This year': [startOfYear(new Date()), endOfYear(new Date())],
+    'Last week': [startOfWeek(addWeeks(new Date(), -1)), endOfWeek(addWeeks(new Date(), -1))],
+    'Last month': [startOfMonth(addMonths(new Date(), -1)), endOfMonth(addMonths(new Date(), -1))]
 }
 ```
 
