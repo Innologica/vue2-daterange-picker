@@ -41,7 +41,7 @@ const localeData = (options = {}) => {
         weekLabel: 'W',
         daysOfWeek: [0, 1, 2, 3, 4, 5, 6].map(i => format(setDay(new Date(), i), 'ccc', { locale: options.locale })),
         customRangeLabel: 'Custom Range',
-        firstDay: options.locale ? options.locale.weekStartsOn : 1
+        firstDay: options.locale && options.locale.options ? options.locale.options.weekStartsOn : 1
     }
     let actions = {
         formatDate: function (date) {
