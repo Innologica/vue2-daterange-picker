@@ -79,6 +79,13 @@
       },
     },
     watch: {
+      currentTime (newTime) {
+        let hours = newTime.getHours();
+        this.hour = this.hour24 ? hours : hours % 12 || 12;
+        this.minute = newTime.getMinutes() - (newTime.getMinutes() % this.miniuteIncrement);
+        this.second = newTime.getSeconds();
+        this.ampm = hours < 12 ? 'AM' : 'PM';
+      },
       hour () {
         this.onChange();
       },
