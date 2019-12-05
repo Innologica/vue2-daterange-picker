@@ -23,7 +23,7 @@
     },
     methods: {
       range_class (range) {
-        return { active: moment(this.selected.startDate).isSame(range[0], 'date') && moment(this.selected.endDate).isSame(range[1], 'date') };
+        return { active: moment(this.selected.startDate).isSame(range[0]) && moment(this.selected.endDate).isSame(range[1]) };
       }
     },
   }
