@@ -424,7 +424,10 @@
       clickRange (value) {
         this.start = new Date(value[0])
         this.end = new Date(value[1])
-        this.monthDate = new Date(value[0])
+        this.changeLeftMonth({
+          month: value[0].month(),
+          year: value[0].year()
+        })
         if (this.autoApply)
           this.clickedApply()
       },
