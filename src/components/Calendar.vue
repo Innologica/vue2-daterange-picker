@@ -10,7 +10,7 @@
             >
                 <div class="row mx-1">
                     <select v-model="month" class="monthselect col">
-                        <option v-for="(m) in months" :key="m.value" :value="m.value">{{m.label}}</option>
+                        <option v-for="(m) in months" :key="m.value" :value="m.value + 1">{{m.label}}</option>
                     </select>
                     <input type="number" v-model="year" class="yearselect col" />
                 </div>
@@ -29,7 +29,7 @@
                 :key="index"
         >
             <td v-if="showWeekNumbers && (index%7 || index===0)" class="week">
-                {{dateRow[0] | weeknumber}}
+                {{$dateUtil.weekNumber(dateRow[0])}}
             </td>
             <slot name="date-slot" v-for="(date, idx) in dateRow">
                 <td
@@ -38,7 +38,7 @@
                         @mouseover="$emit('hoverDate', date)"
                         :key="idx"
                 >
-                    {{date | dateNum}}
+                    {{date.getDate()}}
                 </td>
             </slot>
         </tr>
@@ -47,10 +47,10 @@
 </template>
 
 <script>
-  import moment from 'moment'
-  import {localeData, nextMonth, prevMonth, validateDateRange, yearMonth} from "./util";
+  import dateUtilMixin from './dateUtilMixin'
 
   export default {
+    mixins: [dateUtilMixin],
     name: 'calendar',
     props: {
       monthDate: Date,
@@ -79,15 +79,15 @@
     },
     methods: {
       prevMonth() {
-        this.changeMonthDate(prevMonth(this.currentMonthDate))
+        this.changeMonthDate(this.$dateUtil.prevMonth(this.currentMonthDate))
       },
       nextMonth() {
-        this.changeMonthDate(nextMonth(this.currentMonthDate))
+        this.changeMonthDate(this.$dateUtil.nextMonth(this.currentMonthDate))
       },
       changeMonthDate (date, emit = true) {
-        let year_month = yearMonth(this.currentMonthDate)
-        this.currentMonthDate = validateDateRange(date, this.minDate, this.maxDate)
-        if(emit && year_month !== yearMonth(this.currentMonthDate)) {
+        let year_month = this.$dateUtil.yearMonth(this.currentMonthDate)
+        this.currentMonthDate = this.$dateUtil.validateDateRange(date, this.minDate, this.maxDate)
+        if(emit && year_month !== this.$dateUtil.yearMonth(this.currentMonthDate)) {
           this.$emit('change-month', {
             month: this.currentMonthDate.getMonth(),
             year: this.currentMonthDate.getFullYear(),
@@ -103,15 +103,15 @@
         end.setHours(0, 0, 0, 0)
 
         let classes = {
-          off: date.month() !== this.month,
-          weekend: date.isoWeekday() > 5,
+          off: date.getMonth() + 1 !== this.month,
+          weekend: date.getDay() === 6 || date.getDay() === 0,
           today: dt.setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0),
           active: dt.setHours(0, 0, 0, 0) == new Date(this.start).setHours(0, 0, 0, 0) || dt.setHours(0, 0, 0, 0) == new Date(this.end).setHours(0, 0, 0, 0),
-          // 'in-range': dt >= start && dt <= end,
+          'in-range': dt >= start && dt <= end,
           'start-date': dt.getTime() === start.getTime(),
           'end-date': dt.getTime() === end.getTime(),
-          disabled: (this.minDate && moment(dt).startOf("day").isBefore(moment(this.minDate).startOf("day")))
-            || (this.maxDate && moment(dt).startOf("day").isAfter(moment(this.maxDate).startOf("day"))),
+          disabled: (this.minDate && dt.getTime() < this.minDate.getTime())
+            || (this.maxDate && dt.getTime() > this.maxDate.getTime()),
         }
         return this.dateFormat ? this.dateFormat(classes, date) : classes
 
@@ -126,7 +126,7 @@
           return this.currentMonthDate.getFullYear()
         },
         set (value) {
-          let newDate = validateDateRange(new Date(value, this.month, 1), this.minDate, this.maxDate)
+          let newDate = this.$dateUtil.validateDateRange(new Date(value, this.month, 1), this.minDate, this.maxDate)
 
           this.$emit('change-month', {
             month: newDate.getMonth(),
@@ -136,10 +136,10 @@
       },
       month: {
         get () {
-          return this.currentMonthDate.getMonth()
+          return this.currentMonthDate.getMonth() + 1
         },
         set (value) {
-          let newDate = validateDateRange(new Date(this.year, value, 1), this.minDate, this.maxDate)
+          let newDate = this.$dateUtil.validateDateRange(new Date(this.year, value - 1, 1), this.minDate, this.maxDate)
 
           this.$emit('change-month', {
             month: newDate.getMonth(),
@@ -150,12 +150,10 @@
       calendar () {
         let month = this.month
         let year = this.currentMonthDate.getFullYear()
-        let daysInMonth = new Date(year, month, 0).getDate()
-        let firstDay = new Date(year, month, 1)
-        let lastDay = new Date(year, month, daysInMonth)
-        let lastMonth = moment(firstDay).subtract(1, 'month').month()
-        let lastYear = moment(firstDay).subtract(1, 'month').year()
-        let daysInLastMonth = moment([lastYear, lastMonth]).daysInMonth()
+        let firstDay = new Date(year, month - 1, 1)
+        let lastMonth = this.$dateUtil.prevMonth(firstDay).getMonth() + 1
+        let lastYear = this.$dateUtil.prevMonth(firstDay).getFullYear()
+        let daysInLastMonth = new Date(lastYear, month - 1, 0).getDate()
 
         let dayOfWeek = firstDay.getDay()
 
@@ -172,14 +170,13 @@
         if (dayOfWeek === this.locale.firstDay)
           startDay = daysInLastMonth - 6;
 
-        let curDate = moment([lastYear, lastMonth, startDay, 12, 0, 0]);
-        for (let i = 0, col = 0, row = 0; i < 6 * 7; i++, col++, curDate = moment(curDate).add(1, 'day')) {
+        let curDate = new Date(lastYear, lastMonth - 1, startDay, 12, 0, 0);
+        for (let i = 0, col = 0, row = 0; i < 6 * 7; i++, col++, curDate.setDate(curDate.getDate() + 1)) {
           if (i > 0 && col % 7 === 0) {
             col = 0;
             row++;
           }
-          calendar[row][col] = curDate.clone()
-          curDate.hour(12);
+          calendar[row][col] = new Date(curDate.getTime())
         }
 
         return calendar
@@ -214,19 +211,11 @@
         }
         return monthsData;
       },
-      locale () { return localeData(this.localeData) }
+      locale () { return this.$dateUtil.localeData(this.localeData) }
     },
     watch: {
       monthDate (value) {
         this.changeMonthDate(value, false)
-      }
-    },
-    filters: {
-      dateNum (value) {
-        return value.date()
-      },
-      weeknumber (value) {
-        return value.week()
       }
     }
   }

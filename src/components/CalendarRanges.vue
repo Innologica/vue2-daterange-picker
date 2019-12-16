@@ -14,16 +14,17 @@
 </template>
 
 <script>
-  import moment from 'moment'
+  import dateUtilMixin from './dateUtilMixin'
 
   export default {
+    mixins: [dateUtilMixin],
     props: {
       ranges: Object,
       selected: Object
     },
     methods: {
       range_class (range) {
-        return { active: moment(this.selected.startDate).isSame(range[0], 'date') && moment(this.selected.endDate).isSame(range[1], 'date') };
+        return { active: this.$dateUtil.isSame(this.selected.startDate, range[0], 'date') && this.$dateUtil.isSame(this.selected.endDate, range[1], 'date') };
       }
     },
   }

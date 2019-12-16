@@ -15,4 +15,5 @@ selenium-debug.log
 *.sln
 
 docs/.vuepress/dist
+docs/docs.json
 dist/

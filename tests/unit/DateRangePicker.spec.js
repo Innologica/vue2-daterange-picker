@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import DateRangePicker from '@/components/DateRangePicker'
 import moment from 'moment'
+import {getDateUtil} from '../../src/components/util'
 import { shallowMount, mount } from '@vue/test-utils'
 
 // helper function that mounts and returns the rendered text
@@ -24,8 +25,8 @@ describe('DateRangePicker.vue', () => {
   let dt_start = new Date(propsData.dateRange.startDate)
   let dt_end = new Date(propsData.dateRange.endDate)
 
-  let dt_start_text = moment(dt_start).format(vm.locale.format)
-  let dt_end_text = moment(dt_end).format(vm.locale.format)
+  let dt_start_text = getDateUtil(vm.dateUtil).format(dt_start, vm.locale.format)
+  let dt_end_text = getDateUtil(vm.dateUtil).format(dt_end, vm.locale.format)
 
   it('should render correct contents', () => {
     expect(vm.$el.querySelector('.reportrange-text span').textContent)

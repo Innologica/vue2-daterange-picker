@@ -1,16 +1,16 @@
 <template>
   <div class="calendar-time">
     <select v-model="hour" class="hourselect">
-      <option v-for="h in hours" 
+      <option v-for="h in hours"
         :key="h" :value="h">{{h | formatNumber}}</option>
     </select>
     :<select v-model="minute" class="minuteselect">
-      <option v-for="m in minutes" 
+      <option v-for="m in minutes"
         :key="m" :value="m" >{{m | formatNumber}}</option>
     </select>
     <template v-if="secondPicker">
       :<select v-model="second" class="secondselect">
-        <option v-for="s in 60" 
+        <option v-for="s in 60"
           :key="s-1" :value="s-1">{{s-1 | formatNumber}}</option>
       </select>
     </template>
@@ -114,7 +114,3 @@
     },
   }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

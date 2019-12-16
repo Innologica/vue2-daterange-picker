@@ -1,5 +1,5 @@
 <template>
-    <div class="vue-daterange-picker">
+    <div class="vue-daterange-picker" @click.stop>
         <div class="form-control reportrange-text" @click="togglePicker(null, true)">
             <!--
               Allows you to change the input which is visible before the picker opens
@@ -24,7 +24,6 @@
                     class="daterangepicker dropdown-menu ltr"
                     :class="pickerStyles"
                     v-if="open"
-                    v-on-clickaway="clickAway"
             >
                 <div class="calendars row no-gutters">
             <!--
@@ -130,17 +129,16 @@
 </template>
 
 <script>
-  import moment from 'moment'
+  import dateUtilMixin from './dateUtilMixin'
   import Calendar from './Calendar.vue'
   import CalendarTime from './CalendarTime'
   import CalendarRanges from './CalendarRanges'
-  import {localeData, nextMonth, prevMonth, validateDateRange, yearMonth} from './util'
-  import {mixin as clickaway} from 'vue-clickaway'
+  import {getDateUtil} from './util'
 
   export default {
     inheritAttrs: false,
     components: {Calendar, CalendarTime, CalendarRanges},
-    mixins: [clickaway],
+    mixins: [dateUtilMixin],
     model: {
       prop: 'dateRange',
       event: 'update',
@@ -241,9 +239,12 @@
         },
       },
       /**
-       * This is the v-model prop which the component uses.
+       * This is the v-model prop which the component uses. This should be an object containing startDate and endDate props.
+       * Each of the props should be a string which can be parsed by Date, or preferably a Date Object.
+       * @default { startDate: null, endDate: null }
        */
       dateRange: { // for v-model
+        type: [Object],
         default: null,
         required: true
       },
@@ -254,13 +255,22 @@
       ranges: {
         type: [Object, Boolean],
         default () {
+          let today = new Date()
+          today.setHours(0, 0, 0, 0)
+
+          let yesterday = new Date()
+          yesterday.setDate(today.getDate() - 1)
+          yesterday.setHours(0, 0, 0, 0);
+
+          let thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+          let thisMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
           return {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'This month': [moment().startOf('month'), moment().endOf('month')],
-            'This year': [moment().startOf('year'), moment().endOf('year')],
-            'Last week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
-            'Last month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            'Today': [today, today],
+            'Yesterday': [yesterday, yesterday],
+            'This month': [thisMonthStart, thisMonthEnd],
+            'This year': [new Date(today.getFullYear(), 0, 1), new Date(today.getFullYear(), 11, 31)],
+            'Last month': [new Date(today.getFullYear(), today.getMonth() - 1, 1), new Date(today.getFullYear(), today.getMonth(), 0)],
           }
         }
       },
@@ -287,13 +297,17 @@
       }
     },
     data () {
-      let data = {locale: localeData(this.localeData)}
+      //copy locale data object
+      const util = getDateUtil(this.dateUtil);
+      let data = {locale: util.localeData({...this.localeData})}
 
       let startDate = this.dateRange.startDate || null;
       let endDate = this.dateRange.endDate || null;
 
       data.monthDate = startDate ? new Date(startDate) : new Date()
-      data.nextMonthDate = nextMonth(data.monthDate)
+      //get next month date
+      data.nextMonthDate = util.nextMonth(data.monthDate)
+
       data.start = startDate ? new Date(startDate) : null
       if (this.singleDatePicker) {
         // ignore endDate for singleDatePicker
@@ -330,20 +344,20 @@
       changeLeftMonth (value) {
         let newDate = new Date(value.year, value.month, 1);
         this.monthDate = newDate
-        if (this.linkedCalendars || (yearMonth(this.monthDate) >= yearMonth(this.nextMonthDate))) {
-          this.nextMonthDate = validateDateRange(nextMonth(newDate), this.minDate, this.maxDate);
-          if (yearMonth(this.monthDate) === yearMonth(this.nextMonthDate)) {
-            this.monthDate = validateDateRange(prevMonth(this.monthDate), this.minDate, this.maxDate)
+        if (this.linkedCalendars || (this.$dateUtil.yearMonth(this.monthDate) >= this.$dateUtil.yearMonth(this.nextMonthDate))) {
+          this.nextMonthDate = this.$dateUtil.validateDateRange(this.$dateUtil.nextMonth(newDate), this.minDate, this.maxDate);
+          if (this.$dateUtil.yearMonth(this.monthDate) === this.$dateUtil.yearMonth(this.nextMonthDate)) {
+            this.monthDate = this.$dateUtil.validateDateRange(this.$dateUtil.prevMonth(this.monthDate), this.minDate, this.maxDate)
           }
         }
       },
       changeRightMonth (value) {
         let newDate = new Date(value.year, value.month, 1);
         this.nextMonthDate = newDate
-        if (this.linkedCalendars || (yearMonth(this.nextMonthDate) <= yearMonth(this.monthDate))) {
-          this.monthDate = validateDateRange(prevMonth(newDate), this.minDate, this.maxDate);
-          if (yearMonth(this.monthDate) === yearMonth(this.nextMonthDate)) {
-            this.nextMonthDate = validateDateRange(nextMonth(this.nextMonthDate), this.minDate, this.maxDate)
+        if (this.linkedCalendars || (this.$dateUtil.yearMonth(this.nextMonthDate) <= this.$dateUtil.yearMonth(this.monthDate))) {
+          this.monthDate = this.$dateUtil.validateDateRange(this.$dateUtil.prevMonth(newDate), this.minDate, this.maxDate);
+          if (this.$dateUtil.yearMonth(this.monthDate) === this.$dateUtil.yearMonth(this.nextMonthDate)) {
+            this.nextMonthDate = this.$dateUtil.validateDateRange(this.$dateUtil.nextMonth(this.nextMonthDate), this.minDate, this.maxDate)
           }
         }
       },
@@ -450,16 +464,14 @@
     },
     computed: {
       startText () {
-        // return this.start.toLocaleDateString()+
         if (this.start === null)
           return ''
-        return moment(this.start).format(this.locale.format)
+        return this.$dateUtil.format(this.start, this.locale.format)
       },
       endText () {
         if (this.end === null)
           return ''
-        // return new Date(this.end).toLocaleDateString()
-        return moment(new Date(this.end)).format(this.locale.format)
+        return this.$dateUtil.format(this.end, this.locale.format)
       },
       rangeText () {
         let range = this.startText;
@@ -492,11 +504,11 @@
     },
     watch: {
       minDate () {
-        let dt = validateDateRange(this.monthDate, this.minDate || new Date(), this.maxDate)
+        let dt = this.$dateUtil.validateDateRange(this.monthDate, this.minDate || new Date(), this.maxDate)
         this.changeLeftMonth({year: dt.getFullYear(), month: dt.getMonth()})
       },
       maxDate () {
-        let dt = validateDateRange(this.nextMonthDate, this.minDate, this.maxDate || new Date())
+        let dt = this.$dateUtil.validateDateRange(this.nextMonthDate, this.minDate, this.maxDate || new Date())
         this.changeRightMonth({year: dt.getFullYear(), month: dt.getMonth()})
       },
       'dateRange.startDate' (value) {
@@ -518,6 +530,15 @@
           this.start = new Date(this.dateRange.startDate)
           this.end = new Date(this.dateRange.endDate)
         }
+      },
+      open: {
+        handler (value) {
+          if(typeof document === "object")
+            this.$nextTick(() => {
+              value ? document.body.addEventListener('click', this.clickAway) : document.body.removeEventListener('click', this.clickAway)
+            })
+        },
+        immediate: true
       }
     }
   }

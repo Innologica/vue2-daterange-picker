@@ -34,7 +34,7 @@
     },
     data () {
       let meta = require('../../docs')
-      console.log(meta[0].events)
+      // console.log(meta[0].events)
       return {
         events: meta[0].events
       }

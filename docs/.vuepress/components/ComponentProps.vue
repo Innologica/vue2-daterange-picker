@@ -32,7 +32,7 @@
     },
     data () {
       let meta = require('../../docs')
-      console.log(meta[0].props[12])
+      // console.log(meta[0].props[12])
       return {
         props: meta[0].props
       }

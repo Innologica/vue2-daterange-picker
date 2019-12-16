@@ -7,7 +7,7 @@
                 <date-range-picker
                         ref="picker"
                         :opens="opens"
-                        :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY HH:mm:ss' }"
+                        :locale-data="{ firstDay: 1, format: 'yyyy-mm-dd HH:MM:ss' }"
                         :minDate="minDate" :maxDate="maxDate"
                         :singleDatePicker="singleDatePicker"
                         :timePicker="timePicker"
@@ -198,13 +198,13 @@
       //                    :locale-data="{ daysOfWeek: [ 'Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб' ] }"
       return {
         opens: 'center',
-        minDate: '2017-08-02',
-        maxDate: '2017-11-02',
+        minDate: '2019-08-02',
+        maxDate: '2020-11-02',
         // minDate: '',
         // maxDate: '',
         dateRange: {
-          startDate: '2017-09-10',
-          endDate: '2017-9-20',
+          startDate: '2019-12-10',
+          endDate: '2019-12-20',
         },
         show_ranges: true,
         singleDatePicker: false,
@@ -232,7 +232,7 @@
       dateFormat (classes, date) {
         let yesterday = moment().subtract(1, 'day');
         if (!classes.disabled) {
-          classes.disabled = date.isSame(yesterday, 'day')
+          classes.disabled = moment(date).isSame(yesterday, 'day')
         }
         return classes
       }
