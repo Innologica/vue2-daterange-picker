@@ -2,7 +2,7 @@
 
 > Vue2 date range picker based on https://github.com/dangrossman/bootstrap-daterangepicker (no jQuery)
 
-Date range picker component for vue made without jQuery dependency. Heavily inspired by bootstrap-daterangepicker. 
+Date range picker component for vue made without jQuery dependency. Heavily inspired by bootstrap-daterangepicker.
 
 
 ## Installation
@@ -11,7 +11,7 @@ Date range picker component for vue made without jQuery dependency. Heavily insp
 npm i vue2-daterange-picker --save
 ```
 
-or 
+or
 
 ```sh
 yarn add vue2-daterange-picker
@@ -94,6 +94,9 @@ export default {
     'Last month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
 }
 ```
+* custom date util object
+
+<<< @/src/components/date_util/template.js
 
 ## Events
 

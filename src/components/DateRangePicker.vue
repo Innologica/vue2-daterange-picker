@@ -241,7 +241,7 @@
       /**
        * This is the v-model prop which the component uses. This should be an object containing startDate and endDate props.
        * Each of the props should be a string which can be parsed by Date, or preferably a Date Object.
-       * @default { startDate: null, endDate: null }
+       * @default startDate: null, endDate: null
        */
       dateRange: { // for v-model
         type: [Object],
@@ -294,7 +294,16 @@
       alwaysShowCalendars: {
         type: Boolean,
         default: true
-      }
+      },
+      /**
+       * The dateUtil implementation to use. Possible values: native, moment, date-fns.
+       * If an object is given it must implement all the functions required. See below for
+       * custom date util object template*
+       */
+      dateUtil: {
+        type: [Object, String],
+        default: 'native'
+      },
     },
     data () {
       //copy locale data object
@@ -439,8 +448,8 @@
         this.start = new Date(value[0])
         this.end = new Date(value[1])
         this.changeLeftMonth({
-          month: value[0].month(),
-          year: value[0].year()
+          month: this.start.getMonth() + 1,
+          year: this.start.getFullYear()
         })
         if (this.autoApply)
           this.clickedApply()
@@ -684,6 +693,7 @@
     .vue-daterange-picker {
         position: relative;
         display: inline-block;
+        min-width: 60px;
     }
 
 </style>

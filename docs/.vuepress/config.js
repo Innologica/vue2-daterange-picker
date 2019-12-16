@@ -7,7 +7,10 @@ module.exports = {
     nav: [
       { text: 'Github', link: 'https://github.com/Innologica/vue2-daterange-picker' }
     ],
-    sidebar: 'auto'
+    sidebar: [
+      '/',
+      '/advanced/'
+    ]
   },
   markdown: {
     config: md => {
