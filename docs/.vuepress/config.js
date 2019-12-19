@@ -10,7 +10,8 @@ module.exports = {
     sidebar: [
       '/',
       '/advanced/'
-    ]
+    ],
+    displayAllHeaders: true
   },
   markdown: {
     config: md => {

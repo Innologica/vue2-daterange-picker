@@ -1,8 +1,9 @@
-# Vue date range picker
+# Date range picker
 
 > Vue2 date range picker based on https://github.com/dangrossman/bootstrap-daterangepicker (no jQuery)
 
 Date range picker component for vue made without jQuery dependency. Heavily inspired by bootstrap-daterangepicker.
+The component has NO dependency except vue.
 
 
 ## Installation
@@ -72,29 +73,29 @@ export default {
 ```JS
 {
     direction: 'ltr',
-    format: moment.localeData().longDateFormat('L'),
+    format: 'mm/dd/yyyy',
     separator: ' - ',
     applyLabel: 'Apply',
     cancelLabel: 'Cancel',
     weekLabel: 'W',
     customRangeLabel: 'Custom Range',
-    daysOfWeek: moment.weekdaysMin(),
-    monthNames: moment.monthsShort(),
-    firstDay: moment.localeData().firstDayOfWeek()
+    daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    firstDay: 0
 }
 ```
 * default ranges object (set to false to hide ranges)
 ```JS
 {
-    'Today': [moment(), moment()],
-    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-    'This month': [moment().startOf('month'), moment().endOf('month')],
-    'This year': [moment().startOf('year'), moment().endOf('year')],
-    'Last week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
-    'Last month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+    'Today',
+    'Yesterday',
+    'This month',
+    'This year',
+    'Last week',
+    'Last month',
 }
 ```
-* custom date util object
+* custom date util object (keep in mind that this can change in the future)
 
 <<< @/src/components/date_util/template.js
 

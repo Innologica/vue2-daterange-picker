@@ -142,7 +142,7 @@
           let newDate = this.$dateUtil.validateDateRange(new Date(this.year, value - 1, 1), this.minDate, this.maxDate)
 
           this.$emit('change-month', {
-            month: newDate.getMonth(),
+            month: newDate.getMonth() + 1,
             year: newDate.getFullYear(),
           });
         }

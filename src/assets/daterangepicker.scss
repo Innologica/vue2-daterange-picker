@@ -1,0 +1,11 @@
+.daterangepicker {
+  &.hide-calendars.show-ranges {
+    .ranges {
+      width: 100%;
+
+     ul {
+       width: 100%;
+     }
+    }
+  }
+}

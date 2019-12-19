@@ -5,6 +5,8 @@ const DateUtil = {
     let dt1 = new Date(date1)
     let dt2 = new Date(date2)
     if(granularity === 'date') {
+      dt1.setHours(0,0,0,0);
+      dt2.setHours(0,0,0,0);
       return dt1.getTime() === dt2.getTime()
     }
     return false
