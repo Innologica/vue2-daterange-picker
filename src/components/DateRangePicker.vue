@@ -461,8 +461,8 @@
         }
       },
       clickRange (value) {
-        this.start = new Date(value[0])
-        this.end = new Date(value[1])
+        this.start = this.$dateUtil.validateDateRange(new Date(value[0]), this.minDate, this.maxDate)
+        this.end = this.$dateUtil.validateDateRange(new Date(value[1]), this.minDate, this.maxDate)
         this.changeLeftMonth({
           month: this.start.getMonth() + 1,
           year: this.start.getFullYear()
@@ -476,7 +476,7 @@
         start.setMinutes(value.minutes);
         start.setSeconds(value.seconds);
 
-        this.start = start;
+        this.start = this.$dateUtil.validateDateRange(start, this.minDate, this.maxDate);
       },
       onUpdateEndTime (value) {
         let end = new Date(this.end);
@@ -484,7 +484,7 @@
         end.setMinutes(value.minutes);
         end.setSeconds(value.seconds);
 
-        this.end = end;
+        this.end = this.$dateUtil.validateDateRange(end, this.minDate, this.maxDate);
       },
     },
     computed: {
@@ -579,7 +579,7 @@
 </script>
 
 <style lang="scss">
-  @import '../assets/daterangepicker.css';
+  @import '../assets/daterangepicker.scss';
 </style>
 
 <style lang="scss" scoped>

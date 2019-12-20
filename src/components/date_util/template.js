@@ -63,8 +63,8 @@ const DateUtil = {
       cancelLabel: 'Cancel',
       weekLabel: 'W',
       customRangeLabel: 'Custom Range',
-      daysOfWeek: //days of week (short),
-      monthNames: // month names (short),
+      daysOfWeek: [],//days of week (short),
+      monthNames: [],// month names (short),
       firstDay: 0
     };
 

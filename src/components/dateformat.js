@@ -211,6 +211,6 @@ function kindOf (val) {
 
   return {}.toString.call(val)
     .slice(8, -1).toLowerCase();
-};
+}
 
 export {dateFormat, getDayOfWeek, getWeek }

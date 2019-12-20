@@ -210,8 +210,8 @@
       //                    :locale-data="{ daysOfWeek: [ 'Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб' ] }"
       return {
         opens: 'center',
-        minDate: '2019-08-02',
-        maxDate: '2020-11-02',
+        minDate: '2019-05-02 04:00:00',
+        maxDate: '2019-12-26 14:00:00',
         // minDate: '',
         // maxDate: '',
         dateRange: {
@@ -234,10 +234,9 @@
     },
     methods: {
       updateValues (values) {
-        this.dateRange.startDate = moment(values.startDate).format('YYYY-MM-DD');
-        this.dateRange.endDate = moment(values.endDate).format('YYYY-MM-DD');
-
-        console.log('event: update', values)
+        console.log('event: update', {...values})
+        this.dateRange.startDate = moment(values.startDate).format('YYYY-MM-DD HH:mm:ss');
+        this.dateRange.endDate = moment(values.endDate).format('YYYY-MM-DD HH:mm:ss');
       },
       checkOpen (open) {
         console.log('event: open', open)
