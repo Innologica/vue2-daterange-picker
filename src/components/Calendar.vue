@@ -89,7 +89,7 @@
         this.currentMonthDate = this.$dateUtil.validateDateRange(date, this.minDate, this.maxDate)
         if(emit && year_month !== this.$dateUtil.yearMonth(this.currentMonthDate)) {
           this.$emit('change-month', {
-            month: this.currentMonthDate.getMonth(),
+            month: this.currentMonthDate.getMonth() + 1,
             year: this.currentMonthDate.getFullYear(),
           })
         }
