@@ -467,6 +467,7 @@
           month: this.start.getMonth() + 1,
           year: this.start.getFullYear()
         })
+        this.in_selection = false
         if (this.autoApply)
           this.clickedApply()
       },
