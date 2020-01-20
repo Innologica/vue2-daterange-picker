@@ -55,7 +55,7 @@ const DateUtil = {
       cancelLabel: 'Cancel',
       weekLabel: 'W',
       customRangeLabel: 'Custom Range',
-      daysOfWeek: dateFormat.i18n.dayNames.slice(0, 7),
+      daysOfWeek: dateFormat.i18n.dayNames.slice(0, 7).map(d => d.substring(0, 2)),
       monthNames: dateFormat.i18n.monthNames.slice(0, 12),
       firstDay: 0
     };

@@ -583,7 +583,7 @@
 </style>
 
 <style lang="scss" scoped>
-  $week-width: 682px - 628px;
+  $week-width: 0px;
 
   .reportrange-text {
     background: #fff;
@@ -619,17 +619,17 @@
     @media screen and (min-width: 540px) {
       min-width: 486px;
       &.show-weeknumbers {
-        min-width: 490px + $week-width;
+        min-width: 486px + $week-width;
       }
 
     }
 
     @media screen and (min-width: 768px) {
       &.show-ranges {
-        min-width: 628px;
+        min-width: 682px;
 
         &.show-weeknumbers {
-          min-width: 628px + $week-width;
+          min-width: 682px + $week-width;
         }
       }
     }
@@ -646,10 +646,10 @@
       @media screen and (min-width: 339px) {
         min-width: auto;
         &.show-ranges {
-          min-width: 328px;
+          min-width: 356px;
 
           &.show-weeknumbers {
-            min-width: 328px + $week-width;
+            min-width: 356px + $week-width;
           }
 
           .drp-calendar.left {

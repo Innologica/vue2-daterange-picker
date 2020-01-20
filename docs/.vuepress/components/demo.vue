@@ -271,10 +271,6 @@
   }
 </style>
 
-<style lang="scss">
-  @import "../../../src/assets/daterangepicker.scss";
-</style>
-
 <style>
   @import "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css";
 </style>
