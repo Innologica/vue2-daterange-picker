@@ -141,7 +141,7 @@ describe('DateRangePicker.vue DEMO', () => {
         endDate: '2019-12-20'
       },
       minDate: '2019-05-02 04:00:00',
-      maxDate: '2020-12-26 14:00:00',
+      maxDate: '2020-02-26 14:00:00',
       showDropdowns: true,
     }
   })
@@ -151,7 +151,12 @@ describe('DateRangePicker.vue DEMO', () => {
     vm.togglePicker(true)
     vm.$nextTick(() => {
       const input = wrapper.find('.drp-calendar.left .next')
-      expect(input.is('th')).toBe(true)
+      expect(input.is('th')).to.equal(true)
+      input.trigger('click')
+      expect(vm.monthDate.getDate()).to.equal(1)
+      expect(vm.monthDate.getMonth()).to.equal(0)
+      expect(vm.monthDate.getFullYear()).to.equal(2020)
+
       done()
     })
   })

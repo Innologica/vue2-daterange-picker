@@ -15,7 +15,7 @@
                     <input type="number" v-model="year" class="yearselect col" />
                 </div>
             </th>
-            <th v-else colspan="5" class="month">{{monthName}} {{year}}</th>
+            <th v-else :colspan="showWeekNumbers ? 6 : 5" class="month">{{monthName}} {{year}}</th>
             <th class="next available" @click="nextMonth"><span/></th>
         </tr>
         </thead>
@@ -87,10 +87,10 @@
       changeMonthDate (date, emit = true) {
         let year_month = this.$dateUtil.yearMonth(this.currentMonthDate)
         this.currentMonthDate = this.$dateUtil.validateDateRange(date, this.minDate, this.maxDate)
-        console.info(date, this.currentMonthDate)
+        // console.info(date, this.currentMonthDate)
         if(emit && year_month !== this.$dateUtil.yearMonth(this.currentMonthDate)) {
           this.$emit('change-month', {
-            month: this.currentMonthDate.getMonth(),
+            month: this.currentMonthDate.getMonth() + 1,
             year: this.currentMonthDate.getFullYear(),
           })
         }
