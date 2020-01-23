@@ -87,6 +87,7 @@
       changeMonthDate (date, emit = true) {
         let year_month = this.$dateUtil.yearMonth(this.currentMonthDate)
         this.currentMonthDate = this.$dateUtil.validateDateRange(date, this.minDate, this.maxDate)
+        console.info(date, this.currentMonthDate)
         if(emit && year_month !== this.$dateUtil.yearMonth(this.currentMonthDate)) {
           this.$emit('change-month', {
             month: this.currentMonthDate.getMonth(),
@@ -215,7 +216,9 @@
     },
     watch: {
       monthDate (value) {
-        this.changeMonthDate(value, false)
+        if(this.currentMonthDate.getTime() !== value.getTime()) {
+          this.changeMonthDate(value, false)
+        }
       }
     }
   }

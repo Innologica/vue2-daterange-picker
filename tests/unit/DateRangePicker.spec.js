@@ -132,3 +132,27 @@ describe('DateRangePicker.vue MIN/MAX', () => {
     })
   })
 })
+
+describe('DateRangePicker.vue DEMO', () => {
+  const wrapper = mount(DateRangePicker, {
+    propsData: {
+      dateRange: {
+        startDate: '2019-12-10',
+        endDate: '2019-12-20'
+      },
+      minDate: '2019-05-02 04:00:00',
+      maxDate: '2020-12-26 14:00:00',
+      showDropdowns: true,
+    }
+  })
+  const vm = wrapper.vm
+
+  it('should be able to change to next month', (done) => {
+    vm.togglePicker(true)
+    vm.$nextTick(() => {
+      const input = wrapper.find('.drp-calendar.left .next')
+      expect(input.is('th')).toBe(true)
+      done()
+    })
+  })
+})
