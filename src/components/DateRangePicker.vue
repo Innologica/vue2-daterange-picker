@@ -138,7 +138,7 @@
   import Calendar from './Calendar.vue'
   import CalendarTime from './CalendarTime'
   import CalendarRanges from './CalendarRanges'
-  import {getDateUtil} from './util'
+  import {getDateUtil, isValidDate} from './util'
 
   export default {
     inheritAttrs: false,
@@ -541,7 +541,10 @@
         this.changeRightMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
       },
       'dateRange.startDate' (value) {
-        this.start = (!!value && !this.isClear) ? new Date(value) : null
+        if(!isValidDate(new Date(value)))
+          return
+
+        this.start = (!!value && !this.isClear && isValidDate(new Date(value))) ? new Date(value) : null
         if (this.isClear) {
           this.start = null
           this.end = null
@@ -551,6 +554,9 @@
         }
       },
       'dateRange.endDate' (value) {
+        if(!isValidDate(new Date(value)))
+          return
+
         this.end = (!!value && !this.isClear) ? new Date(value) : null
         if (this.isClear) {
           this.start = null
