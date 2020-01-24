@@ -157,6 +157,12 @@ describe('DateRangePicker.vue DEMO', () => {
       expect(vm.monthDate.getMonth()).to.equal(0)
       expect(vm.monthDate.getFullYear()).to.equal(2020)
 
+      //second click should be restrained by min/max
+      input.trigger('click')
+      expect(vm.monthDate.getDate()).to.equal(1)
+      expect(vm.monthDate.getMonth()).to.equal(0)
+      expect(vm.monthDate.getFullYear()).to.equal(2020)
+
       done()
     })
   })
