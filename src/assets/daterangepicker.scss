@@ -11,7 +11,6 @@
 
   .calendars-container {
     display: flex;
-    min-width: 540px;
   }
 }
 
@@ -124,6 +123,7 @@
 .daterangepicker .drp-calendar {
   display: none;
   max-width: 270px;
+  width: 270px;
 }
 
 .daterangepicker .drp-calendar.left {
