@@ -1,6 +1,6 @@
 <template>
   <div class="vue-daterange-picker" @click.stop>
-    <div class="form-control reportrange-text" @click="togglePicker(null, true)">
+    <div :class="controlContainerClass" @click="onClickPicker">
       <!--
         Allows you to change the input which is visible before the picker opens
 
@@ -313,6 +313,20 @@
         type: [Object, String],
         default: 'native'
       },
+      /**
+       * Disabled state. If true picker do not popup on click.
+       */
+      disabled: {
+        type: Boolean,
+        default: false,
+      },
+      /**
+       * Class of html picker control container
+       */
+      controlContainerClass: {
+        type: [Object, String],
+        default: 'form-control reportrange-text'
+      },
     },
     data () {
       //copy locale data object
@@ -423,6 +437,11 @@
          * @param {Date} value the date that is being hovered
          */
         this.$emit('hoverDate', value)
+      },
+      onClickPicker () {
+        if (!this.disabled) {
+          this.togglePicker(null, true)
+        }
       },
       togglePicker (value, event) {
         if (typeof value === 'boolean') {
