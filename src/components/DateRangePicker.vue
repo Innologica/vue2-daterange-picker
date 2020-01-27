@@ -461,12 +461,17 @@
         }
       },
       clickRange (value) {
-        this.start = this.$dateUtil.validateDateRange(new Date(value[0]), this.minDate, this.maxDate)
-        this.end = this.$dateUtil.validateDateRange(new Date(value[1]), this.minDate, this.maxDate)
-        this.changeLeftMonth({
-          month: this.start.getMonth() + 1,
-          year: this.start.getFullYear()
-        })
+        if (!!value[0] && !!value[1]) {
+          this.start = this.$dateUtil.validateDateRange(new Date(value[0]), this.minDate, this.maxDate)
+          this.end = this.$dateUtil.validateDateRange(new Date(value[1]), this.minDate, this.maxDate)
+          this.changeLeftMonth({
+            month: this.start.getMonth() + 1,
+            year: this.start.getFullYear()
+          })
+        } else {
+          this.start = null
+          this.end = null
+        }
         if (this.autoApply)
           this.clickedApply()
       },
