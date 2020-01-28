@@ -4,13 +4,6 @@ import moment from 'moment'
 import {getDateUtil} from '../../src/components/util'
 import { shallowMount, mount } from '@vue/test-utils'
 
-// helper function that mounts and returns the rendered text
-function getRenderedComponent (Component, propsData) {
-  // const Ctor = Vue.extend(Component)
-  // return new Ctor({propsData: propsData}).$mount()
-  return shallowMount(Component, { propsData })
-}
-
 const propsData = {
   dateRange: {
     startDate: '2017-09-19',
@@ -20,7 +13,7 @@ const propsData = {
 }
 
 describe('DateRangePicker.vue', () => {
-  let wrapper = getRenderedComponent(DateRangePicker, propsData)
+  let wrapper = shallowMount(DateRangePicker, { propsData })
   const vm = wrapper.vm
   let dt_start = new Date(propsData.dateRange.startDate)
   let dt_end = new Date(propsData.dateRange.endDate)
@@ -143,6 +136,9 @@ describe('DateRangePicker.vue DEMO', () => {
       minDate: '2019-05-02 04:00:00',
       maxDate: '2020-02-26 14:00:00',
       showDropdowns: true,
+      ranges: {
+        'This year': [new Date(2019, 0, 1), new Date(2019, 11, 31)],
+      }
     }
   })
   const vm = wrapper.vm
@@ -165,5 +161,61 @@ describe('DateRangePicker.vue DEMO', () => {
 
       done()
     })
+  })
+
+  it('should select in the scope of min/max date when choosing from ranges', async () => {
+    vm.togglePicker(true)
+    await vm.$nextTick()
+    const range_li = wrapper.find('li[data-range-key="This year"]')
+    expect(range_li.text()).to.equal('This year')
+    range_li.trigger('click')
+    await vm.$nextTick()
+
+    expect(vm.start.getHours()).to.equal(4)
+    expect(vm.start.getDate()).to.equal(2)
+    expect(vm.start.getMonth()).to.equal(4)
+    expect(vm.start.getFullYear()).to.equal(2019)
+  })
+
+  it('should select correct initial date - #114', async () => {
+    const range_li = wrapper.find('li[data-range-key="This year"]')
+    const minMax = {
+      dateRange: {
+        startDate: '2019-05-10',
+        endDate: '2019-10-10'
+      },
+      minDate: '2016-09-02',
+      maxDate: '2020-10-02'
+    }
+    wrapper.setProps(minMax);
+    await vm.$nextTick()
+
+    expect(vm.min.getDate()).to.equal(2)
+    expect(vm.min.getMonth()).to.equal(8)
+    expect(vm.min.getFullYear()).to.equal(2016)
+
+    expect(vm.max.getDate()).to.equal(2)
+    expect(vm.max.getMonth()).to.equal(9)
+    expect(vm.max.getFullYear()).to.equal(2020)
+
+    range_li.trigger('click')
+    await vm.$nextTick()
+    //check selected dates
+    expect(vm.start.getDate()).to.equal(1)
+    expect(vm.start.getMonth()).to.equal(0)
+    expect(vm.start.getFullYear()).to.equal(2019)
+
+    expect(vm.end.getDate()).to.equal(31)
+    expect(vm.end.getMonth()).to.equal(11)
+    expect(vm.end.getFullYear()).to.equal(2019)
+
+    //check current month dates
+    expect(vm.monthDate.getDate()).to.equal(1)
+    expect(vm.monthDate.getMonth()).to.equal(0)
+    expect(vm.monthDate.getFullYear()).to.equal(2019)
+
+    expect(vm.nextMonthDate.getDate()).to.equal(1)
+    expect(vm.nextMonthDate.getMonth()).to.equal(1)
+    expect(vm.nextMonthDate.getFullYear()).to.equal(2019)
   })
 })
