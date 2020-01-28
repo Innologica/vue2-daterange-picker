@@ -370,6 +370,13 @@
             this.monthDate = this.$dateUtil.validateDateRange(this.$dateUtil.prevMonth(this.monthDate), this.minDate, this.maxDate)
           }
         }
+        /**
+         * Emits event when the viewing month is changes. The second param is the index of the calendar.
+         *
+         * @param {monthDate} date displayed (first day of the month)
+         * @param calendarIndex int 0 - first(left) calendar, 1 - second(right) calendar
+         */
+        this.$emit('change-month', this.monthDate, 0)
       },
       changeRightMonth (value) {
         let newDate = new Date(value.year, value.month - 1, 1);
@@ -380,6 +387,7 @@
             this.nextMonthDate = this.$dateUtil.validateDateRange(this.$dateUtil.nextMonth(this.nextMonthDate), this.minDate, this.maxDate)
           }
         }
+        this.$emit('change-month', this.monthDate, 1)
       },
       normalizeDatetime (value, oldValue) {
         let newDate = new Date(value);
