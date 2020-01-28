@@ -7,12 +7,14 @@
                     :data-range-key="key"
                     :key="key"
                     :class="range_class(value)"
+                    tabindex="0"
             >{{key}}
             </li>
             <li
               v-if="showCustomRangeLabel"
               :class="{ active: customRangeActive || !selectedRange }"
               @click="clickCustomRange"
+              tabindex="0"
             >
               {{localeData.customRangeLabel}}
             </li>
