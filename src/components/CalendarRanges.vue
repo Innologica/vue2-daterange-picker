@@ -53,7 +53,7 @@
     },
     computed: {
       selectedRange () {
-        return Object.keys(this.ranges).find(key => this.$dateUtil.isSame(this.selected.startDate, this.ranges[key][0], 'date') && this.$dateUtil.isSame(this.selected.endDate, this.ranges[key][1], 'date'))
+        return Object.keys(this.ranges).find(key => this.$dateUtil.isSame(this.selected.startDate, this.ranges[key][0]) && this.$dateUtil.isSame(this.selected.endDate, this.ranges[key][1]))
       },
       showCustomRangeLabel () {
         return !this.alwaysShowCalendars;

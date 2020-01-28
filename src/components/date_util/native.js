@@ -7,9 +7,8 @@ const DateUtil = {
     if(granularity === 'date') {
       dt1.setHours(0,0,0,0);
       dt2.setHours(0,0,0,0);
-      return dt1.getTime() === dt2.getTime()
     }
-    return false
+    return dt1.getTime() === dt2.getTime()
   },
   daysInMonth: (year, month) => {
     return new Date(year, month, 0).getDate()
