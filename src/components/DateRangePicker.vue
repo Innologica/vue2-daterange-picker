@@ -366,7 +366,7 @@
         this.monthDate = newDate
         if (this.linkedCalendars || (this.$dateUtil.yearMonth(this.monthDate) >= this.$dateUtil.yearMonth(this.nextMonthDate))) {
           this.nextMonthDate = this.$dateUtil.validateDateRange(this.$dateUtil.nextMonth(newDate), this.minDate, this.maxDate);
-          if (this.$dateUtil.yearMonth(this.monthDate) === this.$dateUtil.yearMonth(this.nextMonthDate)) {
+          if (!this.singleDatePicker && this.$dateUtil.yearMonth(this.monthDate) === this.$dateUtil.yearMonth(this.nextMonthDate)) {
             this.monthDate = this.$dateUtil.validateDateRange(this.$dateUtil.prevMonth(this.monthDate), this.minDate, this.maxDate)
           }
         }
@@ -461,6 +461,7 @@
         }
       },
       clickRange (value) {
+        this.in_selection = false;
         this.start = this.$dateUtil.validateDateRange(new Date(value[0]), this.minDate, this.maxDate)
         this.end = this.$dateUtil.validateDateRange(new Date(value[1]), this.minDate, this.maxDate)
         this.changeLeftMonth({
