@@ -423,16 +423,20 @@
             this.in_selection = true
             this.start = this.normalizeDatetime(value, this.start);
           }
-          if (!this.in_selection && this.autoApply) {
-            this.clickedApply();
+          if (!this.in_selection) {
+            this.$emit('select', {startDate: this.start, endDate: this.end});
+            if (this.autoApply)
+              this.clickedApply();
           }
         } else {
           this.start = this.normalizeDatetime(value, this.start);
           this.end = this.normalizeDatetime(value, this.end);
           if (!this.singleDatePicker) {
             this.in_selection = true
-          } else if (this.autoApply) {
-            this.clickedApply();
+          } else {
+            this.$emit('select', {startDate: this.start, endDate: this.end});
+            if (this.autoApply)
+              this.clickedApply();
           }
         }
       },
@@ -501,6 +505,8 @@
           this.start = null
           this.end = null
         }
+
+        this.$emit('select', {startDate: this.start, endDate: this.end});
 
         if (this.autoApply)
           this.clickedApply()
