@@ -424,7 +424,7 @@
             this.start = this.normalizeDatetime(value, this.start);
           }
           if (!this.in_selection) {
-            this.$emit('select', {startDate: this.start, endDate: this.end});
+            this.onSelect();
             if (this.autoApply)
               this.clickedApply();
           }
@@ -434,7 +434,7 @@
           if (!this.singleDatePicker) {
             this.in_selection = true
           } else {
-            this.$emit('select', {startDate: this.start, endDate: this.end});
+            this.onSelect();
             if (this.autoApply)
               this.clickedApply();
           }
@@ -480,6 +480,13 @@
          */
         this.$emit('update', {startDate: this.start, endDate: this.end})
       },
+      onSelect () {
+        /**
+         * Emits when the user selects a range from the picker.
+         * @param {json} value - json object containing the dates: {startDate, endDate}
+         */
+        this.$emit('select', {startDate: this.start, endDate: this.end})
+      },
       clickAway () {
         if (this.open) {
           // reset start and end
@@ -506,7 +513,7 @@
           this.end = null
         }
 
-        this.$emit('select', {startDate: this.start, endDate: this.end});
+        this.onSelect();
 
         if (this.autoApply)
           this.clickedApply()
