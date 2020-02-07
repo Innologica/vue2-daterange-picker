@@ -1,5 +1,4 @@
 module.exports = {
-  ga: 'UA-141652960-3',
   base: '/vue2-daterange-picker/',
   title: 'Vue2 date range picker',
   description: 'Vue2 date range picker by Innologica',
@@ -13,9 +12,14 @@ module.exports = {
     ],
     displayAllHeaders: true
   },
-  markdown: {
-    config: md => {
-      md.use(require('markdown-it-footnote'))
-    }
-  }
+  plugins: [
+    [ '@vuepress/back-to-top' ],
+    [
+
+      '@vuepress/google-analytics',
+      {
+        ga: 'UA-141652960-3',
+      }
+    ]
+  ]
 }
