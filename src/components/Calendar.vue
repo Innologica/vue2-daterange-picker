@@ -122,7 +122,6 @@
       },
       checkYear () {
         this.$nextTick(() => {
-          console.log(this.monthDate)
           this.year_text = this.monthDate.getFullYear()
         })
       }
