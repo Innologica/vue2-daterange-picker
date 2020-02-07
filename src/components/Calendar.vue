@@ -12,7 +12,7 @@
                     <select v-model="month" class="monthselect col">
                         <option v-for="(m) in months" :key="m.value" :value="m.value + 1">{{m.label}}</option>
                     </select>
-                    <input type="number" v-model="year" class="yearselect col" />
+                    <input ref="yearSelect" type="number" v-model="year" @blur="checkYear" class="yearselect col" />
                 </div>
             </th>
             <th v-else :colspan="showWeekNumbers ? 6 : 5" class="month">{{monthName}} {{year}}</th>
@@ -48,6 +48,7 @@
 
 <script>
   import dateUtilMixin from './dateUtilMixin'
+  import {isValidDate} from "./util";
 
   export default {
     mixins: [dateUtilMixin],
@@ -73,8 +74,10 @@
       }
     },
     data () {
+      let currentMonthDate = this.monthDate || this.start || new Date()
       return {
-        currentMonthDate: this.monthDate || this.start || new Date(),
+        currentMonthDate,
+        year_text: currentMonthDate.getFullYear(),
       }
     },
     methods: {
@@ -116,6 +119,12 @@
         }
         return this.dateFormat ? this.dateFormat(classes, date) : classes
 
+      },
+      checkYear () {
+        this.$nextTick(() => {
+          console.log(this.monthDate)
+          this.year_text = this.monthDate.getFullYear()
+        })
       }
     },
     computed: {
@@ -124,15 +133,18 @@
       },
       year: {
         get () {
-          return this.currentMonthDate.getFullYear()
+          //return this.currentMonthDate.getFullYear()
+          return this.year_text
         },
         set (value) {
+          this.year_text = value
           let newDate = this.$dateUtil.validateDateRange(new Date(value, this.month, 1), this.minDate, this.maxDate)
-
-          this.$emit('change-month', {
-            month: newDate.getMonth(),
-            year: newDate.getFullYear(),
-          });
+          if(isValidDate(newDate)) {
+            this.$emit('change-month', {
+              month: newDate.getMonth(),
+              year: newDate.getFullYear(),
+            });
+          }
         }
       },
       month: {
@@ -218,6 +230,8 @@
       monthDate (value) {
         if(this.currentMonthDate.getTime() !== value.getTime()) {
           this.changeMonthDate(value, false)
+          if(this.$refs.yearSelect !== document.activeElement)
+            this.checkYear()
         }
       }
     }
