@@ -1,4 +1,4 @@
-import { isSameDay, getDaysInMonth, getISOWeek, format, addMonths, subMonths } from 'date-fns'
+import { isSameDay, getDaysInMonth, getISOWeek, format, addMonths, subMonths, isValid } from 'date-fns'
 import {dateFormat} from '../dateformat'
 
 const DateUtil = {
@@ -54,6 +54,9 @@ const DateUtil = {
   yearMonth: (date) => {
     let month = date.getMonth() + 1
     return date.getFullYear() + (month < 10 ? '0' : '') + month
+  },
+  isValidDate: (d) => {
+    return isValid(d);
   }
 }
 

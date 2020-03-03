@@ -6,8 +6,4 @@ const getDateUtil = (dateUtil = 'native') => {
   }
 }
 
-const isValidDate = (d) => {
-  return d instanceof Date && !isNaN(d);
-}
-
-export { getDateUtil, isValidDate }
+export { getDateUtil }

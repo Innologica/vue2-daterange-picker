@@ -64,6 +64,9 @@ const DateUtil = {
   yearMonth: (date) => {
     let month = date.getMonth() + 1
     return date.getFullYear() + (month < 10 ? '0':'') + month
+  },
+  isValidDate: (d) => {
+    return d instanceof Date && !isNaN(d);
   }
 }
 

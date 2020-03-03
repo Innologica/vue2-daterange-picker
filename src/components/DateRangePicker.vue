@@ -138,7 +138,7 @@
   import Calendar from './Calendar.vue'
   import CalendarTime from './CalendarTime'
   import CalendarRanges from './CalendarRanges'
-  import {getDateUtil, isValidDate} from './util'
+  import {getDateUtil} from './util'
 
   export default {
     inheritAttrs: false,
@@ -490,7 +490,7 @@
       clickRange (value) {
         this.in_selection = false;
 
-        if(isValidDate(value[0]) && isValidDate(value[1])) {
+        if(this.$dateUtil.isValidDate(value[0]) && this.$dateUtil.isValidDate(value[1])) {
           this.start = this.$dateUtil.validateDateRange(new Date(value[0]), this.minDate, this.maxDate)
           this.end = this.$dateUtil.validateDateRange(new Date(value[1]), this.minDate, this.maxDate)
           this.changeLeftMonth({
@@ -576,10 +576,10 @@
         this.changeRightMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
       },
       'dateRange.startDate' (value) {
-        if(!isValidDate(new Date(value)))
+        if(!this.$dateUtil.isValidDate(new Date(value)))
           return
 
-        this.start = (!!value && !this.isClear && isValidDate(new Date(value))) ? new Date(value) : null
+        this.start = (!!value && !this.isClear && this.$dateUtil.isValidDate(new Date(value))) ? new Date(value) : null
         if (this.isClear) {
           this.start = null
           this.end = null
@@ -589,7 +589,7 @@
         }
       },
       'dateRange.endDate' (value) {
-        if(!isValidDate(new Date(value)))
+        if(!this.$dateUtil.isValidDate(new Date(value)))
           return
 
         this.end = (!!value && !this.isClear) ? new Date(value) : null

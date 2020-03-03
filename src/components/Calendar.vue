@@ -48,7 +48,6 @@
 
 <script>
   import dateUtilMixin from './dateUtilMixin'
-  import {isValidDate} from "./util";
 
   export default {
     mixins: [dateUtilMixin],
@@ -141,7 +140,7 @@
         set (value) {
           this.year_text = value
           let newDate = this.$dateUtil.validateDateRange(new Date(value, this.month, 1), this.minDate, this.maxDate)
-          if(isValidDate(newDate)) {
+          if(this.$dateUtil.isValidDate(newDate)) {
             this.$emit('change-month', {
               month: newDate.getMonth(),
               year: newDate.getFullYear(),

@@ -51,5 +51,8 @@ export default {
   },
   yearMonth: (date) => {
     return moment(date).format('YYYYMM')
+  },
+  isValidDate: (d) => {
+    return moment(d).isValid()
   }
 }
