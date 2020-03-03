@@ -97,6 +97,7 @@
             year: this.currentMonthDate.getFullYear(),
           })
         }
+        this.checkYear()
       },
       dayClass (date) {
         let dt = new Date(date)
@@ -121,9 +122,11 @@
 
       },
       checkYear () {
-        this.$nextTick(() => {
-          this.year_text = this.monthDate.getFullYear()
-        })
+        if(this.$refs.yearSelect !== document.activeElement) {
+          this.$nextTick(() => {
+            this.year_text = this.monthDate.getFullYear()
+          })
+        }
       }
     },
     computed: {
@@ -229,8 +232,6 @@
       monthDate (value) {
         if(this.currentMonthDate.getTime() !== value.getTime()) {
           this.changeMonthDate(value, false)
-          if(this.$refs.yearSelect !== document.activeElement)
-            this.checkYear()
         }
       }
     }
