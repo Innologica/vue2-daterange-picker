@@ -211,7 +211,7 @@
       return {
         opens: 'center',
         minDate: '2019-05-02 04:00:00',
-        maxDate: '2019-12-26 14:00:00',
+        maxDate: '2020-12-26 14:00:00',
         // minDate: '',
         // maxDate: '',
         dateRange: {
