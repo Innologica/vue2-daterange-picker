@@ -2,7 +2,7 @@
     <table class="table-condensed">
         <thead>
         <tr>
-            <th class="prev available" @click="prevMonth" tabindex="0"><span/></th>
+            <th class="prev available" @click="prevMonthClick" tabindex="0"><span/></th>
             <th
                     v-if="showDropdowns"
                     :colspan="showWeekNumbers ? 6 : 5"
@@ -16,7 +16,7 @@
                 </div>
             </th>
             <th v-else :colspan="showWeekNumbers ? 6 : 5" class="month">{{monthName}} {{year}}</th>
-            <th class="next available" @click="nextMonth" tabindex="0"><span/></th>
+            <th class="next available" @click="nextMonthClick" tabindex="0"><span/></th>
         </tr>
         </thead>
         <tbody>
@@ -80,10 +80,10 @@
       }
     },
     methods: {
-      prevMonth() {
+      prevMonthClick() {
         this.changeMonthDate(this.$dateUtil.prevMonth(this.currentMonthDate))
       },
-      nextMonth() {
+      nextMonthClick() {
         this.changeMonthDate(this.$dateUtil.nextMonth(this.currentMonthDate))
       },
       changeMonthDate (date, emit = true) {
