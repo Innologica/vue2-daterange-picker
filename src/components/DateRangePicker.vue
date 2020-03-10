@@ -25,6 +25,20 @@
         :class="pickerStyles"
         v-if="open"
       >
+
+        <!--
+          Optional header slot (same props as footer) @see footer slot for documentation
+        -->
+        <slot name="header"
+              :rangeText="rangeText"
+              :locale="locale"
+              :clickAway="clickAway"
+              :clickApply="clickedApply"
+              :in_selection="in_selection"
+              :autoApply="autoApply"
+        >
+        </slot>
+
         <div class="calendars row no-gutters">
           <!--
             Allows you to change the range
@@ -110,24 +124,41 @@
             </div>
           </div>
         </div>
+        <!--
+          Allows you to change footer of the component (where the buttons are)
 
-        <div class="drp-buttons" v-if="!autoApply">
-          <span class="drp-selected" v-if="showCalendars">{{rangeText}}</span>
-          <button
-            class="cancelBtn btn btn-sm btn-default"
-            type="button"
-            @click="clickAway"
-          >{{locale.cancelLabel}}
-          </button>
-          <button
-            class="applyBtn btn btn-sm btn-success"
-            :disabled="in_selection"
-            type="button"
-            @click="clickedApply"
-          >{{locale.applyLabel}}
-          </button>
-        </div>
-
+          @param {string} rangeText - the formatted date range by the component
+          @param {object} locale - the locale object @see locale prop
+          @param {function} clickAway - function which is called when you click away(outside) of the picker
+          @param {function} clickedApply -function which to call when you want to apply the selection
+          @param {boolean} in_selection - is the picker in selection mode
+          @param {boolean} autoApply - value of the autoApply prop (whether to select immediately)
+        -->
+        <slot name="footer"
+              :rangeText="rangeText"
+              :locale="locale"
+              :clickAway="clickAway"
+              :clickApply="clickedApply"
+              :in_selection="in_selection"
+              :autoApply="autoApply"
+        >
+          <div class="drp-buttons" v-if="!autoApply">
+            <span class="drp-selected" v-if="showCalendars">{{rangeText}}</span>
+            <button
+              class="cancelBtn btn btn-sm btn-default"
+              type="button"
+              @click="clickAway"
+            >{{locale.cancelLabel}}
+            </button>
+            <button
+              class="applyBtn btn btn-sm btn-success"
+              :disabled="in_selection"
+              type="button"
+              @click="clickedApply"
+            >{{locale.applyLabel}}
+            </button>
+          </div>
+        </slot>
       </div>
     </transition>
   </div>
@@ -501,7 +532,7 @@
       clickRange (value) {
         this.in_selection = false;
 
-        if(this.$dateUtil.isValidDate(value[0]) && this.$dateUtil.isValidDate(value[1])) {
+        if (this.$dateUtil.isValidDate(value[0]) && this.$dateUtil.isValidDate(value[1])) {
           this.start = this.$dateUtil.validateDateRange(new Date(value[0]), this.minDate, this.maxDate)
           this.end = this.$dateUtil.validateDateRange(new Date(value[1]), this.minDate, this.maxDate)
           this.changeLeftMonth({
@@ -589,7 +620,7 @@
         this.changeRightMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
       },
       'dateRange.startDate' (value) {
-        if(!this.$dateUtil.isValidDate(new Date(value)))
+        if (!this.$dateUtil.isValidDate(new Date(value)))
           return
 
         this.start = (!!value && !this.isClear && this.$dateUtil.isValidDate(new Date(value))) ? new Date(value) : null
@@ -602,7 +633,7 @@
         }
       },
       'dateRange.endDate' (value) {
-        if(!this.$dateUtil.isValidDate(new Date(value)))
+        if (!this.$dateUtil.isValidDate(new Date(value)))
           return
 
         this.end = (!!value && !this.isClear) ? new Date(value) : null
@@ -619,7 +650,7 @@
           if (typeof document === "object")
             this.$nextTick(() => {
               value ? document.body.addEventListener('click', this.clickAway) : document.body.removeEventListener('click', this.clickAway)
-              if(!this.alwaysShowCalendars && this.ranges) {
+              if (!this.alwaysShowCalendars && this.ranges) {
                 this.showCustomRangeCalendars = !Object.keys(this.ranges)
                   .find(key => this.$dateUtil.isSame(this.start, this.ranges[key][0], 'date') && this.$dateUtil.isSame(this.end, this.ranges[key][1], 'date'))
               }
