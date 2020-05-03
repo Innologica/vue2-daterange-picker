@@ -59,7 +59,9 @@
           return {
             label: value,
             value: this.ranges[value],
-            selected: this.$dateUtil.isSame(this.selected.startDate, this.ranges[value][0]) && this.$dateUtil.isSame(this.selected.endDate, this.ranges[value][1])
+            selected:
+              this.$dateUtil.isSame(this.selected.startDate, this.ranges[value][0]) &&
+              this.$dateUtil.isSame(this.selected.endDate, this.ranges[value][1])
           };
         })
       },

@@ -2,9 +2,11 @@ import { isSameDay, getDaysInMonth, getISOWeek, format, addMonths, subMonths, is
 import {dateFormat} from '../dateformat'
 
 const DateUtil = {
-  isSame: (date1, date2, granularity = 'date') => {
-    if (granularity === 'day')
+  isSame: (date1, date2, granularity ) => {
+    if (granularity === 'date')
       return isSameDay(date1, date2)
+    else
+      return date1.getTime() === date2.getTime()
   },
   daysInMonth: (year, month) => {
     return getDaysInMonth(new Date(year, month - 1, 1))

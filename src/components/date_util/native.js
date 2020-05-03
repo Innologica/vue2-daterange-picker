@@ -1,7 +1,7 @@
 import {dateFormat, getWeek} from '../dateformat'
 
 const DateUtil = {
-  isSame: (date1, date2, granularity = 'date') => {
+  isSame: (date1, date2, granularity ) => {
     let dt1 = new Date(date1)
     let dt2 = new Date(date2)
     if(granularity === 'date') {

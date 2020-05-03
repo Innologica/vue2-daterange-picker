@@ -6,7 +6,7 @@ const DateUtil = {
    * @param granularity
    * @return Boolean returns if the dates are the same with this granularity
    */
-  isSame: (date1, date2, granularity = 'date') => {},
+  isSame: (date1, date2, granularity) => {},
   /**
    * Get number of days in month specified by year and month
    * @param year

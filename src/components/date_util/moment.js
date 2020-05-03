@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 export default {
-  isSame: (date1, date2, granularity = 'date') => {
+  isSame: (date1, date2, granularity) => {
     return moment(date1).isSame(date2, granularity)
   },
   daysInMonth: (year, month) => {
