@@ -85,14 +85,21 @@ export default {
 }
 ```
 * default ranges object (set to false to hide ranges)
+
+To specify ranges you need to pass and array where each element is an array with exactly two Date objects (from, to) or their timestamp equivalent.
 ```JS
+let today = new Date()
+today.setHours(0, 0, 0, 0)
+
+let yesterday = new Date()
+yesterday.setDate(today.getDate() - 1)
+yesterday.setHours(0, 0, 0, 0);
 {
-    'Today',
-    'Yesterday',
-    'This month',
-    'This year',
-    'Last week',
-    'Last month',
+    'Today': [today, today],
+    'Yesterday': [yesterday, yesterday],
+    'This month': [thisMonthStart, thisMonthEnd],
+    'This year': [new Date(today.getFullYear(), 0, 1), new Date(today.getFullYear(), 11, 31)],
+    'Last month': [new Date(today.getFullYear(), today.getMonth() - 1, 1), new Date(today.getFullYear(), today.getMonth(), 0)],
 }
 ```
 * custom date util object (keep in mind that this can change in the future)
