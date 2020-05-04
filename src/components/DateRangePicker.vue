@@ -1,5 +1,5 @@
 <template>
-  <div class="vue-daterange-picker" @click.stop>
+  <div class="vue-daterange-picker">
     <div :class="controlContainerClass" @click="onClickPicker">
       <!--
         Allows you to change the input which is visible before the picker opens
@@ -518,8 +518,9 @@
          */
         this.$emit('select', {startDate: this.start, endDate: this.end})
       },
-      clickAway () {
-        if (this.open) {
+      clickAway ($event) {
+        const is_away = $event && $event.target && !this.$el.contains($event.target)
+        if (this.open && is_away) {
           // reset start and end
           let startDate = this.dateRange.startDate
           let endDate = this.dateRange.endDate
@@ -647,7 +648,7 @@
       },
       open: {
         handler (value) {
-          if (typeof document === "object")
+          if (typeof document === "object") {
             this.$nextTick(() => {
               value ? document.body.addEventListener('click', this.clickAway) : document.body.removeEventListener('click', this.clickAway)
               if (!this.alwaysShowCalendars && this.ranges) {
@@ -655,6 +656,7 @@
                   .find(key => this.$dateUtil.isSame(this.start, this.ranges[key][0], 'date') && this.$dateUtil.isSame(this.end, this.ranges[key][1], 'date'))
               }
             })
+          }
         },
         immediate: true
       }
