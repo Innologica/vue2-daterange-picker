@@ -32,7 +32,7 @@
         <slot name="header"
               :rangeText="rangeText"
               :locale="locale"
-              :clickAway="clickAway"
+              :clickCancel="clickCancel"
               :clickApply="clickedApply"
               :in_selection="in_selection"
               :autoApply="autoApply"
@@ -85,7 +85,7 @@
                           :showWeekNumbers="showWeekNumbers"
                 ></calendar>
               </div>
-              <calendar-time v-if="timePicker"
+              <calendar-time v-if="timePicker && start"
                              @update="onUpdateStartTime"
                              :miniute-increment="timePickerIncrement"
                              :hour24="timePicker24Hour"
@@ -114,7 +114,7 @@
                           :showWeekNumbers="showWeekNumbers"
                 ></calendar>
               </div>
-              <calendar-time v-if="timePicker"
+              <calendar-time v-if="timePicker && end"
                              @update="onUpdateEndTime"
                              :miniute-increment="timePickerIncrement"
                              :hour24="timePicker24Hour"
@@ -129,7 +129,7 @@
 
           @param {string} rangeText - the formatted date range by the component
           @param {object} locale - the locale object @see locale prop
-          @param {function} clickAway - function which is called when you click away(outside) of the picker
+          @param {function} clickCancel - function which is called when you want to cancel the range picking and reset old values
           @param {function} clickedApply -function which to call when you want to apply the selection
           @param {boolean} in_selection - is the picker in selection mode
           @param {boolean} autoApply - value of the autoApply prop (whether to select immediately)
@@ -137,7 +137,7 @@
         <slot name="footer"
               :rangeText="rangeText"
               :locale="locale"
-              :clickAway="clickAway"
+              :clickCancel="clickCancel"
               :clickApply="clickedApply"
               :in_selection="in_selection"
               :autoApply="autoApply"
@@ -147,7 +147,7 @@
             <button
               class="cancelBtn btn btn-sm btn-default"
               type="button"
-              @click="clickAway"
+              @click="clickCancel"
             >{{locale.cancelLabel}}
             </button>
             <button
@@ -511,6 +511,17 @@
          */
         this.$emit('update', {startDate: this.start, endDate: this.end})
       },
+      clickCancel () {
+        if (this.open) {
+          // reset start and end
+          let startDate = this.dateRange.startDate
+          let endDate = this.dateRange.endDate
+          this.start = startDate ? new Date(startDate) : null
+          this.end = endDate ? new Date(endDate) : null
+          // this.open = false
+          this.togglePicker(false, true)
+        }
+      },
       onSelect () {
         /**
          * Emits when the user selects a range from the picker.
@@ -519,15 +530,8 @@
         this.$emit('select', {startDate: this.start, endDate: this.end})
       },
       clickAway ($event) {
-        const is_away = $event && $event.target && !this.$el.contains($event.target)
-        if (this.open && is_away) {
-          // reset start and end
-          let startDate = this.dateRange.startDate
-          let endDate = this.dateRange.endDate
-          this.start = startDate ? new Date(startDate) : null
-          this.end = endDate ? new Date(endDate) : null
-          // this.open = false
-          this.togglePicker(false, true)
+        if($event && $event.target && !this.$el.contains($event.target)) {
+          this.clickCancel()
         }
       },
       clickRange (value) {

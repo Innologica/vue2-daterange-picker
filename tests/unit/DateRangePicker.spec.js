@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import DateRangePicker from '@/components/DateRangePicker'
 import moment from 'moment'
 import {getDateUtil} from '../../src/components/util'
-import { shallowMount, mount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 
 const propsData = {
   dateRange: {
@@ -13,7 +13,7 @@ const propsData = {
 }
 
 describe('DateRangePicker.vue', () => {
-  let wrapper = shallowMount(DateRangePicker, { propsData })
+  let wrapper = mount(DateRangePicker, { propsData })
   const vm = wrapper.vm
   let dt_start = new Date(propsData.dateRange.startDate)
   let dt_end = new Date(propsData.dateRange.endDate)
@@ -77,6 +77,21 @@ describe('DateRangePicker.vue', () => {
       expect(vm.startText).to.equal("")
       expect(vm.endText).to.equal("")
       expect(vm.rangeText).to.equal(vm.locale.separator)
+      done()
+    })
+  })
+
+  it('should not fill time when no date is selected #153', (done) => {
+    wrapper.setProps({ dateRange: { startDate: null, endDate: null }, timePicker: true })
+    vm.open = true
+    vm.$nextTick(() => {
+      expect(vm.$el.querySelector('.daterangepicker'))
+        .to.not.be.empty
+      expect(vm.start).to.equal(null)
+      expect(vm.end).to.equal(null)
+      console.log(vm.$el.querySelector('.calendar-time'))
+      expect(vm.$el.querySelector('.calendar-time'))
+        .to.equal(null)
       done()
     })
   })
