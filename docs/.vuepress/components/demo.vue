@@ -23,6 +23,7 @@
           :dateFormat="dateFormat"
           :always-show-calendars="false"
           :alwaysShowCalendars="alwaysShowCalendars"
+          :append-to-body="appendToBody"
         >
           <div slot="input" slot-scope="picker" style="min-width: 350px;">
             {{ picker.startDate | date }} - {{ picker.endDate | date }}
@@ -171,6 +172,16 @@
           is selected or you have clicked the "Custom ranges" then the calendar selectors are shown.
         </small>
       </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="appendToBody" v-model="appendToBody">
+        <label class="form-check-label" for="appendToBody">
+          appendToBody
+        </label>
+        <small class="form-text text-muted">
+          Defaults to false. Append the dropdown element to the end of the body
+          * and size/position it dynamically.
+        </small>
+      </div>
     </div>
 
     <div class="pt-5">
@@ -227,6 +238,7 @@
         showWeekNumbers: true,
         linkedCalendars: true,
         alwaysShowCalendars: true,
+        appendToBody: false
       }
     },
     mounted () {

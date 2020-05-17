@@ -1,6 +1,10 @@
 <template>
   <div class="vue-daterange-picker">
-    <div :class="controlContainerClass" @click="onClickPicker">
+    <div
+      :class="controlContainerClass"
+      @click="onClickPicker"
+      ref="toggle"
+    >
       <!--
         Allows you to change the input which is visible before the picker opens
 
@@ -24,6 +28,8 @@
         class="daterangepicker dropdown-menu ltr"
         :class="pickerStyles"
         v-if="open"
+        v-append-to-body
+        ref="dropdown"
       >
 
         <!--
@@ -170,11 +176,13 @@
   import CalendarTime from './CalendarTime'
   import CalendarRanges from './CalendarRanges'
   import {getDateUtil} from './util'
+  import appendToBody from '../directives/appendToBody';
 
   export default {
     inheritAttrs: false,
     components: {Calendar, CalendarTime, CalendarRanges},
     mixins: [dateUtilMixin],
+    directives: {appendToBody},
     model: {
       prop: 'dateRange',
       event: 'update',
@@ -358,6 +366,47 @@
         type: [Object, String],
         default: 'form-control reportrange-text'
       },
+      /**
+       * Append the dropdown element to the end of the body
+       * and size/position it dynamically. Use it if you have
+       * overflow or z-index issues.
+       * @type {Boolean}
+       */
+      appendToBody: {
+        type: Boolean,
+        default: false
+      },
+      /**
+       * When `appendToBody` is true, this function is responsible for
+       * positioning the drop down list.
+       *
+       * If a function is returned from `calculatePosition`, it will
+       * be called when the drop down list is removed from the DOM.
+       * This allows for any garbage collection you may need to do.
+       *
+       * @since v0.5.1
+       */
+      calculatePosition: {
+        type: Function,
+        /**
+         * @param dropdownList {HTMLUListElement}
+         * @param component {Vue} current instance of vue select
+         * @param width {string} calculated width in pixels of the dropdown menu
+         * @param top {string} absolute position top value in pixels relative to the document
+         * @param left {string} absolute position left value in pixels relative to the document
+         * @return {function|void}
+         */
+        default(dropdownList, component, {width, top, left}) {
+          dropdownList.style.top = top;
+          dropdownList.style.left = left;
+          dropdownList.style.width = width; //left
+          // which way the picker opens - "center", "left" or "right"
+          if(component.opens === 'center')
+            dropdownList.style.left -= (width / 2).toFixed(0)
+          if(component.opens === 'right')
+            dropdownList.style.left -= width
+        }
+      }
     },
     data () {
       //copy locale data object
@@ -530,7 +579,10 @@
         this.$emit('select', {startDate: this.start, endDate: this.end})
       },
       clickAway ($event) {
-        if($event && $event.target && !this.$el.contains($event.target)) {
+        if($event && $event.target &&
+          !this.$el.contains($event.target) &&
+          this.$refs.dropdown &&
+          !this.$refs.dropdown.contains($event.target) ) {
           this.clickCancel()
         }
       },
