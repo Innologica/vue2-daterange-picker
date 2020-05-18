@@ -24,6 +24,7 @@
           :always-show-calendars="false"
           :alwaysShowCalendars="alwaysShowCalendars"
           :append-to-body="appendToBody"
+          :closeOnEsc="closeOnEsc"
         >
           <div slot="input" slot-scope="picker" style="min-width: 350px;">
             {{ picker.startDate | date }} - {{ picker.endDate | date }}
@@ -182,6 +183,15 @@
           * and size/position it dynamically.
         </small>
       </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="closeOnEsc" v-model="closeOnEsc">
+        <label class="form-check-label" for="closeOnEsc">
+          closeOnEsc
+        </label>
+        <small class="form-text text-muted">
+          Defaults to true. Close the dropdown on escape key pressed.
+        </small>
+      </div>
     </div>
 
     <div class="pt-5">
@@ -238,7 +248,8 @@
         showWeekNumbers: true,
         linkedCalendars: true,
         alwaysShowCalendars: true,
-        appendToBody: false
+        appendToBody: false,
+        closeOnEsc: true,
       }
     },
     mounted () {

@@ -234,3 +234,38 @@ describe('DateRangePicker.vue DEMO', () => {
     expect(vm.nextMonthDate.getFullYear()).to.equal(2019)
   })
 })
+
+describe('DateRangePicker Calendar months positioning', () => {
+  let dateRange = {startDate: new Date(2020,4, 18), endDate: new Date(2020,4,24)}
+  const wrapper = mount(DateRangePicker, { propsData: { dateRange } })
+  const vm = wrapper.vm
+
+  it('should be able to change to next month', (done) => {
+    vm.togglePicker(true)
+    vm.$nextTick(() => {
+      const input = wrapper.find('.drp-calendar.right .next')
+      expect(input.is('th')).to.equal(true)
+      input.trigger('click')
+      expect(vm.monthDate.getDate()).to.equal(1)
+      expect(vm.monthDate.getMonth()).to.equal(5)
+      expect(vm.monthDate.getFullYear()).to.equal(2020)
+
+      done()
+    })
+  })
+
+  it('should locate correct month of the selected range', (done) => {
+    const range = wrapper.find('[data-range-key="Today"]')
+    range.trigger('click')
+
+    vm.$nextTick(() => {
+      expect(vm.monthDate.getDate()).to.equal(1)
+      expect(vm.monthDate.getMonth()).to.equal(4)
+      expect(vm.monthDate.getFullYear()).to.equal(2020)
+
+      done()
+    })
+
+  })
+
+})

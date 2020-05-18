@@ -52,12 +52,14 @@
             @param {Date} startDate - current startDate
             @param {Date} endDate - current endDate
             @param {object} ranges - object with ranges
+            @param {Fn} clickRange(dateRange) - call to select the dateRange - any two date objects or an object from tha ranges array
           -->
           <slot
             name="ranges"
             :startDate="start"
             :endDate="end"
             :ranges="ranges"
+            :clickRange="clickRange"
             v-if="ranges !== false"
           >
             <calendar-ranges class="col-12 col-md-auto"
@@ -390,22 +392,35 @@
         type: Function,
         /**
          * @param dropdownList {HTMLUListElement}
-         * @param component {Vue} current instance of vue select
-         * @param width {string} calculated width in pixels of the dropdown menu
-         * @param top {string} absolute position top value in pixels relative to the document
-         * @param left {string} absolute position left value in pixels relative to the document
+         * @param component {Vue} current instance of vue date range picker
+         * @param width {int} calculated width in pixels of the dropdown menu
+         * @param top {int} absolute position top value in pixels relative to the document
+         * @param left {int} absolute position left value in pixels relative to the document
+         * @param right {int} absolute position right value in pixels relative to the document
          * @return {function|void}
          */
-        default(dropdownList, component, {width, top, left}) {
-          dropdownList.style.top = top;
-          dropdownList.style.left = left;
-          dropdownList.style.width = width; //left
+        default (dropdownList, component, {width, top, left, right}) {
           // which way the picker opens - "center", "left" or "right"
-          if(component.opens === 'center')
-            dropdownList.style.left -= (width / 2).toFixed(0)
-          if(component.opens === 'right')
-            dropdownList.style.left -= width
+          if (component.opens === 'center') {
+            // console.log('center open', left, width)
+            dropdownList.style.left = (left + width/2) + 'px'
+          } else if (component.opens === 'left') {
+            // console.log('left open', right, width)
+            dropdownList.style.right = (window.innerWidth - right) + 'px'
+          } else if (component.opens === 'right') {
+            // console.log('right open')
+            dropdownList.style.left = (left) + 'px'
+          }
+          dropdownList.style.top = top + 'px'
+          // dropdownList.style.width = width + 'px'
         }
+      },
+      /**
+       * Whether to close the dropdown on "esc"
+       */
+      closeOnEsc: {
+        type: Boolean,
+        default: true
       }
     },
     data () {
@@ -579,10 +594,10 @@
         this.$emit('select', {startDate: this.start, endDate: this.end})
       },
       clickAway ($event) {
-        if($event && $event.target &&
+        if ($event && $event.target &&
           !this.$el.contains($event.target) &&
           this.$refs.dropdown &&
-          !this.$refs.dropdown.contains($event.target) ) {
+          !this.$refs.dropdown.contains($event.target)) {
           this.clickCancel()
         }
       },
@@ -622,6 +637,11 @@
 
         this.end = this.$dateUtil.validateDateRange(end, this.minDate, this.maxDate);
       },
+      handleEscape (e) {
+        if (this.open && e.keyCode === 27 && this.closeOnEsc) {
+          this.clickCancel()
+        }
+      }
     },
     computed: {
       showCalendars () {
@@ -707,6 +727,8 @@
           if (typeof document === "object") {
             this.$nextTick(() => {
               value ? document.body.addEventListener('click', this.clickAway) : document.body.removeEventListener('click', this.clickAway)
+              value ? document.addEventListener('keydown', this.handleEscape) : document.removeEventListener('keydown', this.handleEscape)
+
               if (!this.alwaysShowCalendars && this.ranges) {
                 this.showCustomRangeCalendars = !Object.keys(this.ranges)
                   .find(key => this.$dateUtil.isSame(this.start, this.ranges[key][0], 'date') && this.$dateUtil.isSame(this.end, this.ranges[key][1], 'date'))
@@ -821,20 +843,20 @@
 
   .daterangepicker {
     &.opensleft {
-      top: 35px;
+      /*top: 35px;*/
       right: 10px;
       left: auto;
     }
 
     &.openscenter {
-      top: 35px;
+      /*top: 35px;*/
       right: auto;
       left: 50%;
       transform: translate(-50%, 0);
     }
 
     &.opensright {
-      top: 35px;
+      /*top: 35px;*/
       left: 10px;
       right: auto;
     }
