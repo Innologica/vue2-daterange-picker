@@ -1,5 +1,5 @@
 <template>
-  <div class="vue-daterange-picker">
+  <div class="vue-daterange-picker" :class="{ inline: opens === 'inline' }">
     <div
       :class="controlContainerClass"
       @click="onClickPicker"
@@ -27,7 +27,7 @@
       <div
         class="daterangepicker dropdown-menu ltr"
         :class="pickerStyles"
-        v-if="open"
+        v-if="open || opens === 'inline'"
         v-append-to-body
         ref="dropdown"
       >
@@ -324,7 +324,7 @@
         }
       },
       /**
-       * which way the picker opens - "center", "left" or "right"
+       * which way the picker opens - "center", "left", "right" or "inline"
        */
       opens: {
         type: String,
@@ -672,19 +672,23 @@
       },
       pickerStyles () {
         return {
-          'show-calendar': this.open,
+          'show-calendar': this.open || this.opens === 'inline',
           'show-ranges': !!this.ranges,
           'show-weeknumbers': this.showWeekNumbers,
           single: this.singleDatePicker,
-          opensright: this.opens === 'right',
-          opensleft: this.opens === 'left',
-          openscenter: this.opens === 'center',
+          ['opens' + this.opens]: true,
           linked: this.linkedCalendars,
           'hide-calendars': !this.showCalendars
         }
       },
       isClear () {
         return !this.dateRange.startDate || !this.dateRange.endDate
+      },
+      isDirty () {
+        let origStart = new Date(this.dateRange.startDate)
+        let origEnd = new Date(this.dateRange.endDate)
+
+        return !this.isClear && (this.start.getTime() !== origStart.getTime() || this.end.getTime() !== origEnd.getTime())
       }
     },
     watch: {
@@ -891,6 +895,16 @@
     .show-ranges.hide-calendars {
       width: 150px;
       min-width: 150px;
+    }
+  }
+
+  .inline {
+    .daterangepicker {
+      position: static;
+
+      &:before, &:after {
+        display: none;
+      }
     }
   }
 

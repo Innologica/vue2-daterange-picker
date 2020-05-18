@@ -84,8 +84,13 @@
                v-model="opens">
         <label class="form-check-label">right</label>
       </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="options" id="option4" value="inline"
+               v-model="opens">
+        <label class="form-check-label">inline</label>
+      </div>
       <small class="form-text text-muted">Whether the picker appears aligned to the left, to the right, or
-        centered relative to the HTML element it's attached to
+        centered relative to the HTML element it's attached to. Or inline to display it inline.
       </small>
     </div>
 
