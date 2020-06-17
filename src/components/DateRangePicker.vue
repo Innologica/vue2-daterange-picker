@@ -628,6 +628,11 @@
         start.setSeconds(value.seconds);
 
         this.start = this.$dateUtil.validateDateRange(start, this.minDate, this.maxDate);
+
+        // if autoapply is ON we should update the value on time selection change
+        if (this.autoApply) {
+          this.$emit('update', {startDate: this.start, endDate: this.end})
+        }
       },
       onUpdateEndTime (value) {
         let end = new Date(this.end);
@@ -636,6 +641,11 @@
         end.setSeconds(value.seconds);
 
         this.end = this.$dateUtil.validateDateRange(end, this.minDate, this.maxDate);
+
+        // if autoapply is ON we should update the value on time selection change
+        if (this.autoApply) {
+          this.$emit('update', {startDate: this.start, endDate: this.end})
+        }
       },
       handleEscape (e) {
         if (this.open && e.keyCode === 27 && this.closeOnEsc) {
