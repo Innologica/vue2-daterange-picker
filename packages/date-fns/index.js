@@ -1,5 +1,5 @@
 import { isSameDay, getDaysInMonth, getISOWeek, format, addMonths, subMonths, isValid } from 'date-fns'
-import {dateFormat} from '../dateformat'
+import {dateFormat} from './dateformat'
 
 const DateUtil = {
   isSame: (date1, date2, granularity ) => {

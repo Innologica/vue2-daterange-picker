@@ -12,8 +12,7 @@
     "url": "https://github.com/Innologica/vue2-daterange-picker"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "scripts": {
     "components:parse": "node ./docs/.scripts/parse.js",
@@ -58,9 +57,9 @@
     "vuepress": "^1.2",
     "webpack": "^4.41.2"
   },
-  "optionalDependencies": {
-    "moment": "^2.24.0",
-    "date-fns": "^2.8.1"
+  "peerDependencies": {
+    "@vue2-daterange-picker/moment": "*",
+    "@vue2-daterange-picker/date-fns": "*"
   },
   "browserslist": [
     "> 1%",

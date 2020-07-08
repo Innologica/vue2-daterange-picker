@@ -1,0 +1,23 @@
+{
+  "name": "@vue2-daterange-picker/date-fns",
+  "version": "0.1.0",
+  "description": "Date util for vue2-daterange-picker (https://github.com/Innologica/vue2-daterange-picker) using date-fns",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Innologica/vue2-daterange-picker.git"
+  },
+  "author": {
+    "name": "Gustavo Gondim",
+    "url": "https://github/ggondim"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Innologica/vue2-daterange-picker/issues"
+  },
+  "homepage": "https://github.com/Innologica/vue2-daterange-picker#readme",
+  "dependencies": {
+    "date-fns": "^2.14.0"
+  }
+}
