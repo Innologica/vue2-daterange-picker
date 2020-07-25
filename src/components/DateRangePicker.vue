@@ -225,10 +225,14 @@
         default: true,
       },
       /**
-       * Allows you to select only one date (instead of range). This will hide the ranges with different start/end
+       * Only show a single calendar, with or without ranges.
+       * 
+       * Set true or 'single' for a single calendar with no ranges, single dates only.
+       * Set 'range' for a single calendar WITH ranges.
+       * Set false for a double calendar with ranges.
        */
       singleDatePicker: {
-        type: Boolean,
+        type: [Boolean, String],
         default: false,
       },
       /**
@@ -436,7 +440,7 @@
       data.nextMonthDate = util.nextMonth(data.monthDate)
 
       data.start = startDate ? new Date(startDate) : null
-      if (this.singleDatePicker) {
+      if (this.singleDatePicker && this.singleDatePicker !== 'range') {
         // ignore endDate for singleDatePicker
         data.end = data.start
       } else {
@@ -526,7 +530,7 @@
         } else {
           this.start = this.normalizeDatetime(value, this.start);
           this.end = this.normalizeDatetime(value, this.end);
-          if (!this.singleDatePicker) {
+          if (!this.singleDatePicker || this.singleDatePicker === 'range') {
             this.in_selection = true
           } else {
             this.onSelect();
@@ -659,7 +663,7 @@
       },
       rangeText () {
         let range = this.startText;
-        if (!this.singleDatePicker) {
+        if (!this.singleDatePicker || this.singleDatePicker === 'range') {
           range += this.locale.separator + this.endText;
         }
         return range;
