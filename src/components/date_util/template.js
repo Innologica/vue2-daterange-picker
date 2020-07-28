@@ -75,7 +75,14 @@ const DateUtil = {
    * @param {Date} date
    * @return {string} the date formatted
    */
-  yearMonth: (date) => {}
+  yearMonth: (date) => {},
+  
+  /**
+   * Is the date valid?
+   * @param {Date} date
+   * @return {boolean} true if valid, false otherwise.
+   */
+  isValidDate: (date) => {},
 }
 
 export default DateUtil
