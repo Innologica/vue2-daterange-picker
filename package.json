@@ -59,8 +59,9 @@
     "webpack": "^4.41.2"
   },
   "optionalDependencies": {
-    "moment": "^2.24.0",
-    "date-fns": "^2.8.1"
+    "date-fns": "^2.8.1",
+    "luxon": "^1.24.1",
+    "moment": "^2.24.0"
   },
   "browserslist": [
     "> 1%",
