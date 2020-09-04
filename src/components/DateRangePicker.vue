@@ -138,7 +138,7 @@
           @param {string} rangeText - the formatted date range by the component
           @param {object} locale - the locale object @see locale prop
           @param {function} clickCancel - function which is called when you want to cancel the range picking and reset old values
-          @param {function} clickedApply -function which to call when you want to apply the selection
+          @param {function} clickApply -function which to call when you want to apply the selection
           @param {boolean} in_selection - is the picker in selection mode
           @param {boolean} autoApply - value of the autoApply prop (whether to select immediately)
         -->
