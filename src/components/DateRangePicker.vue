@@ -60,7 +60,7 @@
             :endDate="end"
             :ranges="ranges"
             :clickRange="clickRange"
-            v-if="ranges !== false"
+            v-if="showRanges"
           >
             <calendar-ranges class="col-12 col-md-auto"
                              @clickRange="clickRange"
@@ -99,6 +99,7 @@
                              :hour24="timePicker24Hour"
                              :second-picker="timePickerSeconds"
                              :current-time="start"
+                             :readonly="readonly"
               />
             </div>
 
@@ -128,6 +129,7 @@
                              :hour24="timePicker24Hour"
                              :second-picker="timePickerSeconds"
                              :current-time="end"
+                             :readonly="readonly"
               />
             </div>
           </div>
@@ -156,6 +158,7 @@
               class="cancelBtn btn btn-sm btn-secondary"
               type="button"
               @click="clickCancel"
+              v-if="!readonly"
             >{{locale.cancelLabel}}
             </button>
             <button
@@ -163,6 +166,7 @@
               :disabled="in_selection"
               type="button"
               @click="clickedApply"
+              v-if="!readonly"
             >{{locale.applyLabel}}
             </button>
           </div>
@@ -425,6 +429,12 @@
       closeOnEsc: {
         type: Boolean,
         default: true
+      },
+      /**
+       * Makes the picker readonly. No button in footer. No ranges. Cannot change.
+       */
+      readonly: {
+        type: Boolean
       }
     },
     data () {
@@ -514,6 +524,8 @@
         return newDate;
       },
       dateClick (value) {
+        if(this.readonly)
+          return false
         if (this.in_selection) {
           this.in_selection = false
           this.end = this.normalizeDatetime(value, this.end);
@@ -540,6 +552,8 @@
         }
       },
       hoverDate (value) {
+        if(this.readonly)
+          return false
         let dt = this.normalizeDatetime(value, this.end);
         if (this.in_selection && dt >= this.start)
           this.end = dt
@@ -658,6 +672,9 @@
       }
     },
     computed: {
+      showRanges () {
+        return this.ranges !== false && !this.readonly
+      },
       showCalendars () {
         return this.alwaysShowCalendars || this.showCustomRangeCalendars
       },
@@ -687,7 +704,7 @@
       pickerStyles () {
         return {
           'show-calendar': this.open || this.opens === 'inline',
-          'show-ranges': !!this.ranges,
+          'show-ranges': this.showRanges,
           'show-weeknumbers': this.showWeekNumbers,
           single: this.singleDatePicker,
           ['opens' + this.opens]: true,
@@ -781,6 +798,7 @@
     display: flex;
     width: auto;
 
+    //les than 768
     @media screen and (max-width: 768px) {
       &.show-ranges {
         .drp-calendar.left {
@@ -799,14 +817,21 @@
       }
     }
 
+    @media screen and (max-width: 541px){
+      .calendars-container {
+        flex-wrap: wrap;
+      }
+    }
+
+    /*from 540 to 768*/
     @media screen and (min-width: 540px) {
       min-width: 486px;
       &.show-weeknumbers {
         min-width: 486px + $week-width;
       }
-
     }
 
+    //more than 768
     @media screen and (min-width: 768px) {
       &.show-ranges {
         min-width: 682px;

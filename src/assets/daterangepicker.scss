@@ -17,8 +17,11 @@
 
   .calendars-container {
     display: flex;
-    flex-wrap: wrap;
   }
+}
+
+.daterangepicker[readonly] {
+  pointer-events: none;
 }
 
 //imported

@@ -1,20 +1,20 @@
 <template>
   <div class="calendar-time">
-    <select v-model="hour" class="hourselect form-control mr-1">
+    <select v-model="hour" class="hourselect form-control mr-1" :disabled="readonly">
       <option v-for="h in hours"
         :key="h" :value="h">{{h | formatNumber}}</option>
     </select>
-    :<select v-model="minute" class="minuteselect form-control ml-1">
+    :<select v-model="minute" class="minuteselect form-control ml-1" :disabled="readonly">
       <option v-for="m in minutes"
         :key="m" :value="m" >{{m | formatNumber}}</option>
     </select>
     <template v-if="secondPicker">
-      :<select v-model="second" class="secondselect form-control ml-1">
+      :<select v-model="second" class="secondselect form-control ml-1" :disabled="readonly">
         <option v-for="s in 60"
           :key="s-1" :value="s-1">{{s-1 | formatNumber}}</option>
       </select>
     </template>
-    <select v-if="!hour24" v-model="ampm" class="ampmselect">
+    <select v-if="!hour24" v-model="ampm" class="ampmselect" :disabled="readonly">
       <option value="AM">AM</option>
       <option value="PM">PM</option>
     </select>
@@ -48,6 +48,10 @@
         default () {
           return new Date()
         }
+      },
+      readonly: {
+        type: Boolean,
+        default: false
       }
     },
     data() {
