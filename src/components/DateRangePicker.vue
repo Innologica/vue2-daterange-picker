@@ -455,10 +455,12 @@
       // update day names order to firstDay
       if (data.locale.firstDay !== 0) {
         let iterator = data.locale.firstDay
+        let weekDays = [...data.locale.daysOfWeek]
         while (iterator > 0) {
-          data.locale.daysOfWeek.push(data.locale.daysOfWeek.shift())
+          weekDays.push(weekDays.shift())
           iterator--
         }
+        data.locale.daysOfWeek = weekDays
       }
       return data
     },
