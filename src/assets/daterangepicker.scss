@@ -1,3 +1,5 @@
+@import "variables";
+
 .daterangepicker {
   &.hide-calendars.show-ranges {
     .ranges {
@@ -327,12 +329,13 @@
 }
 
 .daterangepicker .ranges li:hover {
-  background-color: #eee;
+  background-color: $ranges-hover-bg-color;
+  color: $ranges-hover-text-color;
 }
 
 .daterangepicker .ranges li.active {
-  background-color: #08c;
-  color: #fff;
+  background-color: $ranges-active-bg-color;
+  color: $ranges-active-text-color;
 }
 
 /*  Larger Screen Styling */
