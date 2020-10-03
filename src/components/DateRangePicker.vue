@@ -153,7 +153,7 @@
           <div class="drp-buttons" v-if="!autoApply">
             <span class="drp-selected" v-if="showCalendars">{{rangeText}}</span>
             <button
-              class="cancelBtn btn btn-sm btn-default"
+              class="cancelBtn btn btn-sm btn-secondary"
               type="button"
               @click="clickCancel"
             >{{locale.cancelLabel}}
@@ -226,7 +226,7 @@
       },
       /**
        * Only show a single calendar, with or without ranges.
-       * 
+       *
        * Set true or 'single' for a single calendar with no ranges, single dates only.
        * Set 'range' for a single calendar WITH ranges.
        * Set false for a double calendar with ranges.
