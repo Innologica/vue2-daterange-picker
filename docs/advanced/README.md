@@ -28,3 +28,10 @@ You can accomplish disabled dates via the date-format property which accepts a f
     components: {SlotsDemo}
   }
 </script>
+
+## Open programmatically
+
+You can open the picker anywhere if you put a ref on the component and call it like this.
+
+this.$refs.picker.togglePicker(true/false)
+
