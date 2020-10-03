@@ -8,6 +8,6 @@ export default {
     },
   },
   created () {
-    this.$dateUtil = getDateUtil(this.dateUtil)
+    this.$dateUtil = getDateUtil('native')
   }
 }

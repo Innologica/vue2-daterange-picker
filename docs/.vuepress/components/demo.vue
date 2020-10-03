@@ -26,9 +26,9 @@
           :append-to-body="appendToBody"
           :closeOnEsc="closeOnEsc"
         >
-          <div slot="input" slot-scope="picker" style="min-width: 350px;">
+          <template #input="picker" style="min-width: 350px;">
             {{ picker.startDate | date }} - {{ picker.endDate | date }}
-          </div>
+          </template>
         </date-range-picker>
 
         <button class="btn btn-info" @click="dateRange.startDate = null, dateRange.endDate = null">
@@ -218,7 +218,7 @@
 
 <script>
   import DateRangePicker from '../../../src/components/DateRangePicker'
-  import moment from 'moment'
+  import dateUtil from '../../../src/components/date_util/native'
 
   export default {
     components: {DateRangePicker},
@@ -263,16 +263,18 @@
     methods: {
       updateValues (values) {
         console.log('event: update', {...values})
-        this.dateRange.startDate = moment(values.startDate).format('YYYY-MM-DD HH:mm:ss');
-        this.dateRange.endDate = moment(values.endDate).format('YYYY-MM-DD HH:mm:ss');
+        this.dateRange.startDate = dateUtil.format(values.startDate, 'yyyy-mm-dd HH:MM:ss');
+        this.dateRange.endDate = dateUtil.format(values.endDate, 'yyyy-mm-dd HH:MM:ss');
       },
       checkOpen (open) {
         console.log('event: open', open)
       },
       dateFormat (classes, date) {
-        let yesterday = moment().subtract(1, 'day');
+        let yesterday = new Date();
+        let d1 = dateUtil.format(date, 'isoDate')
+        let d2 = dateUtil.format(yesterday.setDate(yesterday.getDate() - 1), 'isoDate')
         if (!classes.disabled) {
-          classes.disabled = moment(date).isSame(yesterday, 'day')
+          classes.disabled = d1 === d2
         }
         return classes
       }

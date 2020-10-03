@@ -354,15 +354,6 @@
         default: true
       },
       /**
-       * The dateUtil implementation to use. Possible values: native, moment, date-fns.
-       * If an object is given it must implement all the functions required. See below for
-       * custom date util object template*
-       */
-      dateUtil: {
-        type: [Object, String],
-        default: 'native'
-      },
-      /**
        * Disabled state. If true picker do not popup on click.
        */
       disabled: {
@@ -439,7 +430,7 @@
     },
     data () {
       //copy locale data object
-      const util = getDateUtil(this.dateUtil);
+      const util = getDateUtil();
       let data = {locale: util.localeData({...this.localeData})}
 
       let startDate = this.dateRange.startDate || null;
@@ -591,7 +582,7 @@
          * Emits when the user selects a range from the picker and clicks "apply" (if autoApply is true).
          * @param {json} value - json object containing the dates: {startDate, endDate}
          */
-        this.$emit('update', {startDate: this.start, endDate: this.end})
+        this.$emit('update', {startDate: this.start, endDate: this.singleDatePicker ? this.start : this.end})
       },
       clickCancel () {
         if (this.open) {
@@ -649,7 +640,7 @@
 
         // if autoapply is ON we should update the value on time selection change
         if (this.autoApply) {
-          this.$emit('update', {startDate: this.start, endDate: this.end})
+          this.$emit('update', {startDate: this.start, endDate: this.singleDatePicker ? this.start : this.end})
         }
       },
       onUpdateEndTime (value) {
@@ -881,6 +872,7 @@
 
     &.show-calendar {
       display: block;
+      //top: 42px;
     }
   }
 
