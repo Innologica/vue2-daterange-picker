@@ -874,7 +874,7 @@
 
     &.show-calendar {
       display: block;
-      //top: 42px;
+      top: auto;
     }
   }
 

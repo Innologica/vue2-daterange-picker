@@ -102,9 +102,6 @@ yesterday.setHours(0, 0, 0, 0);
     'Last month': [new Date(today.getFullYear(), today.getMonth() - 1, 1), new Date(today.getFullYear(), today.getMonth(), 0)],
 }
 ```
-* custom date util object (keep in mind that this can change in the future)
-
-<<< @/src/components/date_util/template.js
 
 ## Events
 
