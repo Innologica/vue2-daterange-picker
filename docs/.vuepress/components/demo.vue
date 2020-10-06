@@ -95,13 +95,18 @@
     </div>
 
     <div>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="singleDatePicker"
-               v-model="singleDatePicker">
+      <div class="form-check form-inline py-3">
         <label class="form-check-label" for="singleDatePicker">
           singleDatePicker
         </label>
+        <select v-model="singleDatePicker" id="singleDatePicker" class="form-control ml-3">
+          <option>single</option>
+          <option>range</option>
+          <option :value="false">default</option>
+        </select>
+        <small class="form-text text-muted">Select the calendar mode single selects only single date with 1 calendar. Range is single calendar with ranges. default are 2 calendars with range selection.</small>
       </div>
+
       <div class="form-check">
         <input class="form-check-input" type="checkbox" id="showWeekNumbers" v-model="showWeekNumbers">
         <label class="form-check-label" for="showWeekNumbers">
@@ -244,6 +249,7 @@
           startDate: '2019-12-10',
           endDate: '2019-12-20',
         },
+        single_range_picker: false,
         show_ranges: true,
         singleDatePicker: false,
         timePicker: true,
