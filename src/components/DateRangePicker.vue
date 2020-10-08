@@ -482,7 +482,7 @@
         this.monthDate = newDate
         if (this.linkedCalendars || (this.$dateUtil.yearMonth(this.monthDate) >= this.$dateUtil.yearMonth(this.nextMonthDate))) {
           this.nextMonthDate = this.$dateUtil.validateDateRange(this.$dateUtil.nextMonth(newDate), this.minDate, this.maxDate);
-          if (!this.singleDatePicker && this.$dateUtil.yearMonth(this.monthDate) === this.$dateUtil.yearMonth(this.nextMonthDate)) {
+          if ((!this.singleDatePicker || this.singleDatePicker === 'range') && this.$dateUtil.yearMonth(this.monthDate) === this.$dateUtil.yearMonth(this.nextMonthDate)) {
             this.monthDate = this.$dateUtil.validateDateRange(this.$dateUtil.prevMonth(this.monthDate), this.minDate, this.maxDate)
           }
         }
@@ -584,7 +584,7 @@
          * Emits when the user selects a range from the picker and clicks "apply" (if autoApply is true).
          * @param {json} value - json object containing the dates: {startDate, endDate}
          */
-        this.$emit('update', {startDate: this.start, endDate: this.singleDatePicker ? this.start : this.end})
+        this.$emit('update', {startDate: this.start, endDate: this.singleDatePicker && this.singleDatePicker !== 'range' ? this.start : this.end})
       },
       clickCancel () {
         if (this.open) {
@@ -642,7 +642,7 @@
 
         // if autoapply is ON we should update the value on time selection change
         if (this.autoApply) {
-          this.$emit('update', {startDate: this.start, endDate: this.singleDatePicker ? this.start : this.end})
+          this.$emit('update', {startDate: this.start, endDate: this.singleDatePicker && this.singleDatePicker !== 'range' ? this.start : this.end})
         }
       },
       onUpdateEndTime (value) {
