@@ -1,8 +1,29 @@
 import { expect } from 'chai'
-import DateRangePicker from '@/components/DateRangePicker'
+import DateRangePicker from '@/components/DateRangePicker.vue'
+
+// import DateRangePicker from '@/components/DateRangePicker.vue'
 import moment from 'moment'
 import {getDateUtil} from '../../src/components/util'
 import { mount } from '@vue/test-utils'
+import Vue from "vue";
+interface DatePickerVue extends Vue {
+  locale: any;
+  dateUtil: any;
+  open: boolean;
+  start: any;
+  end: any;
+  startDate: any;
+  endDate: any;
+  changeRightMonth(arg: any): any;
+  togglePicker(arg: boolean): void;
+  monthDate: Date;
+  nextMonthDate: Date;
+  startText: string;
+  endText: string;
+  rangeText: string;
+  min: Date;
+  max: Date;
+}
 
 const propsData = {
   dateRange: {
@@ -13,17 +34,25 @@ const propsData = {
 }
 
 describe('DateRangePicker.vue', () => {
-  let wrapper = mount(DateRangePicker, { propsData })
-  const vm = wrapper.vm
-  let dt_start = new Date(propsData.dateRange.startDate)
-  let dt_end = new Date(propsData.dateRange.endDate)
+  const wrapper = mount(DateRangePicker, { propsData })
+  const vm = wrapper.vm;
+  const dt_start = new Date(propsData.dateRange.startDate)
+  const dt_end = new Date(propsData.dateRange.endDate)
 
-  let dt_start_text = getDateUtil(vm.dateUtil).format(dt_start, vm.locale.format)
-  let dt_end_text = getDateUtil(vm.dateUtil).format(dt_end, vm.locale.format)
+  const dt_start_text = getDateUtil((vm as any).dateUtil).format(dt_start, (vm as any).locale.format)
+  const dt_end_text = getDateUtil((vm as any).dateUtil).format(dt_end, (vm as any).locale.format)
 
   it('should render correct contents', () => {
-    expect(vm.$el.querySelector('.reportrange-text span').textContent)
-      .to.equal(dt_start_text + vm.locale.separator + dt_end_text)
+    const el = vm.$el;
+    expect(el).to.not.be.null;
+    if(el && el.querySelector('.reportrange-text span')){
+      const textEle = el.querySelector('.reportrange-text span');
+      if(textEle){
+        expect(textEle.textContent)
+        .to.equal(dt_start_text + ((vm as any).locale ? (vm as any).locale.separator : '') + dt_end_text)
+      }
+       
+    }
   })
 
   it('should be hidden', () => {
@@ -32,7 +61,7 @@ describe('DateRangePicker.vue', () => {
   })
 
   it('should open when clicked', (done) => {
-    vm.open = true
+    (vm as any).open = true
 
     vm.$nextTick(() => {
       expect(vm.$el.querySelector('.daterangepicker'))
@@ -51,8 +80,8 @@ describe('DateRangePicker.vue', () => {
 
     vm.$nextTick(() => {
       // console.error(vm.start, vm.dateRange)
-      expect(moment(vm.start).isSame('1981-11-24', 'date')).to.equal(true)
-      expect(moment(vm.end).isSame('2018-10-09', 'date')).to.equal(true)
+      expect(moment((vm as any).start).isSame('1981-11-24', 'date')).to.equal(true)
+      expect(moment((vm as any).end).isSame('2018-10-09', 'date')).to.equal(true)
 
       done()
     })
@@ -60,35 +89,35 @@ describe('DateRangePicker.vue', () => {
 
   //bugs
   it('getMonth is not a function #40 - select month before the start date', () => {
-    vm.startDate = propsData.startDate
-    vm.endDate = propsData.endDate
-    vm.changeRightMonth({month: 1, year: 2017})
+    (vm as any).startDate = propsData.dateRange.startDate as any
+    (vm as any).endDate = propsData.dateRange.endDate as any
+    (vm as any).changeRightMonth({month: 1, year: 2017})
 
-    expect(vm.nextMonthDate.getMonth()).to.equal(0)
-    expect(vm.nextMonthDate.getFullYear()).to.equal(2017)
+    expect((vm as any).nextMonthDate.getMonth()).to.equal(0)
+    expect((vm as any).nextMonthDate.getFullYear()).to.equal(2017)
   })
 
   it('Cleared state / null value? #41 - should be able to set null value', (done) => {
     wrapper.setProps({ dateRange: { startDate: null, endDate: null } })
     vm.$nextTick(() => {
-      expect(vm.start).to.equal(null)
-      expect(vm.end).to.equal(null)
+      expect((vm as any).start).to.equal(null)
+      expect((vm as any).end).to.equal(null)
 
-      expect(vm.startText).to.equal("")
-      expect(vm.endText).to.equal("")
-      expect(vm.rangeText).to.equal(vm.locale.separator)
+      expect((vm as any).startText).to.equal("")
+      expect((vm as any).endText).to.equal("")
+      expect((vm as any).rangeText).to.equal((vm as any).locale.separator)
       done()
     })
   })
 
-  it('should not fill time when no date is selected #153', (done) => {
-    wrapper.setProps({ dateRange: { startDate: null, endDate: null }, timePicker: true })
-    vm.open = true
+  it('should not fill time when no date is selected #153', (done) => {    
+    wrapper.setProps({ dateRange: { startDate: null, endDate: null }, timePicker: true });
+    (vm as any).open = true
     vm.$nextTick(() => {
       expect(vm.$el.querySelector('.daterangepicker'))
         .to.not.be.empty
-      expect(vm.start).to.equal(null)
-      expect(vm.end).to.equal(null)
+      expect((vm as any).start).to.equal(null)
+      expect((vm as any).end).to.equal(null)
       console.log(vm.$el.querySelector('.calendar-time'))
       expect(vm.$el.querySelector('.calendar-time'))
         .to.equal(null)
@@ -108,7 +137,7 @@ describe('DateRangePicker.vue MIN/MAX', () => {
       showDropdowns: true,
     }
   })
-  const vm = wrapper.vm
+  const vm = wrapper.vm as any
 
   it('should not be able to navigate outside of min/max values', (done) => {
     //the input is missing when not open
@@ -156,7 +185,7 @@ describe('DateRangePicker.vue DEMO', () => {
       }
     }
   })
-  const vm = wrapper.vm
+  const vm = wrapper.vm as any
 
   it('should be able to change to next month', (done) => {
     vm.togglePicker(true)
@@ -236,9 +265,9 @@ describe('DateRangePicker.vue DEMO', () => {
 })
 
 describe('DateRangePicker Calendar months positioning', () => {
-  let dateRange = {startDate: new Date(2020,4, 18), endDate: new Date(2020,4,24)}
+  const dateRange = {startDate: new Date(2020,4, 18), endDate: new Date(2020,4,24)}
   const wrapper = mount(DateRangePicker, { propsData: { dateRange } })
-  const vm = wrapper.vm
+  const vm = wrapper.vm as any
 
   it('should be able to change to next month', (done) => {
     vm.togglePicker(true)
