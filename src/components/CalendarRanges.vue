@@ -22,32 +22,41 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
   import dateUtilMixin from './dateUtilMixin'
 
-  export default {
-    mixins: [dateUtilMixin],
+  import Vue from "vue";
+
+import mixins from "vue-typed-mixins";
+
+// export default Vue.extend({
+  export default mixins(dateUtilMixin).extend({
+    // mixins: [dateUtilMixin],
+    name: 'calendar-ranges',
     props: {
-      ranges: Object,
+      ranges:  Array as () => any[],
       selected: Object,
       localeData: Object,
       alwaysShowCalendars: Boolean,
     },
     data () {
       return {
+        test: false,
         customRangeActive: false
       }
     },
     methods: {
-      clickRange (range) {
-        this.customRangeActive = false
+      clickRange (range: any) {
+        const vm: any = this;
+        vm.customRangeActive = false
         this.$emit('clickRange', range)
       },
       clickCustomRange () {
-        this.customRangeActive = true
+        const vm: any = this;
+        vm.customRangeActive = true
         this.$emit('showCustomRange')
       },
-      range_class (range) {
+      range_class (range: any) {
         return { active: range.selected === true };
       }
     },
@@ -55,10 +64,10 @@
       listedRanges () {
         if(!this.ranges)
           return false
-        return Object.keys(this.ranges).map(value => {
+        return Object.keys(this.ranges).map((value: any) => {
           return {
             label: value,
-            value: this.ranges[value],
+            value: (this.ranges as any)[value],
             selected:
               this.$dateUtil.isSame(this.selected.startDate, this.ranges[value][0]) &&
               this.$dateUtil.isSame(this.selected.endDate, this.ranges[value][1])
@@ -66,11 +75,12 @@
         })
       },
       selectedRange () {
-        return this.listedRanges.find(r => r.selected === true)
+        const vm: any = this;
+        return vm.listedRanges.find((r: any) => r.selected === true)
       },
       showCustomRangeLabel () {
         return !this.alwaysShowCalendars;
       }
     },
-  }
+  })
 </script>

@@ -21,10 +21,12 @@
   </div>
 </template>
 
-<script>
-  export default {
+<script lang="ts">
+ import Vue from "vue";
+
+export default Vue.extend({
     filters: {
-      formatNumber: (value) => {
+      formatNumber: (value: number) => {
         if (value < 10) {
           return '0'+value.toString();
         }
@@ -45,9 +47,11 @@
         default: false,
       },
       currentTime: {
-        default () {
-          return new Date()
-        }
+        type:Date,
+        default: new Date()
+        // default () {
+        //   return new Date()
+        // }
       },
       readonly: {
         type: Boolean,
@@ -55,8 +59,8 @@
       }
     },
     data() {
-      let current = this.currentTime ? this.currentTime : new Date()
-      let hours = current.getHours();
+      const current: Date = this.currentTime ? new Date(this.currentTime) : new Date()
+      const hours = current.getHours();
       return {
         hour: this.hour24 ? hours : hours % 12 || 12,
         minute: current.getMinutes() - (current.getMinutes() % this.miniuteIncrement),
@@ -66,17 +70,18 @@
     },
     computed: {
       hours () {
-        let values = [];
-        let max = this.hour24? 24:12;
+        const values = [];
+        const max = this.hour24? 24:12;
         for(let i=0; i< max; i++) {
           values.push(this.hour24? i:i+1);
         }
         return values;
       },
       minutes () {
-        let values = [];
-        let max = 60;
-        for(let i=0; i< max; i=i+this.miniuteIncrement) {
+        const values = [];
+        const max = 60;
+        const mI: number = this.miniuteIncrement as number;
+        for(let i=0; i< max; i=i + mI) {
           values.push(i);
         }
         return values;
@@ -84,37 +89,43 @@
     },
     watch: {
       hour () {
-        this.onChange();
+        const vm: any = this;
+        vm.onChange();
       },
       minute () {
-        this.onChange();
+        const vm: any = this;
+        vm.onChange();
       },
       second () {
-        this.onChange();
+         const vm: any = this;
+        vm.onChange();
       },
       ampm () {
-        this.onChange();
+         const vm: any = this;
+        vm.onChange();
       },
     },
     methods: {
       getHour() {
-        if (this.hour24) {
-          return this.hour;
+        const vm: any = this;
+        if (vm.hour24) {
+          return vm.hour;
         } else {
-         if (this.hour === 12) {
-           return this.ampm === 'AM' ? 0 : 12;
+         if (vm.hour === 12) {
+           return vm.ampm === 'AM' ? 0 : 12;
          } else {
-           return this.hour + (this.ampm === 'PM' ? 12 : 0);
+           return vm.hour + (vm.ampm === 'PM' ? 12 : 0);
          }
         }
       },
       onChange () {
+        const vm: any = this;
         this.$emit('update', {
-          hours: this.getHour(),
-          minutes: this.minute,
-          seconds: this.second,
+          hours: vm.getHour(),
+          minutes: vm.minute,
+          seconds: vm.second,
         });
       }
     },
-  }
+  })
 </script>

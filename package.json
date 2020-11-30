@@ -19,6 +19,7 @@
     "components:parse": "node ./docs/.scripts/parse.js",
     "components:watch": "watch \"npm run components:parse\" ./src",
     "lint": "vue-cli-service lint",
+    "lint:fix": "vue-cli-service lint --fix",
     "lib": "vue-cli-service build --target lib --name vue2-daterange-picker ./src/index.js",
     "docs:dev": "concurrently \"npm run components:watch\" \"vuepress dev docs\"",
     "docs:build": "vuepress build docs",
@@ -26,19 +27,27 @@
     "unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "vue": "^2.6.10"
+    "moment": "^2.29.1",
+    "vue": "^2.6.10",
+    "vue-typed-mixins": "^0.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",
     "@babel/runtime": "^7.7.4",
+    "@types/chai": "^4.2.14",
+    "@types/mocha": "^8.0.4",
+    "@typescript-eslint/eslint-plugin": "^2.18.0",
+    "@typescript-eslint/parser": "^2.18.0",
     "@vue/cli-plugin-babel": "^4.1.1",
     "@vue/cli-plugin-eslint": "^4.1.1",
+    "@vue/cli-plugin-typescript": "^4.5.9",
     "@vue/cli-plugin-unit-mocha": "^4.1.1",
     "@vue/cli-service": "^4.1.1",
+    "@vue/eslint-config-typescript": "^5.0.1",
     "@vue/test-utils": "^1.0.0-beta.30",
     "@vuedoc/parser": "^1.4.0",
-    "@vuepress/plugin-google-analytics": "^1.2.0",
     "@vuepress/plugin-back-to-top": "^1.2.0",
+    "@vuepress/plugin-google-analytics": "^1.2.0",
     "acorn": "^7.1.0",
     "autoprefixer": "^9.7.0",
     "babel-eslint": "^10.0.3",
@@ -54,6 +63,8 @@
     "mockdate": "^2.0.5",
     "node-sass": "^4.14.1",
     "sass-loader": "^8.0.0",
+    "ts-migrate": "^0.1.10",
+    "typescript": "~3.9.7",
     "vue-template-compiler": "^2.6.10",
     "vuepress": "^1.2",
     "webpack": "^4.41.2"
