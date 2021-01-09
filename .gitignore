@@ -13,3 +13,7 @@ selenium-debug.log
 *.ntvs*
 *.njsproj
 *.sln
+
+docs/.vuepress/dist
+docs/docs.json
+dist/
