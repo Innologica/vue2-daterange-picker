@@ -108,6 +108,15 @@
   import {nextMonth, prevMonth} from './util'
   import {mixin as clickaway} from 'vue-clickaway'
 
+  function parseDatetime(value) {
+    const pattern = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(:\d{2}Z)?$/;
+    if (typeof value === 'string' && pattern.test(value)) {
+      value = value.replace(' ', 'T')
+    }
+
+    return value === null ? null : new Date(value)
+  }
+
   export default {
     components: {Calendar, CalendarTime, CalendarRanges},
     mixins: [clickaway],
@@ -207,8 +216,8 @@
       let startDate = this.startDate;
       let endDate = this.endDate;
       if (this.dateRange !== null) {
-        startDate = this.dateRange.startDate;
-        endDate = this.dateRange.endDate;
+        startDate = parseDatetime(this.dateRange.startDate);
+        endDate = parseDatetime(this.dateRange.endDate);
       }
 
       data.monthDate = new Date(startDate)
@@ -327,8 +336,8 @@
           let startDate = this.startDate;
           let endDate = this.endDate;
           if (this.dateRange !== null) {
-            startDate = this.dateRange.startDate;
-            endDate = this.dateRange.endDate;
+            startDate = parseDatetime(this.dateRange.startDate);
+            endDate = parseDatetime(this.dateRange.endDate);
           }
           this.start = new Date(startDate);
           this.end = new Date(endDate);
@@ -378,18 +387,18 @@
         return range;
       },
       min () {
-        return this.minDate ? new Date(this.minDate) : null
+        return this.minDate ? parseDatetime(this.minDate) : null
       },
       max () {
-        return this.maxDate ? new Date(this.maxDate) : null
+        return this.maxDate ? parseDatetime(this.maxDate) : null
       },
     },
     watch: {
       startDate (value) {
-        this.start = new Date(value)
+        this.start = parseDatetime(value)
       },
       endDate (value) {
-        this.end = new Date(value)
+        this.end = parseDatetime(value)
       },
       minDate (value) {
         this.changeMonth(this.monthDate);
@@ -400,10 +409,10 @@
       dateRange (value) {
         if (value) {
           if (value.startDate) {
-            this.start = new Date(value.startDate);
+            this.start = parseDatetime(value.startDate);
           }
           if (value.endDate) {
-            this.end = new Date(value.endDate);
+            this.end = parseDatetime(value.endDate);
           }
         }
       }

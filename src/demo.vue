@@ -119,7 +119,7 @@
         maxDate: '2017-10-02',
         dateRange: {
             startDate: '2017-09-10',
-            endDate: '2017-9-20',
+            endDate: '2017-09-20',
         }
       }
     },
