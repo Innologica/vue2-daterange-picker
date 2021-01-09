@@ -67,6 +67,17 @@ const DateUtil = {
   },
   isValidDate: (d) => {
     return d instanceof Date && !isNaN(d);
+  },
+  parseDatetime: (value) => {
+    if (typeof value === 'number') {
+      return new Date(value)
+    }
+    const pattern = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(:\d{2}Z)?$/;
+    if (typeof value === 'string' && pattern.test(value)) {
+      value = value.replace(' ', 'T')
+    }
+
+    return value ? new Date(value) : value
   }
 }
 

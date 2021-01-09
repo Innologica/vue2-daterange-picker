@@ -433,8 +433,8 @@
       const util = getDateUtil();
       let data = {locale: util.localeData({...this.localeData})}
 
-      let startDate = this.dateRange.startDate || null;
-      let endDate = this.dateRange.endDate || null;
+      let startDate = util.parseDatetime(this.dateRange.startDate) || null;
+      let endDate = util.parseDatetime(this.dateRange.endDate) || null;
 
       data.monthDate = startDate ? new Date(startDate) : new Date()
       //get next month date
@@ -589,8 +589,8 @@
       clickCancel () {
         if (this.open) {
           // reset start and end
-          let startDate = this.dateRange.startDate
-          let endDate = this.dateRange.endDate
+          let startDate = this.$dateUtil.parseDatetime(this.dateRange.startDate)
+          let endDate = this.$dateUtil.parseDatetime(this.dateRange.endDate)
           this.start = startDate ? new Date(startDate) : null
           this.end = endDate ? new Date(endDate) : null
           // this.open = false
@@ -709,8 +709,8 @@
         return !this.dateRange.startDate || !this.dateRange.endDate
       },
       isDirty () {
-        let origStart = new Date(this.dateRange.startDate)
-        let origEnd = new Date(this.dateRange.endDate)
+        let origStart = this.$dateUtil.parseDatetime(this.dateRange.startDate)
+        let origEnd = this.$dateUtil.parseDatetime(this.dateRange.endDate)
 
         return !this.isClear && (this.start.getTime() !== origStart.getTime() || this.end.getTime() !== origEnd.getTime())
       }
@@ -725,29 +725,29 @@
         this.changeRightMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
       },
       'dateRange.startDate' (value) {
-        if (!this.$dateUtil.isValidDate(new Date(value)))
+        if (!this.$dateUtil.isValidDate(this.$dateUtil.parseDatetime(value)))
           return
 
-        this.start = (!!value && !this.isClear && this.$dateUtil.isValidDate(new Date(value))) ? new Date(value) : null
+        this.start = (!!value && !this.isClear && this.$dateUtil.isValidDate(this.$dateUtil.parseDatetime(value))) ? this.$dateUtil.parseDatetime(value) : null
         if (this.isClear) {
           this.start = null
           this.end = null
         } else {
-          this.start = new Date(this.dateRange.startDate)
-          this.end = new Date(this.dateRange.endDate)
+          this.start = this.$dateUtil.parseDatetime(this.dateRange.startDate)
+          this.end = this.$dateUtil.parseDatetime(this.dateRange.endDate)
         }
       },
       'dateRange.endDate' (value) {
-        if (!this.$dateUtil.isValidDate(new Date(value)))
+        if (!this.$dateUtil.isValidDate(this.$dateUtil.parseDatetime(value)))
           return
 
-        this.end = (!!value && !this.isClear) ? new Date(value) : null
+        this.end = (!!value && !this.isClear) ? this.$dateUtil.parseDatetime(value) : null
         if (this.isClear) {
           this.start = null
           this.end = null
         } else {
-          this.start = new Date(this.dateRange.startDate)
-          this.end = new Date(this.dateRange.endDate)
+          this.start = this.$dateUtil.parseDatetime(this.dateRange.startDate)
+          this.end = this.$dateUtil.parseDatetime(this.dateRange.endDate)
         }
       },
       open: {
