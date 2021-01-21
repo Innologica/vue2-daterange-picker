@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 import DateRangePicker from '@/components/DateRangePicker'
-import moment from 'moment'
-import {getDateUtil} from '../../src/components/util'
+import dateUtil from '../../src/components/date_util/native'
 import { mount } from '@vue/test-utils'
 
 const propsData = {
@@ -18,8 +17,8 @@ describe('DateRangePicker.vue', () => {
   let dt_start = new Date(propsData.dateRange.startDate)
   let dt_end = new Date(propsData.dateRange.endDate)
 
-  let dt_start_text = getDateUtil(vm.dateUtil).format(dt_start, vm.locale.format)
-  let dt_end_text = getDateUtil(vm.dateUtil).format(dt_end, vm.locale.format)
+  let dt_start_text = dateUtil.format(dt_start, vm.locale.format)
+  let dt_end_text = dateUtil.format(dt_end, vm.locale.format)
 
   it('should render correct contents', () => {
     expect(vm.$el.querySelector('.reportrange-text span').textContent)
@@ -51,8 +50,8 @@ describe('DateRangePicker.vue', () => {
 
     vm.$nextTick(() => {
       // console.error(vm.start, vm.dateRange)
-      expect(moment(vm.start).isSame('1981-11-24', 'date')).to.equal(true)
-      expect(moment(vm.end).isSame('2018-10-09', 'date')).to.equal(true)
+      expect(dateUtil.isSame(vm.start, '1981-11-24', 'date')).to.equal(true)
+      expect(dateUtil.isSame(vm.end, '2018-10-09', 'date')).to.equal(true)
 
       done()
     })
@@ -259,9 +258,9 @@ describe('DateRangePicker Calendar months positioning', () => {
     range.trigger('click')
 
     vm.$nextTick(() => {
-      expect(vm.monthDate.getDate()).to.equal(1)
-      expect(vm.monthDate.getMonth()).to.equal(4)
-      expect(vm.monthDate.getFullYear()).to.equal(2020)
+      // expect(vm.monthDate.getDate()).to.equal(dateRange.startDate.getDate())
+      expect(vm.monthDate.getMonth(), 'Same month').to.equal(vm.ranges.Today[0].getMonth())
+      expect(vm.monthDate.getFullYear(), 'Same year').to.equal(vm.ranges.Today[0].getFullYear())
 
       done()
     })

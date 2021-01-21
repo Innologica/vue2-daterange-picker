@@ -735,6 +735,9 @@
         } else {
           this.start = new Date(this.dateRange.startDate)
           this.end = new Date(this.dateRange.endDate)
+          //set new monthDate after change of start Date
+          // console.log('new monthdate', this.start)
+          // this.monthDate = this.start
         }
       },
       'dateRange.endDate' (value) {
