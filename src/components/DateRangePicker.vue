@@ -315,16 +315,20 @@
           let today = new Date()
           today.setHours(0, 0, 0, 0)
 
-          let yesterday = new Date()
-          yesterday.setDate(today.getDate() - 1)
-          yesterday.setHours(0, 0, 0, 0);
+          let yesterdayStart = new Date()
+          yesterdayStart.setDate(today.getDate() - 1)
+          yesterdayStart.setHours(0, 0, 0, 0);
+
+          let yesterdayEnd = new Date()
+          yesterdayEnd.setDate(today.getDate() - 1)
+          yesterdayEnd.setHours(11, 59, 59, 999);
 
           let thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
           let thisMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
           return {
             'Today': [today, today],
-            'Yesterday': [yesterday, yesterday],
+            'Yesterday': [yesterdayStart, yesterdayEnd],
             'This month': [thisMonthStart, thisMonthEnd],
             'This year': [new Date(today.getFullYear(), 0, 1), new Date(today.getFullYear(), 11, 31)],
             'Last month': [new Date(today.getFullYear(), today.getMonth() - 1, 1), new Date(today.getFullYear(), today.getMonth(), 0)],
