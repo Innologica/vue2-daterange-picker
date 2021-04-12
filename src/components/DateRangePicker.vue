@@ -606,6 +606,7 @@
           this.start = startDate ? new Date(startDate) : null
           this.end = endDate ? new Date(endDate) : null
           // this.open = false
+          this.in_selection = false;
           this.togglePicker(false, true)
         }
       },
