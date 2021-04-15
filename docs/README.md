@@ -29,7 +29,7 @@ import DateRangePicker from 'vue2-daterange-picker'
 Register the component
 ```JS
 import DateRangePicker from 'vue2-daterange-picker'
-//you need to import the CSS manually (in case you want to override it)
+//you need to import the CSS manually
 import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 
 export default {

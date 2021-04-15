@@ -91,7 +91,9 @@
 
                           @dateClick="dateClick" @hoverDate="hoverDate"
                           :showWeekNumbers="showWeekNumbers"
-                ></calendar>
+                >
+                  <slot name="date" slot="date-slot" slot-scope="data" v-bind="data"></slot>
+                </calendar>
               </div>
               <calendar-time v-if="timePicker && start"
                              @update="onUpdateStartTime"
@@ -121,7 +123,14 @@
 
                           @dateClick="dateClick" @hoverDate="hoverDate"
                           :showWeekNumbers="showWeekNumbers"
-                ></calendar>
+                >
+                  <!--
+                    Allows you to change date cell slot. By default it renders the day number
+
+                    @param {Date} date - the date being rendered into the table cell
+                  -->
+                  <slot name="date" slot="date-slot" slot-scope="data" v-bind="data"></slot>
+                </calendar>
               </div>
               <calendar-time v-if="timePicker && end"
                              @update="onUpdateEndTime"
