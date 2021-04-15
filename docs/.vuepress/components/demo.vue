@@ -34,6 +34,7 @@
         <button class="btn btn-info" @click="dateRange.startDate = null, dateRange.endDate = null">
           Clear
         </button>
+        <button @click.stop="$refs.picker.togglePicker()" class="btn btn-secondary">Toggle</button>
       </div>
     </div>
 
