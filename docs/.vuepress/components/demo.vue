@@ -29,9 +29,6 @@
           <template #input="picker" style="min-width: 350px;">
             {{ picker.startDate | date }} - {{ picker.endDate | date }}
           </template>
-          <template #date="data">
-            {{data}}
-          </template>
         </date-range-picker>
 
         <button class="btn btn-info" @click="dateRange.startDate = null, dateRange.endDate = null">

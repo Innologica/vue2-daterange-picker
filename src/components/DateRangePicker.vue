@@ -11,12 +11,14 @@
         @param {Date} startDate - current startDate
         @param {Date} endDate - current endDate
         @param {object} ranges - object with ranges
+        @param {string} rangeText - the calculated rangeText string
       -->
       <slot
         name="input"
         :startDate="start"
         :endDate="end"
         :ranges="ranges"
+        :rangeText="rangeText"
       >
         <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
         <span>{{rangeText}}</span>
