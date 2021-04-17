@@ -829,6 +829,7 @@
     padding: 5px 10px;
     border: 1px solid #ccc;
     width: 100%;
+    overflow: hidden;
   }
 
   .daterangepicker {
