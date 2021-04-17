@@ -1,10 +1,10 @@
 <template>
   <div class="demo">
-
     <div class="py-5">
-      <div class="form-group">
+      <div class="form-group flex">
         <label>Select range: </label>
         <date-range-picker
+          class="ml-1"
           ref="picker"
           :opens="opens"
           :locale-data="{ firstDay: 1, format: 'yyyy-mm-dd HH:MM:ss' }"
@@ -31,36 +31,40 @@
           </template>
         </date-range-picker>
 
-        <button class="btn btn-info" @click="dateRange.startDate = null, dateRange.endDate = null">
+        <button class="btn btn-info ml-1" @click="dateRange.startDate = null, dateRange.endDate = null">
           Clear
         </button>
-        <button @click.stop="$refs.picker.togglePicker()" class="btn btn-secondary">Toggle</button>
+        <button @click.stop="$refs.picker.togglePicker()" class="btn btn-secondary ml-1">Toggle</button>
       </div>
     </div>
 
-    <div class="form-row pt-3 bg-light">
-      <div class="col-md-6">
+    <div class="form-row pt-3 bg-light tip custom-block">
+      <p class="custom-block-title">dateRange: { startDate, endDate }</p>
+      <p></p>
+
+      <div class="flex">
         <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="startDate">StartDate</label>
+          <label class="col-sm-4 col-form-label" for="startDate">startDate</label>
           <div class="col-sm-8">
             <input type="text" class="form-control" id="startDate" v-model="dateRange.startDate">
           </div>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="endDate">EndDate</label>
+        <div class="ml-1 form-group row">
+          <label class="col-sm-4 col-form-label" for="endDate">endDate</label>
           <div class="col-sm-8">
             <input type="text" class="form-control" id="endDate" v-model="dateRange.endDate">
           </div>
         </div>
       </div>
-      <div class="col-md-6">
+
+      <div class="flex">
         <div class="form-group row">
           <label class="col-sm-4 col-form-label" for="minDate">minDate</label>
           <div class="col-sm-8">
             <input type="text" class="form-control" id="minDate" v-model="minDate">
           </div>
         </div>
-        <div class="form-group row">
+        <div class="ml-1 form-group row">
           <label class="col-sm-4 col-form-label" for="maxDate">maxDate</label>
           <div class="col-sm-8">
             <input type="text" class="form-control" id="maxDate" v-model="maxDate">
@@ -69,8 +73,11 @@
       </div>
     </div>
 
-    <div>
-      <div class="form-check form-check-inline">
+    <h3>Other props: </h3>
+    <p>
+    <div class="flex">
+      <label>opens: </label>
+      <div class="form-check form-check-inline ml-1">
         <input class="form-check-input" type="radio" name="options" id="option1" value="left"
                v-model="opens">
         <label class="form-check-label">left</label>
@@ -90,23 +97,27 @@
                v-model="opens">
         <label class="form-check-label">inline</label>
       </div>
-      <small class="form-text text-muted">Whether the picker appears aligned to the left, to the right, or
-        centered relative to the HTML element it's attached to. Or inline to display it inline.
-      </small>
     </div>
+    <small class="form-text text-muted">Whether the picker appears aligned to the left, to the right, or
+      centered relative to the HTML element it's attached to. Or inline to display it inline.
+    </small>
+    </p>
 
     <div>
-      <div class="form-check form-inline py-3">
-        <label class="form-check-label" for="singleDatePicker">
-          singleDatePicker
-        </label>
-        <select v-model="singleDatePicker" id="singleDatePicker" class="form-control ml-3">
-          <option>single</option>
-          <option>range</option>
-          <option :value="false">default</option>
-        </select>
-        <small class="form-text text-muted">Select the calendar mode single selects only single date with 1 calendar. Range is single calendar with ranges. default are 2 calendars with range selection.</small>
-      </div>
+      <p class="form-check form-inline">
+        <div class=" flex">
+          <label class="form-check-label" for="singleDatePicker">
+            singleDatePicker:
+          </label>
+          <select v-model="singleDatePicker" id="singleDatePicker" class="form-control ml-1">
+            <option>single</option>
+            <option>range</option>
+            <option :value="false">default</option>
+          </select>
+        </div>
+        <small class="form-text text-muted">Select the calendar mode single selects only single date with 1 calendar.
+          Range is single calendar with ranges. default are 2 calendars with range selection.</small>
+      </p>
 
       <div class="form-check">
         <input class="form-check-input" type="checkbox" id="showWeekNumbers" v-model="showWeekNumbers">
@@ -223,91 +234,135 @@
 </template>
 
 <script>
-  import DateRangePicker from '../../../src/components/DateRangePicker'
-  import dateUtil from '../../../src/components/date_util/native'
+import DateRangePicker from '../../../src/components/DateRangePicker'
+import dateUtil from '../../../src/components/date_util/native'
 
-  export default {
-    components: {DateRangePicker},
-    name: 'DateRangePickerDemo',
-    filters: {
-      date (value) {
-        if (!value)
-          return ''
+export default {
+  components: {DateRangePicker},
+  name: 'DateRangePickerDemo',
+  filters: {
+    date (value) {
+      if (!value)
+        return ''
 
-        let options = {year: 'numeric', month: 'long', day: 'numeric'};
-        return Intl.DateTimeFormat('en-US', options).format(value)
-      }
-    },
-    data () {
-      //                    :locale-data="{ daysOfWeek: [ 'Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб' ] }"
-      return {
-        opens: 'center',
-        minDate: '2019-05-02 04:00:00',
-        maxDate: '2020-12-26 14:00:00',
-        // minDate: '',
-        // maxDate: '',
-        dateRange: {
-          startDate: '2019-12-10',
-          endDate: '2019-12-20',
-        },
-        single_range_picker: false,
-        show_ranges: true,
-        singleDatePicker: false,
-        timePicker: true,
-        timePicker24Hour: true,
-        showDropdowns: true,
-        autoApply: false,
-        showWeekNumbers: true,
-        linkedCalendars: true,
-        alwaysShowCalendars: true,
-        appendToBody: false,
-        closeOnEsc: true,
-      }
-    },
-    mounted () {
-      // this.$refs.picker.open = true
-    },
-    methods: {
-      updateValues (values) {
-        console.log('event: update', {...values})
-        this.dateRange.startDate = dateUtil.format(values.startDate, 'yyyy-mm-dd HH:MM:ss');
-        this.dateRange.endDate = dateUtil.format(values.endDate, 'yyyy-mm-dd HH:MM:ss');
+      let options = {year: 'numeric', month: 'long', day: 'numeric'};
+      return Intl.DateTimeFormat('en-US', options).format(value)
+    }
+  },
+  data () {
+    //                    :locale-data="{ daysOfWeek: [ 'Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб' ] }"
+    return {
+      opens: 'center',
+      minDate: '2019-05-02 04:00:00',
+      maxDate: '2020-12-26 14:00:00',
+      // minDate: '',
+      // maxDate: '',
+      dateRange: {
+        startDate: '2019-12-10',
+        endDate: '2019-12-20',
       },
-      checkOpen (open) {
-        console.log('event: open', open)
-      },
-      dateFormat (classes, date) {
-        let yesterday = new Date();
-        let d1 = dateUtil.format(date, 'isoDate')
-        let d2 = dateUtil.format(yesterday.setDate(yesterday.getDate() - 1), 'isoDate')
-        if (!classes.disabled) {
-          classes.disabled = d1 === d2
-        }
-        return classes
+      single_range_picker: false,
+      show_ranges: true,
+      singleDatePicker: false,
+      timePicker: true,
+      timePicker24Hour: true,
+      showDropdowns: true,
+      autoApply: false,
+      showWeekNumbers: true,
+      linkedCalendars: true,
+      alwaysShowCalendars: true,
+      appendToBody: false,
+      closeOnEsc: true,
+    }
+  },
+  mounted () {
+    // this.$refs.picker.open = true
+  },
+  methods: {
+    updateValues (values) {
+      console.log('event: update', {...values})
+      this.dateRange.startDate = dateUtil.format(values.startDate, 'yyyy-mm-dd HH:MM:ss');
+      this.dateRange.endDate = dateUtil.format(values.endDate, 'yyyy-mm-dd HH:MM:ss');
+    },
+    checkOpen (open) {
+      console.log('event: open', open)
+    },
+    dateFormat (classes, date) {
+      let yesterday = new Date();
+      let d1 = dateUtil.format(date, 'isoDate')
+      let d2 = dateUtil.format(yesterday.setDate(yesterday.getDate() - 1), 'isoDate')
+      if (!classes.disabled) {
+        classes.disabled = d1 === d2
       }
+      return classes
     }
   }
+}
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
-  h1, h2 {
-    font-weight: normal;
-  }
+<style scoped>
+.py-5 {
+  padding: 3rem 0;
+}
 
-  a {
-    color: #42b983;
-  }
+.form-group {
+  margin-bottom: 1rem;
+}
 
-  small.form-text {
-    display: initial;
+label {
+  display: inline-block;
+}
 
-    &::before {
-      content: ' - ';
-    }
-  }
-</style>
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  color: #212529;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+}
 
-<style>
-  @import "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css";
+.btn-info {
+  color: #fff;
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+}
+
+.btn-secondary {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.form-control {
+  display: block;
+  max-width: 100%;
+  padding: .3rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.ml-1 {
+  margin-left: 0.25rem;
+}
+.text-muted {
+  color: #6c757d!important;
+}
 </style>

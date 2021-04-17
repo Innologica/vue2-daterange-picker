@@ -1,0 +1,12 @@
+.monthselect, .yearselect {
+  font-size: 12px;
+  padding: 1px;
+  height: auto;
+  margin: 0;
+  cursor: default;
+  width: calc(50% - 1rem);
+}
+
+.monthselect {
+  margin-right: 1rem;
+}

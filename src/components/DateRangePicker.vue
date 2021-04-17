@@ -47,7 +47,7 @@
         >
         </slot>
 
-        <div class="calendars row no-gutters">
+        <div class="calendars">
           <!--
             Allows you to change the range
 
@@ -816,6 +816,11 @@
 </style>
 
 <style lang="scss" scoped>
+  .calendars {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
   $week-width: 0px;
 
   .reportrange-text {
@@ -840,6 +845,7 @@
 
         .ranges {
           border-bottom: 1px solid #ddd;
+          width: 100%;
 
           ::v-deep ul {
             display: flex;
@@ -898,7 +904,7 @@
           }
 
           .ranges {
-            width: auto;
+            //width: auto;
             max-width: none;
             flex-basis: auto;
             border-bottom: 0;

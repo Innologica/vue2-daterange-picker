@@ -1,0 +1,24 @@
+.calendar-time {
+  text-align: center;
+  margin: 4px auto 0 auto;
+  line-height: 30px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.calendar-time select.disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+select.hourselect, select.minuteselect, select.secondselect, select.ampmselect {
+  width: 50px;
+  margin: 2px;
+  background: #eee;
+  border: 1px solid #eee;
+  padding: 2px;
+  outline: 0;
+  font-size: 12px;
+}
+

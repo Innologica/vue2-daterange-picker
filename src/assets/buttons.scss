@@ -1,0 +1,30 @@
+@import "variables";
+
+.drp-buttons .btn {
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 8px;
+}
+
+.btn {
+  display: inline-block;
+  //font-family: $btn-font-family;
+  //font-weight: $btn-font-weight;
+  //color: $body-color;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  background-color: transparent;
+  border: $btn-border-width solid transparent;
+}
+
+.btn-success, .btn-primary {
+  background-color: $primary-button-bg;
+  color: $primary-button-color;
+}
+
+.btn-secondary {
+  background-color: $secondary-button-bg;
+  color: $secondary-button-color;
+}

@@ -1,5 +1,18 @@
 @import "variables";
 
+.daterangepicker {
+  @import "ranges";
+  @import "calendar";
+  @import "calendar-time";
+  @import "buttons";
+}
+
+.vue-daterange-picker {
+  *, ::after, ::before {
+    box-sizing: border-box;
+  }
+}
+
 .drp-calendar .col .left {
   flex: 0 0 auto;
 }
@@ -247,44 +260,8 @@
   text-decoration: line-through;
 }
 
-.daterangepicker select.monthselect, .daterangepicker select.yearselect {
-  font-size: 12px;
-  padding: 1px;
-  height: auto;
-  margin: 0;
-  cursor: default;
-}
-
-.daterangepicker select.monthselect {
-  margin-right: 2%;
-  width: 56%;
-}
-
 .daterangepicker select.yearselect {
   width: 40%;
-}
-
-.daterangepicker select.hourselect, .daterangepicker select.minuteselect, .daterangepicker select.secondselect, .daterangepicker select.ampmselect {
-  width: 50px;
-  margin: 0 auto;
-  background: #eee;
-  border: 1px solid #eee;
-  padding: 2px;
-  outline: 0;
-  font-size: 12px;
-}
-
-.daterangepicker .calendar-time {
-  text-align: center;
-  margin: 4px auto 0 auto;
-  line-height: 30px;
-  position: relative;
-  display: flex;
-}
-
-.daterangepicker .calendar-time select.disabled {
-  color: #ccc;
-  cursor: not-allowed;
 }
 
 .daterangepicker .drp-buttons {
@@ -303,47 +280,14 @@
   padding-right: 8px;
 }
 
-.daterangepicker .drp-buttons .btn {
-  margin-left: 8px;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 4px 8px;
-}
-
 .daterangepicker.show-ranges .drp-calendar.left {
   border-left: 1px solid #ddd;
 }
 
-.daterangepicker .ranges {
-  text-align: left;
-  margin: 0;
-}
 
 .daterangepicker.show-calendar .ranges {
   margin-top: 8px;
-}
-
-.daterangepicker .ranges ul {
-  list-style: none;
-  margin: 0 auto;
-  padding: 0;
-  width: 100%;
-}
-
-.daterangepicker .ranges li {
-  font-size: 12px;
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
-.daterangepicker .ranges li:hover {
-  background-color: $ranges-hover-bg-color;
-  color: $ranges-hover-text-color;
-}
-
-.daterangepicker .ranges li.active {
-  background-color: $ranges-active-bg-color;
-  color: $ranges-active-text-color;
+  width: auto;
 }
 
 /*  Larger Screen Styling */
@@ -414,9 +358,6 @@
 }
 
 @media (min-width: 730px) {
-  .daterangepicker .ranges {
-    width: auto;
-  }
   .daterangepicker .drp-calendar.left {
     clear: none !important;
   }

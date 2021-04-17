@@ -84,6 +84,9 @@ export default {
     firstDay: 0
 }
 ```
+
+See this link for details on date format - [https://blog.stevenlevithan.com/archives/date-time-format](https://blog.stevenlevithan.com/archives/date-time-format)
+
 * default ranges object (set to false to hide ranges)
 
 To specify ranges you need to pass and array where each element is an array with exactly two Date objects (from, to) or their timestamp equivalent.
