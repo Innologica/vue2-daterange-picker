@@ -27,7 +27,7 @@
     </div>
     <transition name="slide-fade" mode="out-in">
       <div
-        class="daterangepicker dropdown-menu ltr"
+        class="daterangepicker ltr"
         :class="pickerStyles"
         v-if="open || opens === 'inline'"
         v-append-to-body
@@ -966,10 +966,6 @@
     position: relative;
     display: inline-block;
     min-width: 60px;
-
-    .dropdown-menu {
-      padding: 0;
-    }
 
     .show-ranges.hide-calendars {
       width: 150px;
