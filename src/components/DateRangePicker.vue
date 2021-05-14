@@ -326,7 +326,7 @@
           let today = new Date()
           today.setHours(0, 0, 0, 0)
           let todayEnd = new Date()
-          todayEnd.setHours(11, 59, 59, 999);
+          todayEnd.setHours(23, 59, 59, 999);
 
           let yesterdayStart = new Date()
           yesterdayStart.setDate(today.getDate() - 1)
@@ -334,10 +334,10 @@
 
           let yesterdayEnd = new Date()
           yesterdayEnd.setDate(today.getDate() - 1)
-          yesterdayEnd.setHours(11, 59, 59, 999);
+          yesterdayEnd.setHours(23, 59, 59, 999);
 
           let thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-          let thisMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0, 11, 59, 59, 999);
+          let thisMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
 
           return {
             'Today': [today, todayEnd],
@@ -345,11 +345,11 @@
             'This month': [thisMonthStart, thisMonthEnd],
             'This year': [
               new Date(today.getFullYear(), 0, 1),
-              new Date(today.getFullYear(), 11, 31, 11, 59, 59, 999)
+              new Date(today.getFullYear(), 11, 31, 23, 59, 59, 999)
             ],
             'Last month': [
               new Date(today.getFullYear(), today.getMonth() - 1, 1),
-              new Date(today.getFullYear(), today.getMonth(), 0, 11, 59, 59, 999)
+              new Date(today.getFullYear(), today.getMonth(), 0, 23, 59, 59, 999)
             ],
           }
         }
