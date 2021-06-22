@@ -268,3 +268,33 @@ describe('DateRangePicker Calendar months positioning', () => {
   })
 
 })
+
+
+describe('DateRangePicker Calendar months positioning with linkedCalendars false', () => {
+  let dateRange = {startDate: new Date(2020,4, 18), endDate: new Date(2020,4,24)}
+  const wrapper = mount(DateRangePicker, { propsData: { dateRange, linkedCalendars: false } })
+  const vm = wrapper.vm
+
+  it('should locate correct month and next month of the selected range', (done) => {
+    vm.togglePicker(true)
+
+    vm.$nextTick(() => {
+
+      const range = wrapper.find('[data-range-key="This year"]')
+      range.trigger('click')
+
+      vm.$nextTick(() => {
+        expect(vm.monthDate.getMonth(), 'Same month').to.equal(vm.ranges["This year"][0].getMonth())
+        expect(vm.monthDate.getFullYear(), 'Same year').to.equal(vm.ranges["This year"][0].getFullYear())
+
+        expect(vm.nextMonthDate.getMonth(), 'Same month').to.equal(vm.ranges["This year"][1].getMonth())
+        expect(vm.nextMonthDate.getFullYear(), 'Same year').to.equal(vm.ranges["This year"][1].getFullYear())
+
+        done()
+      })
+
+    })
+
+  })
+
+})
