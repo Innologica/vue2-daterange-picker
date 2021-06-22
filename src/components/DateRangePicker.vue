@@ -659,6 +659,13 @@
             month: this.start.getMonth() + 1,
             year: this.start.getFullYear()
           })
+
+          if (this.linkedCalendars === false) {
+            this.changeRightMonth({
+              month: this.end.getMonth() + 1,
+              year: this.end.getFullYear()
+            })
+          }
         } else {
           this.start = null
           this.end = null
