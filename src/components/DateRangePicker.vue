@@ -642,8 +642,8 @@
         this.$emit('select', {startDate: this.start, endDate: this.end})
       },
       clickAway ($event) {
-        if ($event && $event.target &&
-          !this.$el.contains($event.target) &&
+        if ($event && $event.composedPath &&
+          !this.$el.contains($event.composedPath()[0]) &&
           this.$refs.dropdown &&
           !this.$refs.dropdown.contains($event.target)) {
           this.clickCancel()
