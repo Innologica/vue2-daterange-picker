@@ -564,6 +564,12 @@
              */
             this.$emit('finishSelection', this.end)
             this.onSelect();
+            /**
+            * Emits event when the select the range from the calendar
+            * @param {Array date}
+            */
+            this.$emit('selectRange', [this.start, this.end]);
+            
             if (this.autoApply)
               this.clickedApply();
           }
