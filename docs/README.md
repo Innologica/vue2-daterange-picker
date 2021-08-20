@@ -41,7 +41,7 @@ export default {
     <date-range-picker
             ref="picker"
             :opens="opens"
-            :locale-data="{ firstDay: 1, format: 'dd-mm-yyyy HH:mm:ss' }"
+            :locale-data="{ firstDay: 1, format: 'dd-mm-yyyy HH:MM:ss' }"
             :minDate="minDate" :maxDate="maxDate"
             :singleDatePicker="singleDatePicker"
             :timePicker="timePicker"
