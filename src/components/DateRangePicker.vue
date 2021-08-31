@@ -64,7 +64,7 @@
             :clickRange="clickRange"
             v-if="showRanges"
           >
-            <calendar-ranges class="col-12 col-md-auto"
+            <calendar-ranges
                              @clickRange="clickRange"
                              @showCustomRange="showCustomRangeCalendars=true"
                              :always-show-calendars="alwaysShowCalendars"
