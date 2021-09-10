@@ -769,7 +769,10 @@ export default {
     },
     maxDate () {
       let dt = this.$dateUtil.validateDateRange(this.nextMonthDate, this.minDate, this.maxDate || new Date())
-      this.changeRightMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
+      if(this.singleDatePicker !== false)
+        this.changeLeftMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
+      else
+        this.changeRightMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
     },
     'dateRange.startDate' (value) {
       if (!this.$dateUtil.isValidDate(new Date(value)))
