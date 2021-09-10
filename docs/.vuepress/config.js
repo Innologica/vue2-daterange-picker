@@ -1,6 +1,8 @@
+const { version } = require('../../package.json')
+
 module.exports = {
   base: '/vue2-daterange-picker/',
-  title: 'Vue2 date range picker',
+  title: 'Vue2 date range picker - v' + version,
   description: 'Vue2 date range picker by Innologica',
   themeConfig: {
     nav: [
