@@ -526,7 +526,7 @@ export default {
           this.nextMonthDate = this.$dateUtil.validateDateRange(this.$dateUtil.nextMonth(this.nextMonthDate), this.minDate, this.maxDate)
         }
       }
-      this.$emit('change-month', this.monthDate, 1)
+      this.$emit('change-month', this.nextMonthDate, 1)
     },
     normalizeDatetime (value, oldValue) {
       let newDate = new Date(value);
