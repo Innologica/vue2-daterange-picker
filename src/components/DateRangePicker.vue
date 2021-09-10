@@ -544,34 +544,26 @@ export default {
         return false
       if (this.in_selection) {
         this.in_selection = false
-        this.end = this.normalizeDatetime(value, this.end);
-
-        if (this.end < this.start) {
-          this.in_selection = this.end
-          this.start = this.normalizeDatetime(value, this.start);
-          /**
-           * Emits event when the user clicks the first date and starts selection
-           *
-           * @param {Date} date the date clicked
-           */
-          this.$emit('startSelection', this.start)
-        }
-        if (!this.in_selection) {
-          /**
-           * Emits event when the user clicks the second date and finishes selection
-           *
-           * @param {Date} date the date clicked
-           */
-          this.$emit('finishSelection', this.end)
-          this.onSelect();
-          if (this.autoApply)
-            this.clickedApply();
-        }
+        // this.end = this.normalizeDatetime(value, this.end);
+        /**
+         * Emits event when the user clicks the second date and finishes selection
+         *
+         * @param {Date} date the date clicked
+         */
+        this.$emit('finishSelection', value)
+        this.onSelect();
+        if (this.autoApply)
+          this.clickedApply();
       } else {
         this.start = this.normalizeDatetime(value, this.start);
         this.end = this.normalizeDatetime(value, this.end);
         if (!this.singleDatePicker || this.singleDatePicker === 'range') {
           this.in_selection = this.end
+          /**
+           * Emits event when the user clicks the first date and starts selection
+           *
+           * @param {Date} date the date clicked
+           */
           this.$emit('startSelection', this.start)
         } else {
           this.onSelect();
