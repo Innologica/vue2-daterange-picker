@@ -10,7 +10,7 @@
       >
         <div class="row mx-1">
           <select v-model="month" class="monthselect col">
-            <option v-for="(m) in months" :key="m.value" :value="m.value + 1">{{ m.label }}</option>
+            <option v-for="(m, idx) in months" :key="idx" :value="m.value + 1" :disabled="!m.enabled">{{ m.label }}</option>
           </select>
           <input ref="yearSelect" type="number" v-model="year" @blur="checkYear" class="yearselect col"/>
         </div>
@@ -22,7 +22,7 @@
     <tbody>
     <tr>
       <th v-if="showWeekNumbers" class="week">{{ locale.weekLabel }}</th>
-      <th v-for="weekDay in locale.daysOfWeek" :key="weekDay">{{ weekDay }}</th>
+      <th v-for="(weekDay, idx) in locale.daysOfWeek" :key="idx">{{ weekDay }}</th>
     </tr>
     <tr
       v-for="(dateRow, index) in calendar"
@@ -197,34 +197,13 @@ export default {
       return calendar
     },
     months () {
-      let monthsData = this.locale.monthNames.map((m, idx) => ({label: m, value: idx}))
-
-      if (this.maxDate && this.minDate) {
-        let y = this.maxDate.getFullYear() - this.minDate.getFullYear();
-        if (y < 2) {
-          // get months
-          let months = [];
-          if (y < 1) {
-            for (let i = this.minDate.getMonth(); i <= this.maxDate.getMonth(); i++) {
-              months.push(i);
-            }
-          } else {
-            for (let i = 0; i <= this.maxDate.getMonth(); i++) {
-              months.push(i);
-            }
-            for (let i = this.minDate.getMonth(); i < 12; i++) {
-              months.push(i);
-            }
-          }
-          // do filter
-          if (months.length > 0) {
-            return monthsData.filter((m) => {
-              return months.find(i => m.value === i) > -1;
-            });
-          }
-        }
-      }
-      return monthsData;
+      return this.locale.monthNames.map((m, idx) => ({
+        label: m,
+        value: idx,
+        enabled:
+          (!this.maxDate || (this.maxDate >= new Date(this.year, idx, 1))) &&
+          (!this.minDate || (this.minDate <= new Date(this.year, idx + 1, 0)))
+      }));
     },
     locale () {
       return this.$dateUtil.localeData(this.localeData)
