@@ -1,7 +1,7 @@
-import { expect } from 'chai'
+import {expect} from 'chai'
 import DateRangePicker from '@/components/DateRangePicker'
 import dateUtil from '../../src/components/date_util/native'
-import { mount } from '@vue/test-utils'
+import {mount} from '@vue/test-utils'
 
 const propsData = {
   dateRange: {
@@ -12,7 +12,7 @@ const propsData = {
 }
 
 describe('DateRangePicker.vue', () => {
-  let wrapper = mount(DateRangePicker, { propsData })
+  let wrapper = mount(DateRangePicker, {propsData})
   const vm = wrapper.vm
   let dt_start = new Date(propsData.dateRange.startDate)
   let dt_end = new Date(propsData.dateRange.endDate)
@@ -68,7 +68,7 @@ describe('DateRangePicker.vue', () => {
   })
 
   it('Cleared state / null value? #41 - should be able to set null value', (done) => {
-    wrapper.setProps({ dateRange: { startDate: null, endDate: null } })
+    wrapper.setProps({dateRange: {startDate: null, endDate: null}})
     vm.$nextTick(() => {
       expect(vm.start).to.equal(null)
       expect(vm.end).to.equal(null)
@@ -81,7 +81,7 @@ describe('DateRangePicker.vue', () => {
   })
 
   it('should not fill time when no date is selected #153', (done) => {
-    wrapper.setProps({ dateRange: { startDate: null, endDate: null }, timePicker: true })
+    wrapper.setProps({dateRange: {startDate: null, endDate: null}, timePicker: true})
     vm.open = true
     vm.$nextTick(() => {
       expect(vm.$el.querySelector('.daterangepicker'))
@@ -97,7 +97,8 @@ describe('DateRangePicker.vue', () => {
 })
 
 describe('DateRangePicker.vue MIN/MAX', () => {
-  const wrapper = mount(DateRangePicker, { propsData: {
+  const wrapper = mount(DateRangePicker, {
+    propsData: {
       dateRange: {
         startDate: '2017-09-19',
         endDate: '2017-10-09'
@@ -235,8 +236,8 @@ describe('DateRangePicker.vue DEMO', () => {
 })
 
 describe('DateRangePicker Calendar months positioning', () => {
-  let dateRange = {startDate: new Date(2020,4, 18), endDate: new Date(2020,4,24)}
-  const wrapper = mount(DateRangePicker, { propsData: { dateRange } })
+  let dateRange = {startDate: new Date(2020, 4, 18), endDate: new Date(2020, 4, 24)}
+  const wrapper = mount(DateRangePicker, {propsData: {dateRange}})
   const vm = wrapper.vm
 
   it('should be able to change to next month', (done) => {
@@ -271,8 +272,8 @@ describe('DateRangePicker Calendar months positioning', () => {
 
 
 describe('DateRangePicker Calendar months positioning with linkedCalendars false', () => {
-  let dateRange = {startDate: new Date(2020,4, 18), endDate: new Date(2020,4,24)}
-  const wrapper = mount(DateRangePicker, { propsData: { dateRange, linkedCalendars: false } })
+  let dateRange = {startDate: new Date(2020, 4, 18), endDate: new Date(2020, 4, 24)}
+  const wrapper = mount(DateRangePicker, {propsData: {dateRange, linkedCalendars: false}})
   const vm = wrapper.vm
 
   it('should locate correct month and next month of the selected range', (done) => {
@@ -297,4 +298,60 @@ describe('DateRangePicker Calendar months positioning with linkedCalendars false
 
   })
 
+})
+
+describe('Picker should be able to display the month of the maxDate in single range mode', () => {
+  let propsData = {
+    dateRange: {
+      startDate: new Date(2021, 3, 1),
+      endDate: new Date(2021, 4, 3),
+    },
+    linkedCalendars: false,
+    minDate: '2019-05-02 04:00:00',
+    maxDate: '2021-05-04 14:00:00',
+    singleDatePicker: 'range'
+  }
+  const wrapper = mount(DateRangePicker, {propsData})
+  const vm = wrapper.vm
+
+  it('should show may as the initial month', (done) => {
+    vm.togglePicker(true)
+    vm.$nextTick(() => {
+      const input = wrapper.find('.drp-calendar.left .next')
+      expect(input.is('th')).to.equal(true)
+
+      input.trigger('click')
+      vm.$nextTick(() => {
+        expect(vm.monthDate.getMonth()).to.equal(4)
+
+        input.trigger('click')
+        vm.$nextTick(() => {
+          expect(vm.monthDate.getMonth()).to.equal(4)
+          done()
+        })
+      })
+    })
+  })
+})
+
+describe('Picker should be abe to select the minDate in the calendar', () => {
+  let propsData = {
+    dateRange: {
+      startDate: new Date(2019, 4, 3),
+      endDate: new Date(2019, 4, 10),
+    },
+    minDate: '2019-05-02 04:00:00',
+    maxDate: '2021-05-04 14:00:00',
+  }
+  const wrapper = mount(DateRangePicker, {propsData})
+  const vm = wrapper.vm
+  vm.open = true
+  it('should allow select of minDate', (done) => {
+    vm.$nextTick(() => {
+      const date_el = vm.$el.querySelector('.calendar-table td[data-date="2019-05-02"]')
+      expect(date_el).to.not.equal(null)
+      expect(date_el.classList.contains('disabled')).to.equal(false)
+      done()
+    })
+  })
 })

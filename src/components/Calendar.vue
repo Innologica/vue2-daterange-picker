@@ -37,6 +37,7 @@
         @click="$emit('dateClick', date)"
         @mouseover="$emit('hoverDate', date)"
         :key="idx"
+        :data-date="date.toISOString().substring(0, 10)"
       >
         <slot name="date-slot" :date="date">
           {{ date.getDate() }}

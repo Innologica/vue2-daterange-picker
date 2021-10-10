@@ -505,7 +505,8 @@ export default {
       this.monthDate = newDate
       if (this.linkedCalendars || (this.$dateUtil.yearMonth(this.monthDate) >= this.$dateUtil.yearMonth(this.nextMonthDate))) {
         this.nextMonthDate = this.$dateUtil.validateDateRange(this.$dateUtil.nextMonth(newDate), this.minDate, this.maxDate);
-        if ((!this.singleDatePicker || this.singleDatePicker === 'range') && this.$dateUtil.yearMonth(this.monthDate) === this.$dateUtil.yearMonth(this.nextMonthDate)) {
+        // || this.singleDatePicker === 'range'
+        if ((!this.singleDatePicker) && this.$dateUtil.yearMonth(this.monthDate) === this.$dateUtil.yearMonth(this.nextMonthDate)) {
           this.monthDate = this.$dateUtil.validateDateRange(this.$dateUtil.prevMonth(this.monthDate), this.minDate, this.maxDate)
         }
       }
@@ -526,6 +527,11 @@ export default {
           this.nextMonthDate = this.$dateUtil.validateDateRange(this.$dateUtil.nextMonth(this.nextMonthDate), this.minDate, this.maxDate)
         }
       }
+      //check for same month fix
+      if(this.$dateUtil.yearMonth(this.monthDate) === this.$dateUtil.yearMonth(this.nextMonthDate)) {
+        this.nextMonthDate = this.$dateUtil.nextMonth(this.nextMonthDate)
+      }
+
       this.$emit('change-month', this.nextMonthDate, 1)
     },
     normalizeDatetime (value, oldValue) {
