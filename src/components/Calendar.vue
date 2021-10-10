@@ -107,6 +107,9 @@ export default {
       let end = new Date(this.end)
       end.setHours(0, 0, 0, 0)
 
+      let dt_min_compare = new Date(dt);
+      dt_min_compare.setHours(23, 59, 59, 999)
+
       let classes = {
         off: date.getMonth() + 1 !== this.month,
         weekend: date.getDay() === 6 || date.getDay() === 0,
@@ -115,7 +118,7 @@ export default {
         'in-range': dt >= start && dt <= end,
         'start-date': dt.getTime() === start.getTime(),
         'end-date': dt.getTime() === end.getTime(),
-        disabled: (this.minDate && dt.getTime() < this.minDate.getTime())
+        disabled: (this.minDate && dt_min_compare.getTime() < this.minDate.getTime())
           || (this.maxDate && dt.getTime() > this.maxDate.getTime()),
       }
       return this.dateFormat ? this.dateFormat(classes, date) : classes
