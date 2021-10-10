@@ -7,7 +7,7 @@ export default {
       default: 'native'
     },
   },
-  created () {
+  beforeCreate () {
     this.$dateUtil = getDateUtil('native')
   }
 }

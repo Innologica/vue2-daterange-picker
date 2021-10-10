@@ -65,12 +65,12 @@
             v-if="showRanges"
           >
             <calendar-ranges
-                             @clickRange="clickRange"
-                             @showCustomRange="showCustomRangeCalendars=true"
-                             :always-show-calendars="alwaysShowCalendars"
-                             :locale-data="locale"
-                             :ranges="ranges"
-                             :selected="{ startDate: start, endDate: end }"
+              @clickRange="clickRange"
+              @showCustomRange="showCustomRangeCalendars=true"
+              :always-show-calendars="alwaysShowCalendars"
+              :locale-data="locale"
+              :ranges="ranges"
+              :selected="{ startDate: start, endDate: end }"
             ></calendar-ranges>
           </slot>
 
@@ -488,6 +488,15 @@ export default {
     return data
   },
   methods: {
+    //calculate initial month selected in picker
+    selectMonthDate () {
+      let dt = this.end || new Date()
+      if (this.singleDatePicker !== false)
+        this.changeLeftMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
+      else
+        this.changeRightMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
+      // console.log('selectMonthDate', this.monthDate)
+    },
     dateFormatFn (classes, date) {
       let dt = new Date(date)
       dt.setHours(0, 0, 0, 0)
@@ -528,7 +537,7 @@ export default {
         }
       }
       //check for same month fix
-      if(this.$dateUtil.yearMonth(this.monthDate) === this.$dateUtil.yearMonth(this.nextMonthDate)) {
+      if (this.$dateUtil.yearMonth(this.monthDate) === this.$dateUtil.yearMonth(this.nextMonthDate)) {
         this.nextMonthDate = this.$dateUtil.nextMonth(this.nextMonthDate)
       }
 
@@ -584,9 +593,9 @@ export default {
       let dt_end = this.normalizeDatetime(value, this.end);
       let dt_start = this.normalizeDatetime(value, this.start);
       if (this.in_selection) {
-        if(this.in_selection <= dt_end)
+        if (this.in_selection <= dt_end)
           this.end = dt_end
-        if(this.in_selection >= dt_start)
+        if (this.in_selection >= dt_start)
           this.start = dt_start
       }
       /**
@@ -770,15 +779,17 @@ export default {
   },
   watch: {
     minDate () {
-      let dt = this.$dateUtil.validateDateRange(this.monthDate, this.minDate || new Date(), this.maxDate)
-      this.changeLeftMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
+      this.selectMonthDate()
+      // let dt = this.$dateUtil.validateDateRange(this.monthDate, this.minDate || new Date(), this.maxDate)
+      // this.changeLeftMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
     },
     maxDate () {
-      let dt = this.$dateUtil.validateDateRange(this.nextMonthDate, this.minDate, this.maxDate || new Date())
-      if(this.singleDatePicker !== false)
-        this.changeLeftMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
-      else
-        this.changeRightMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
+      this.selectMonthDate()
+      // let dt = this.$dateUtil.validateDateRange(this.nextMonthDate, this.minDate, this.maxDate || new Date())
+      // if (this.singleDatePicker !== false)
+      //   this.changeLeftMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
+      // else
+      //   this.changeRightMonth({year: dt.getFullYear(), month: dt.getMonth() + 1})
     },
     'dateRange.startDate' (value) {
       if (!this.$dateUtil.isValidDate(new Date(value)))
@@ -791,9 +802,6 @@ export default {
       } else {
         this.start = new Date(this.dateRange.startDate)
         this.end = new Date(this.dateRange.endDate)
-        //set new monthDate after change of start Date
-        // console.log('new monthdate', this.start)
-        // this.monthDate = this.start
       }
     },
     'dateRange.endDate' (value) {
@@ -812,13 +820,11 @@ export default {
     open: {
       handler (value) {
         if (typeof document === "object") {
+          this.selectMonthDate() //select initial visible months
+
           this.$nextTick(() => {
             value ? document.body.addEventListener('click', this.clickAway) : document.body.removeEventListener('click', this.clickAway)
             value ? document.addEventListener('keydown', this.handleEscape) : document.removeEventListener('keydown', this.handleEscape)
-
-            //recalc current day
-            let dt = this.start || new Date()
-            this.changeLeftMonth({ year: dt.getFullYear(), month: dt.getMonth() + 1 } )
 
             if (!this.alwaysShowCalendars && this.ranges) {
               this.showCustomRangeCalendars = !Object.keys(this.ranges)
