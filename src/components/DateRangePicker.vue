@@ -816,6 +816,10 @@ export default {
             value ? document.body.addEventListener('click', this.clickAway) : document.body.removeEventListener('click', this.clickAway)
             value ? document.addEventListener('keydown', this.handleEscape) : document.removeEventListener('keydown', this.handleEscape)
 
+            //recalc current day
+            let dt = this.start || new Date()
+            this.changeLeftMonth({ year: dt.getFullYear(), month: dt.getMonth() + 1 } )
+
             if (!this.alwaysShowCalendars && this.ranges) {
               this.showCustomRangeCalendars = !Object.keys(this.ranges)
                 .find(key => this.$dateUtil.isSame(this.start, this.ranges[key][0], 'date') && this.$dateUtil.isSame(this.end, this.ranges[key][1], 'date'))
