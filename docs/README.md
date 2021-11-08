@@ -51,7 +51,9 @@ export default {
             :autoApply="autoApply"
             v-model="dateRange"
             @update="updateValues"
-            @toggle="checkOpen"
+            @toggle="logEvent('event: open', $event)"
+            @startSelection="logEvent('event: startSelection', $event)"
+            @finishSelection="logEvent('event: finishSelection', $event)"
             :linkedCalendars="linkedCalendars"
             :dateFormat="dateFormat"
     >

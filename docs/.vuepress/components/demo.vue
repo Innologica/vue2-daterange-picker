@@ -18,7 +18,9 @@
           v-model="dateRange"
           :ranges="show_ranges ? undefined : false"
           @update="updateValues"
-          @toggle="checkOpen"
+          @toggle="logEvent('event: open', $event)"
+          @startSelection="logEvent('event: startSelection', $event)"
+          @finishSelection="logEvent('event: finishSelection', $event)"
           :linkedCalendars="linkedCalendars"
           :dateFormat="dateFormat"
           :always-show-calendars="false"
@@ -279,13 +281,13 @@ export default {
     // this.$refs.picker.open = true
   },
   methods: {
+    logEvent(...args) {
+      console.log(...args)
+    },
     updateValues (values) {
-      console.log('event: update', {...values})
+      this.logEvent('event: update', {...values})
       this.dateRange.startDate = dateUtil.format(values.startDate, 'yyyy-mm-dd HH:MM:ss');
       this.dateRange.endDate = dateUtil.format(values.endDate, 'yyyy-mm-dd HH:MM:ss');
-    },
-    checkOpen (open) {
-      console.log('event: open', open)
     },
     dateFormat (classes, date) {
       let yesterday = new Date();
