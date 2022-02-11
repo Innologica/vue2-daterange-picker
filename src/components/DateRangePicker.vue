@@ -590,13 +590,15 @@ export default {
     hoverDate (value) {
       if (this.readonly)
         return false
-      let dt_end = this.normalizeDatetime(value, this.end);
-      let dt_start = this.normalizeDatetime(value, this.start);
       if (this.in_selection) {
-        if (this.in_selection <= dt_end)
-          this.end = dt_end
-        if (this.in_selection >= dt_start)
-          this.start = dt_start
+        const in_selection = this.normalizeDatetime(value, this.in_selection);
+        if (value < in_selection) {
+          this.start = value
+          this.end = in_selection
+        } else {
+          this.start = in_selection
+          this.end = value
+        }
       }
       /**
        * Emits event when the mouse hovers a date
