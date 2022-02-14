@@ -593,10 +593,8 @@ export default {
       let dt_end = this.normalizeDatetime(value, this.end);
       let dt_start = this.normalizeDatetime(value, this.start);
       if (this.in_selection) {
-        if (this.in_selection <= dt_end)
-          this.end = dt_end
-        if (this.in_selection >= dt_start)
-          this.start = dt_start
+        this.start = new Date(Math.min(this.in_selection.valueOf(), dt_end.valueOf(), dt_start.valueOf()))
+        this.end = new Date(Math.max(this.in_selection.valueOf(), dt_end.valueOf(), dt_start.valueOf()))
       }
       /**
        * Emits event when the mouse hovers a date
