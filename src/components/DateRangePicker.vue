@@ -1,5 +1,9 @@
 <template>
   <div class="vue-daterange-picker" :class="{ inline: opens === 'inline' }">
+  <div class="vue-daterange-picker" :class="{
+    'inline': opens === 'inline',
+    'dp--open': (opens === 'inline' || open)? 'show' : '',
+  }">
     <div
       :class="controlContainerClass"
       @click="onClickPicker"
