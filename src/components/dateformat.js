@@ -150,7 +150,8 @@ function pad (val, len) {
  * @param  {Object} `date`
  * @return {Number}
  */
-function getWeek (date) {
+function getWeek (currentDate = new Date()) {
+  /*
   // Remove time components of date
   var targetThursday = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
@@ -170,6 +171,24 @@ function getWeek (date) {
   // Number of weeks between target Thursday and first Thursday
   var weekDiff = (targetThursday - firstThursday) / (86400000 * 7);
   return 1 + Math.floor(weekDiff);
+  */
+  
+  if (!currentDate || !(currentDate instanceof Date)) {
+    return 0;
+  }
+
+  const date = new Date(currentDate.getTime());
+  date.setHours(0, 0, 0, 0);
+
+  date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
+
+  const firstWeek = new Date(date.getFullYear(), 0, 4);
+  const MILLISECONDS_IN_DAY = 86400000; // 24 * 60 * 60 * 1000
+
+  const currentYearDay = (date.getTime() - firstWeek.getTime()) / MILLISECONDS_IN_DAY;
+
+  return 1 + Math.round((currentYearDay - 3 + ((firstWeek.getDay() + 6) % 7)) / 7);
+
 }
 
 /**
