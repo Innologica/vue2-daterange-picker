@@ -99,7 +99,7 @@
               </div>
               <calendar-time v-if="timePicker && start"
                              @update="onUpdateStartTime"
-                             :miniute-increment="timePickerIncrement"
+                             :minute-increment="timePickerIncrement"
                              :hour24="timePicker24Hour"
                              :second-picker="timePickerSeconds"
                              :current-time="start"
@@ -136,7 +136,7 @@
               </div>
               <calendar-time v-if="timePicker && end"
                              @update="onUpdateEndTime"
-                             :miniute-increment="timePickerIncrement"
+                             :minute-increment="timePickerIncrement"
                              :hour24="timePicker24Hour"
                              :second-picker="timePickerSeconds"
                              :current-time="end"
