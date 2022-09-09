@@ -18,7 +18,7 @@ npm i vue2-daterange-picker --save
 - [x] documentation
 - [x] tests
 - [x] disabled dates
-- [ ] export single components
+- [x] export single components
 
 
 ### Run local demo
