@@ -2,7 +2,11 @@
   <table class="table-condensed">
     <thead>
     <tr>
-      <th class="prev available" @click="prevMonthClick" tabindex="0"><span/></th>
+      <th @click="prevMonthClick" tabindex="0">
+        <slot name="prev-month-btn">
+          <div class="prev available"><span/></div>
+        </slot>
+      </th>
       <th
         v-if="showDropdowns"
         :colspan="showWeekNumbers ? 6 : 5"
@@ -15,8 +19,16 @@
           <input ref="yearSelect" type="number" v-model="year" @blur="checkYear" class="yearselect col"/>
         </div>
       </th>
-      <th v-else :colspan="showWeekNumbers ? 6 : 5" class="month">{{ monthName }} {{ year }}</th>
-      <th class="next available" @click="nextMonthClick" tabindex="0"><span/></th>
+      <th v-else :colspan="showWeekNumbers ? 6 : 5" class="month">
+        <slot name="month-slot" :date="date">
+          {{ monthName }} {{ year }}
+        </slot>
+      </th>
+      <th @click="nextMonthClick" tabindex="0">
+        <slot name="next-month-btn">
+          <div class="next available"><span/></div>
+        </slot>
+      </th>
     </tr>
     </thead>
     <tbody>
