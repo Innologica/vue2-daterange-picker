@@ -19,9 +19,11 @@
           <input ref="yearSelect" type="number" v-model="year" @blur="checkYear" class="yearselect col"/>
         </div>
       </th>
-      <th v-else :colspan="showWeekNumbers ? 6 : 5" class="month">
+      <th v-else :colspan="showWeekNumbers ? 6 : 5">
         <slot name="month-slot" :date="date">
-          {{ monthName }} {{ year }}
+          <div class="month">
+            {{ monthName }} {{ year }}
+          </div>
         </slot>
       </th>
       <th @click="nextMonthClick" tabindex="0">
