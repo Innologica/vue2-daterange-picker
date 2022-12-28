@@ -20,7 +20,7 @@
         </div>
       </th>
       <th v-else :colspan="showWeekNumbers ? 6 : 5">
-        <slot name="month-slot" :date="date">
+        <slot name="month-title-slot" :date="date">
           <div class="month">
             {{ monthName }} {{ year }}
           </div>

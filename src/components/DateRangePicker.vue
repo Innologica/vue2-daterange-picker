@@ -131,7 +131,11 @@
 
                     @param {Date} date - the date being rendered into the table cell
                   -->
+                  <slot name="date" slot="prev-month-btn" slot-scope="data" v-bind="data"></slot>
+                  <slot name="date" slot="month-title-slot" slot-scope="data" v-bind="data"></slot>
+                  <slot name="date" slot="next-month-btn" slot-scope="data" v-bind="data"></slot>
                   <slot name="date" slot="date-slot" slot-scope="data" v-bind="data"></slot>
+                  
                 </calendar>
               </div>
               <calendar-time v-if="timePicker && end"
