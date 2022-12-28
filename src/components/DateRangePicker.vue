@@ -81,7 +81,7 @@
                        :value="startText"/>
                 <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
               </div>
-              <div class="calendar-table">
+              <div class="calendar-table bobo">
                 <calendar :monthDate="monthDate"
                           :locale-data="locale"
                           :start="start" :end="end"
@@ -94,6 +94,9 @@
                           @dateClick="dateClick" @hoverDate="hoverDate"
                           :showWeekNumbers="showWeekNumbers"
                 >
+                  <slot name="prev-month-btn"></slot>
+                  <slot name="month-title" v-bind="data"></slot>
+                  <slot name="next-month-btn" v-bind="data"></slot>
                   <slot name="date" slot="date-slot" slot-scope="data" v-bind="data"></slot>
                 </calendar>
               </div>
@@ -113,7 +116,7 @@
                        :value="endText"/>
                 <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
               </div>
-              <div class="calendar-table">
+              <div class="calendar-table bobo">
                 <calendar :monthDate="nextMonthDate"
                           :locale-data="locale"
                           :start="start" :end="end"
