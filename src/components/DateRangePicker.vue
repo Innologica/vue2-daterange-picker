@@ -94,9 +94,9 @@
                           @dateClick="dateClick" @hoverDate="hoverDate"
                           :showWeekNumbers="showWeekNumbers"
                 >
-                  <slot name="prev-month-btn"></slot>
-                  <slot name="month-title" v-bind="data"></slot>
-                  <slot name="next-month-btn" v-bind="data"></slot>
+                  <template v-slot:month-title="slotProps" style="border: none">
+                    <slot name="prev-month-title" v-bind="slotProps"></slot>
+                  </template>
                   <slot name="date" slot="date-slot" slot-scope="data" v-bind="data"></slot>
                 </calendar>
               </div>
@@ -134,9 +134,11 @@
 
                     @param {Date} date - the date being rendered into the table cell
                   -->
-                  <slot name="prev-month-btn"></slot>
-                  <slot name="month-title" v-bind="data"></slot>
-                  <slot name="next-month-btn" v-bind="data"></slot>
+                  <template v-slot:month-title="slotProps" style="border: none">
+                    <slot name="next-month-title" v-bind="slotProps"></slot>
+                  </template>
+                  
+                  
                   <slot name="date" slot="date-slot" slot-scope="data" v-bind="data"></slot>
                   
                 </calendar>
@@ -197,8 +199,8 @@
 <script>
 import dateUtilMixin from './dateUtilMixin'
 import Calendar from './Calendar.vue'
-import CalendarTime from './CalendarTime'
-import CalendarRanges from './CalendarRanges'
+import CalendarTime from './CalendarTime.vue'
+import CalendarRanges from './CalendarRanges.vue'
 import {getDateUtil} from './util'
 import appendToBody from '../directives/appendToBody';
 

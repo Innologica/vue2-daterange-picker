@@ -2,33 +2,29 @@
   <table class="table-condensed">
     <thead>
     <tr>
-      <th @click="prevMonthClick" tabindex="0">
-        <slot name="prev-month-btn">
-          <div class="prev available"><span/></div>
-        </slot>
-      </th>
       <th
-        v-if="showDropdowns"
-        :colspan="showWeekNumbers ? 6 : 5"
-        class="month"
+        :colspan="showWeekNumbers ? 8 : 7"
       >
-        <div class="row mx-1">
-          <select v-model="month" class="monthselect col">
-            <option v-for="(m, idx) in months" :key="idx" :value="m.value + 1" :disabled="!m.enabled">{{ m.label }}</option>
-          </select>
-          <input ref="yearSelect" type="number" v-model="year" @blur="checkYear" class="yearselect col"/>
-        </div>
-      </th>
-      <th v-else :colspan="showWeekNumbers ? 6 : 5">
-        <slot name="month-title-slot" :date="date">
-          <div class="month">
-            {{ monthName }} {{ year }}
+        <div class="row mx-1" v-if="showDropdowns">
+          <div class="d-flex">
+            <div class="prev available" @click="prevMonthClick" tabindex="0"><span/></div>
+            <div class="flex-grow-1">
+              <select v-model="month" class="monthselect col">
+                <option v-for="(m, idx) in months" :key="idx" :value="m.value + 1" :disabled="!m.enabled">{{ m.label }}</option>
+              </select>
+              <input ref="yearSelect" type="number" v-model="year" @blur="checkYear" class="yearselect col"/>
+            </div>
+            <div class="next available" @click="nextMonthClick" tabindex="0"><span/></div>
           </div>
-        </slot>
-      </th>
-      <th @click="nextMonthClick" tabindex="0">
-        <slot name="next-month-btn">
-          <div class="next available"><span/></div>
+        </div>
+        <slot name="month-title" v-bind="{monthName:monthName, year:year, nextMonthClick:nextMonthClick, prevMonthClick:prevMonthClick}" v-else>
+          <div class="d-flex">
+            <div class="prev available" @click="prevMonthClick" tabindex="0"><span/></div>
+            <div class="month flex-grow-1">
+              {{ monthName }} {{ year }}
+            </div>
+            <div class="next available" @click="nextMonthClick" tabindex="0"><span/></div>
+          </div>
         </slot>
       </th>
     </tr>
