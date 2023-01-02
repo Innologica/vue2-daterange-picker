@@ -228,6 +228,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
 th, td {
   padding: 2px;
   background-color: white;
