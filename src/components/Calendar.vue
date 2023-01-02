@@ -6,16 +6,10 @@
         :colspan="showWeekNumbers ? 8 : 7"
       >
         <div class="row mx-1" v-if="showDropdowns">
-          <div class="d-flex">
-            <div class="prev available" @click="prevMonthClick" tabindex="0"><span/></div>
-            <div class="flex-grow-1">
-              <select v-model="month" class="monthselect col">
-                <option v-for="(m, idx) in months" :key="idx" :value="m.value + 1" :disabled="!m.enabled">{{ m.label }}</option>
-              </select>
-              <input ref="yearSelect" type="number" v-model="year" @blur="checkYear" class="yearselect col"/>
-            </div>
-            <div class="next available" @click="nextMonthClick" tabindex="0"><span/></div>
-          </div>
+          <select v-model="month" class="monthselect col">
+            <option v-for="(m, idx) in months" :key="idx" :value="m.value + 1" :disabled="!m.enabled">{{ m.label }}</option>
+          </select>
+          <input ref="yearSelect" type="number" v-model="year" @blur="checkYear" class="yearselect col"/>
         </div>
         <slot name="month-title" v-bind="{monthName:monthName, year:year, nextMonthClick:nextMonthClick, prevMonthClick:prevMonthClick}" v-else>
           <div class="d-flex">

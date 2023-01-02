@@ -116,7 +116,7 @@
                        :value="endText"/>
                 <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
               </div>
-              <div class="calendar-table bobo">
+              <div class="calendar-table">
                 <calendar :monthDate="nextMonthDate"
                           :locale-data="locale"
                           :start="start" :end="end"
@@ -129,16 +129,14 @@
                           @dateClick="dateClick" @hoverDate="hoverDate"
                           :showWeekNumbers="showWeekNumbers"
                 >
+                  <template v-slot:month-title="slotProps" style="border: none">
+                    <slot name="next-month-title" v-bind="slotProps"></slot>
+                  </template>
                   <!--
                     Allows you to change date cell slot. By default it renders the day number
 
                     @param {Date} date - the date being rendered into the table cell
                   -->
-                  <template v-slot:month-title="slotProps" style="border: none">
-                    <slot name="next-month-title" v-bind="slotProps"></slot>
-                  </template>
-                  
-                  
                   <slot name="date" slot="date-slot" slot-scope="data" v-bind="data"></slot>
                   
                 </calendar>
@@ -574,7 +572,7 @@ export default {
          *
          * @param {Date} date the date clicked
          */
-        this.$emit('finishSelection', value)
+        this.$emit('finish-selection', value)
         this.onSelect();
         if (this.autoApply)
           this.clickedApply();
@@ -588,7 +586,7 @@ export default {
            *
            * @param {Date} date the date clicked
            */
-          this.$emit('startSelection', this.start)
+          this.$emit('start-selection', this.start)
         } else {
           this.onSelect();
           if (this.autoApply)
