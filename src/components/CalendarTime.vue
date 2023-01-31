@@ -32,7 +32,7 @@
       },
     },
     props: {
-      miniuteIncrement: {
+      minuteIncrement: {
         type: Number,
         default: 5,
       },
@@ -52,6 +52,9 @@
       readonly: {
         type: Boolean,
         default: false
+      },
+      timeUpdate: {
+        type: Object,
       }
     },
     data() {
@@ -59,7 +62,7 @@
       let hours = current.getHours();
       return {
         hour: this.hour24 ? hours : hours % 12 || 12,
-        minute: current.getMinutes() - (current.getMinutes() % this.miniuteIncrement),
+        minute: current.getMinutes() - (current.getMinutes() % this.minuteIncrement),
         second: current.getSeconds(),
         ampm: hours < 12 ? 'AM' : 'PM',
       };
@@ -76,7 +79,7 @@
       minutes () {
         let values = [];
         let max = 60;
-        for(let i=0; i< max; i=i+this.miniuteIncrement) {
+        for(let i=0; i< max; i=i+this.minuteIncrement) {
           values.push(i);
         }
         return values;
@@ -95,6 +98,9 @@
       ampm () {
         this.onChange();
       },
+      currentTime() {
+       this.prepareTime();
+      }
     },
     methods: {
       getHour() {
@@ -114,6 +120,12 @@
           minutes: this.minute,
           seconds: this.second,
         });
+      },
+      prepareTime() {
+        let date = new Date(this.currentTime);
+        this.hour = date.getHours();
+        this.minute = date.getMinutes() - ( date.getMinutes() % this.minuteIncrement);
+        this.second = date.getSeconds();
       }
     },
   }
