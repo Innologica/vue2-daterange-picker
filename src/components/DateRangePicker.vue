@@ -81,7 +81,7 @@
                        :value="startText"/>
                 <i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
               </div>
-              <div class="calendar-table">
+              <div class="calendar-table bobo">
                 <calendar :monthDate="monthDate"
                           :locale-data="locale"
                           :start="start" :end="end"
@@ -94,6 +94,9 @@
                           @dateClick="dateClick" @hoverDate="hoverDate"
                           :showWeekNumbers="showWeekNumbers"
                 >
+                  <template v-slot:month-title="slotProps" style="border: none">
+                    <slot name="prev-month-title" v-bind="slotProps"></slot>
+                  </template>
                   <slot name="date" slot="date-slot" slot-scope="data" v-bind="data"></slot>
                 </calendar>
               </div>
@@ -126,12 +129,16 @@
                           @dateClick="dateClick" @hoverDate="hoverDate"
                           :showWeekNumbers="showWeekNumbers"
                 >
+                  <template v-slot:month-title="slotProps" style="border: none">
+                    <slot name="next-month-title" v-bind="slotProps"></slot>
+                  </template>
                   <!--
                     Allows you to change date cell slot. By default it renders the day number
 
                     @param {Date} date - the date being rendered into the table cell
                   -->
                   <slot name="date" slot="date-slot" slot-scope="data" v-bind="data"></slot>
+                  
                 </calendar>
               </div>
               <calendar-time v-if="timePicker && end"
@@ -190,8 +197,8 @@
 <script>
 import dateUtilMixin from './dateUtilMixin'
 import Calendar from './Calendar.vue'
-import CalendarTime from './CalendarTime'
-import CalendarRanges from './CalendarRanges'
+import CalendarTime from './CalendarTime.vue'
+import CalendarRanges from './CalendarRanges.vue'
 import {getDateUtil} from './util'
 import appendToBody from '../directives/appendToBody';
 
@@ -565,7 +572,7 @@ export default {
          *
          * @param {Date} date the date clicked
          */
-        this.$emit('finishSelection', value)
+        this.$emit('finish-selection', value)
         this.onSelect();
         if (this.autoApply)
           this.clickedApply();
@@ -579,7 +586,7 @@ export default {
            *
            * @param {Date} date the date clicked
            */
-          this.$emit('startSelection', this.start)
+          this.$emit('start-selection', this.start)
         } else {
           this.onSelect();
           if (this.autoApply)
