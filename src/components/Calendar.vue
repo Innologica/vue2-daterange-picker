@@ -29,7 +29,7 @@
       :key="index"
     >
       <td v-if="showWeekNumbers && (index%7 || index===0)" class="week">
-        {{ $dateUtil.weekNumber(dateRow[0]) }}
+        {{ $dateUtil.weekNumber(dateRow[0], locale.firstDay) }}
       </td>
       <td
         v-for="(date, idx) in dateRow"

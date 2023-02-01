@@ -13,8 +13,8 @@ const DateUtil = {
   daysInMonth: (year, month) => {
     return new Date(year, month, 0).getDate()
   },
-  weekNumber: (date) => {
-    return getWeek(date)
+  weekNumber: (date, firstDay) => {
+    return getWeek(date, firstDay)
   },
   format: (date, mask) => {
     return dateFormat(date, mask)
