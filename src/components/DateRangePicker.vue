@@ -766,7 +766,7 @@ export default {
       }
     },
     isClear () {
-      return !this.dateRange.startDate || !this.dateRange.endDate
+      return !this.dateRange.startDate || !(this.dateRange.endDate || this.singleDatePicker)
     },
     isDirty () {
       let origStart = new Date(this.dateRange.startDate)
