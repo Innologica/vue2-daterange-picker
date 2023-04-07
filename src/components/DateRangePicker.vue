@@ -2,7 +2,7 @@
   <div class="vue-daterange-picker" :class="{ inline: opens === 'inline' }">
     <div
       :class="controlContainerClass"
-      @click="onClickPicker"
+      v-on="{ [eventType]: onClickPicker }"
       ref="toggle"
     >
       <!--
@@ -205,6 +205,16 @@ export default {
     event: 'update',
   },
   props: {
+    /**
+     * contoller event type, e.g. click, mousedown
+     * @default 'click'
+     */
+    eventType: {
+      type: [String],
+      default () {
+        return 'click'
+      }
+    },
     /**
      * minimum date allowed to be selected
      * @default null
@@ -621,7 +631,6 @@ export default {
          * @param {Function} togglePicker - function (show, event) which can be used to control the picker. where "show" is the new state and "event" is boolean indicating whether a new event should be raised
          */
         this.$emit('toggle', this.open, this.togglePicker)
-
     },
     clickedApply () {
       // this.open = false
@@ -821,8 +830,12 @@ export default {
           this.selectMonthDate() //select initial visible months
 
           this.$nextTick(() => {
-            value ? document.body.addEventListener('click', this.clickAway) : document.body.removeEventListener('click', this.clickAway)
-            value ? document.addEventListener('keydown', this.handleEscape) : document.removeEventListener('keydown', this.handleEscape)
+            value
+              ? document.body.addEventListener(this.eventType, this.clickAway)
+              : document.body.removeEventListener(this.eventType, this.clickAway)
+            value
+              ? document.addEventListener('keydown', this.handleEscape)
+              : document.removeEventListener('keydown', this.handleEscape)
 
             if (!this.alwaysShowCalendars && this.ranges) {
               this.showCustomRangeCalendars = !Object.keys(this.ranges)
